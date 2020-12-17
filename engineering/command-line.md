@@ -11,10 +11,10 @@ Entre muchas razones, las principales que identifico son:
 ### Estrutura de un comando
 Un comando no es sino un programa que ejecutaremos con la siguiente extructura general:
 
-`$ [nombre del programa] [parámetros] [modificadores]`
+  `$ [nombre del programa] [parámetros] [modificadores]`
 
 Ejemplo:
-`ls -l`
+  `ls -l`
 Este comando, nos enlista los archivos que se encuentran dentro del directorio actual, el parámetro `-l` nos muestra mayor información de los archivos.
 
 ### Algunos comandos básicos
@@ -64,4 +64,17 @@ Para modificar estos archivos, tenemos dos editores principales:
   2. Podremos editar inmediatamente
   3. Para cualquier acción, existen comandos que comienzan por ctrl + [opcion], ejemplo: ctrl + x para salir.
 
-
+### Utilidades para archivos de texto
+Existen algunas utilidades en el sistema de archivos, que nos ayudarán para hacer un tratamiento de los archivos de texto, por mencionar algunas:
+* `cat [file]`: muestra el contenido de un archivo
+* `more [file]`: se muestra una parte del archivo permitiéndonos navegar en él, para salir, presionamos `q`
+* `head [file]`: muestra las primeras líneas de un archivo
+  `-n`: muestra un numero n de las primeras líneas
+* `tail [file]`: muestra las últimas líneas de un archivo
+  `-n`: muestra un numero n de las últimas líneas
+* `grep [RegExp] [archivo]`: muestra las líneas de un archivo que contengan la expresión regular señalada
+  `-i`: la búsqueda es insensible a mayúsculas
+  `-c`: solo cuenta la cantidad de líneas que contienen la expresión buscada
+  `-n`: busca las líneas y las numera
+  `-v`: muestra las líneas complemente de nuestra búsqueda, es decir, las que no contienen la expresión introducida
+* `sed`: permite hacer un tratamiento de flujo de caracteres, por ejemplo, [referencia](https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/)
