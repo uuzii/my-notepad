@@ -13,32 +13,39 @@ Los tipos de scope son:
 * Scope Global. Es el ámbito global de todo nuestro código de Javascript
 * Scoper Local. Se delimita por un *bloque*, que bien puede ser el contenido de una función
 Veamos el siguiente fragmento:
-  > `var name = "Uzi"
-  > function printName() {
-  >   var lastName = "Rodriguez"
-  >   console.log(name + " " + lastName);
-  > }`
+  ```javascript
+  var name = "Uzi"
+  function printName() {
+    var lastName = "Rodriguez"
+    console.log(name + " " + lastName);
+  }
+  ```
 En este ejemplo, es posible acceder desde un scope local (delimitado por la función, a un scope global, mas no es posible acceder desde el scope global al local).
 
 # Hoisting
 Es cuando las variables y las funciones se declaran antes que se procese cualquier otra parte del código. Esto sucede en versiones iguales o menor a *ECMAScript 5* ya que solo aplica a las palabras reservadas `var` y `function`; a partir de ECMAScript 6 se introdujo `let`y `const, que son formas de declarar variables que nos evitarán esto.
-
-  > `console.log(name);
-  > var name = 'Uzi' `
+  ```javascript
+  console.log(name);
+  var name = 'Uzi';
+  ```
 En el programa anterior, veremos un `undefined`, dado que el navegador no identificó esta varibale, aquí sucede el fenómeno *hoisting*, que se debe a que, en el *JIT compiler* al llegar al console log, se prepara un espacio en memoria para la variable pero no tiene un valor que asignarle.
 
 En el caso de las funciones, podemos ejecutarlas antes que éstas se declaren, puesto que son lo primero que se identifica en el *JIT compiler*, incluso antes que las variables.
 
 # Coerción
 Muchas veces vemos en JavaScript suceden fenómenos como los siguientes:
-  > `4 + '7' // '47'
-  > 4 * '7' // 28`
+  ```javascript
+  4 + '7' // '47'
+  4 * '7' // 28`
+  ```
 Aquí sucede que, el lenguaje trata de ayudarnos a castear los datos de acuerdo a la operación que estamos tratando de hacer.
 
 Hay dos tipos de coerción:
 * Implícita. El lenguaje nos ayuda y cambiar de un tipo de valor a otro tipo de valor
 * Explícita. Es cuando nosotros obligamos a que un tipo de valor se convierta a otro. Para hacer esto, podemos usar los métodos de datos primitivos, por ejemplo:
-  > `String(20)`
+  ```javascript
+  String(20)
+  ```
 Convertirá la varibale de tipo númber a un string
 
 # Valores truthy y falsy

@@ -11,10 +11,10 @@ Entre muchas razones, las principales que identifico son:
 ### Estrutura de un comando
 Un comando no es sino un programa que ejecutaremos con la siguiente extructura general:
 
-  `$ [nombre del programa] [parámetros] [modificadores]`
+  > `$ [nombre del programa] [parámetros] [modificadores]`
 
 Ejemplo:
-  `ls -l`
+  > `ls -l`
 Este comando, nos enlista los archivos que se encuentran dentro del directorio actual, el parámetro `-l` nos muestra mayor información de los archivos.
 
 ### Algunos comandos básicos
@@ -33,17 +33,17 @@ Este comando, nos enlista los archivos que se encuentran dentro del directorio a
 
 ### Algunos comandos del sistema de archivos:
 * `ls`: Enlista todos los directorios y archivos que existen en el directorio actual
-  `-l`: Muestra más información acerca de cada archivo
-  `-a`: Muestra los archivos ocultos
+  * `-l`: Muestra más información acerca de cada archivo
+  * `-a`: Muestra los archivos ocultos
 * `cd [directorio]`: Nos permite acceder a una directorio
-  > * En todos los directorios encontraremos el directorio `..`, que es un apuntador a la directorio anterior, si hacemos `cd ..` iremos a la carpeta anterior.
-  > * En todos los directorios encontraremos el directorio `.`, que es un apuntador al directorio actual, nos ayudará cuando queramos hacer referencia a la carpeta actual par ejecutar archivos o copiarlos, por mencionar algunos ejemplos.
-  > El directorio `~` suele ser el directorio raíz de nuestro sistema
+  * En todos los directorios encontraremos el directorio `..`, que es un apuntador a la directorio anterior, si hacemos `cd ..` iremos a la carpeta anterior.
+  * En todos los directorios encontraremos el directorio `.`, que es un apuntador al directorio actual, nos ayudará cuando queramos hacer referencia a la carpeta actual par ejecutar archivos o copiarlos, por mencionar algunos ejemplos.
+  * El directorio `~` suele ser el directorio raíz de nuestro sistema
 * `pwd` Nos muestra la ruta actual en la que nos encontramos
 * `rm [archivo]`: Borra un archivo (no servirá para directorios)
-  `-i`: Pregunta si estamos seguros de borrar el archivo
-  `-r [directorio]': Borra recursivamente un **directorio** y los archivos que contiene
-  `-f`: Forza a borrar los archivos sin preguntar
+  * `-i`: Pregunta si estamos seguros de borrar el archivo
+  * `-r [directorio]': Borra recursivamente un **directorio** y los archivos que contiene
+  * `-f`: Forza a borrar los archivos sin preguntar
 * `cp [fuente] [destino]`: Copia un archivo de una carpeta a otra
 * `mv [archivo] [destino]`: Mueve un archivo de un directorio a otro
 * `mkdir [nombre]`: Crea un directorio nuevo con el nombre indicado
@@ -60,7 +60,7 @@ Para modificar estos archivos, tenemos dos editores principales:
   3. Para salir del *insertion mode*, pulsaremos la tecla esc
   4. Para salir del editor, introduciremos `:wq` para guardar y salir
 * **Nano**
-  1. Para abrirlo, usaremos `nano [archivo]``
+  1. Para abrirlo, usaremos `nano [archivo]`
   2. Podremos editar inmediatamente
   3. Para cualquier acción, existen comandos que comienzan por ctrl + [opcion], ejemplo: ctrl + x para salir.
 
@@ -73,8 +73,8 @@ Existen algunas utilidades en el sistema de archivos, que nos ayudarán para hac
 * `tail [file]`: muestra las últimas líneas de un archivo
   `-n`: muestra un numero n de las últimas líneas
 * `grep [RegExp] [archivo]`: muestra las líneas de un archivo que contengan la expresión regular señalada
-  `-i`: la búsqueda es insensible a mayúsculas
-  `-c`: solo cuenta la cantidad de líneas que contienen la expresión buscada
-  `-n`: busca las líneas y las numera
-  `-v`: muestra las líneas complemente de nuestra búsqueda, es decir, las que no contienen la expresión introducida
+  * `-i`: la búsqueda es insensible a mayúsculas
+  * `-c`: solo cuenta la cantidad de líneas que contienen la expresión buscada
+  * `-n`: busca las líneas y las numera
+  * `-v`: muestra las líneas complemente de nuestra búsqueda, es decir, las que no contienen la expresión introducida
 * `sed`: permite hacer un tratamiento de flujo de caracteres, por ejemplo, [referencia](https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/)

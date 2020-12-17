@@ -45,22 +45,24 @@ Para empezar a usar sass, tenemos que instalarlo mediante el comando:
   `npm install -g sass``
 
 ### Sintaxis de sass
-* Variables. Para declararlas, escribimos directamente en el archivo `$var: valor`. Para usarlas, colocamos `property: $var`
-* Anidamiento. Podemos incluir selectores dentro de otros, ejemplo:
-  `.header {
+* **Variables**. Para declararlas, escribimos directamente en el archivo `$var: valor`. Para usarlas, colocamos `property: $var`
+* **Anidamiento**. Podemos incluir selectores dentro de otros, ejemplo:
+  ```css
+  .header {
     background: gray,
     h1 {
       color: blue
     }
-  }`
-* Herencia. Podemos heredar las propiedades de una clase a otros selectores utilizando `@extend .className` dentro de un selector.
-* Mixins. Funcionan parecido a la herencia, pero se denfinen de la siguiente manera: `@mixin mixinName { }` y para usarlas en otro selector colocamos `@include mixinName`
+  }
+  ```
+* **Herencia**. Podemos heredar las propiedades de una clase a otros selectores utilizando `@extend .className` dentro de un selector.
+* **Mixins**. Funcionan parecido a la herencia, pero se denfinen de la siguiente manera: `@mixin mixinName { }` y para usarlas en otro selector colocamos `@include mixinName`
 
 ### Para compilar sass en css
 Debemos tener un archivo extensión scss con su sintaxis apropiada.
 
 Para compilarlo en un archivo css que pueda entender el navegador, usaremos el comando:
-  `sass [ruta/absoluta/al/archivo/sass] [ruta/absoluta/al/archivo/destino.css]
+  > `sass [ruta/absoluta/al/archivo/sass] [ruta/absoluta/al/archivo/destino.css]`
 
 # Storybook
 Es una guía donde podemos documentar cada componente de nuestra aplicación: qué componentes hay, su diseño y comportamientos.
