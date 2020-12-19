@@ -1,3 +1,5 @@
+🚀 v0.1.0
+
 # Funciones declarativas y expresivas
 * Las funciones declarativas, son aquellas que se declaran con la palabra reservada `function`
 * Las funciones expresivas, son aquellas funciones anónimas que se guardan en una variable.

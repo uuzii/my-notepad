@@ -1,3 +1,5 @@
+🚀 v0.1.0
+
 # Accesibilidad
 Sirve para adpatar nuestros sitios web para personas que tienen capacidades diferentes, ejemplo: débiles visuales, daltónicos, entre otros. Mediante algunas herramientas, se puede leer el contenido de una página para las personas con problemas visuales.
 

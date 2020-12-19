@@ -1,3 +1,5 @@
+🚀 v0.1.0
+
 # Historia de la persistencia de la información
 
 Históricamente, la información solo se pasaba de boca en boca, pero el ser humano se dió cuenta de que era necesario almacenar la información en algún sitio para que no se alterara, es así que nació la escritura.

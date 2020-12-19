@@ -34,6 +34,8 @@ Separar los elementos en un modelo biológico de:
 4. Templates
 5. Páginas
 
+🚀 v0.1.0
+
 # Preprocesadores
 Los archivos de CSS eventualmente se pueden hacer muy extensos, para reducir estos archivos así como la escritura de los mismos, nos pueden ayudar los preprocesadores, mismos que tiene una sintaxis expecífica de uso y compilarán nuestro código. Los más usados son:
 * [LESS](https://sass-lang.com/guide)
