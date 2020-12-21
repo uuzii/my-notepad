@@ -42,13 +42,13 @@ En el siguiente ejemplo, vemos un ejemplo de entidades y atributos:
 * **Antigüedad.** Es un atributo autoinferido, pues se deduce del modelo.
 * **No. de serie.** Es un dato que lo diferenciará de otras entidades que sean idénticas.
 
-![Entidades y atributos](https://github.com/uuzii/my-notepad/wip/engineering/main/entities-attributes.jpg?raw=true)
+![Entidades y atributos](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/entities-attributes.jpeg?raw=true)
 
 ### Entidades débiles y fuertes
 
 Las *entidades fuertes*, se denominan así porque no dependen de ninguna otra entidad para existir, las débiles son justo lo opuesto: las *entidades débiles*, son entidades que dependen de otra entidad para tener sentido, en el siguiente ejemplo y se representan con un rectángulo doble.
 
-![Entidades fuertes y débiles](https://github.com/uuzii/my-notepad/wip/engineering/main/weak-strong.jpg?raw=true)
+![Entidades fuertes y débiles](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/weak-strong.jpeg?raw=true)
 
 Pueden determinarse débiles por dos motivos:
   * Por identidad. No se direnecían entre sí, más que por la clave de su entidad fuerte, en el siguient ejemplo, vemos que los ejemplares (débiles) no se pueden diferenciar entre sí, más que por el id de su entidad fuerte
@@ -77,7 +77,7 @@ En estos ejemplos, se representa *ejemplares* como entidad débil de *libro*. Di
 
 Es el otro elemento importante en los diagramas que hemos visto, se llama relación, nos indica cuántos elementos de una entidad corresponden a cuántos elementos de otra. Las relaciones se representan con un rombo.
 
-![Diagrama ER (Relación)](https://github.com/uuzii/my-notepad/wip/engineering/main/relations.jpg?raw=true)
+![Diagrama ER (Relación)](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/relations.jpeg?raw=true)
 ## Cardinalidad
 
 La cardinalidad nos propeorciona información acerca de las relaciones,
@@ -87,4 +87,4 @@ La cardinalidad nos propeorciona información acerca de las relaciones,
 * Cero a n (0:n) ó 0 a n opcional. Ejemplo, un paciente puede estar internado en una habitación, pero no necesariamente una habitación debe tener un paciente.
 * Muchos a muchos (n:n). Ejemplo, un alumno puede estar inscrito a muchas clases, a su vez una clase puede tener muchos alumnos.
 
-![Cardinalidades](https://github.com/uuzii/my-notepad/wip/engineering/main/cardinalities.jpg?raw=true)
+![Cardinalidades](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/cardinalities.jpeg?raw=true)
