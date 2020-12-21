@@ -33,14 +33,58 @@ Uno de los objetos principales de las bases de datos, son las entidades. Una ent
   * Naturales. Número de serie asignado
   * Clave artificial. Se le asigna de manera arbitraria
 
-> Ejemplo de entidad: un automovil que tiene volante, llantas (atributo multivaluado), motor (atributo compuesto), antigüedad (atributo inferido)
+En el siguiente ejemplo, vemos un ejemplo de entidades y atributos:
 
-### Entidades fuertes
-Son entidades que pueden sobrevivir por sí solas
-> Ej. Libro > Ejemplares, el libro es la entidad fuerte que sostiene el sentido de los ejemplares.
+* **Automóvil.** Es la entidad, se representa con un rectángulo.
+* **Volante y modelo.** Son atributos simples.
+* **Llantas.** Es un atributo *multivaluado*, es decir que tiene más de uno, se representa con un óvalo doble.
+* **Motor.** Es un atributo *compuesto* pues está formado por múltiples atributos.
+* **Antigüedad.** Es un atributo autoinferido, pues se deduce del modelo.
+* **No. de serie.** Es un dato que lo diferenciará de otras entidades que sean idénticas.
 
-### Entidades fuertes
-No pueden existir sin una entidad fuerte
-* Por identidad. No se diferencían entre sí más que por la clave de su entidad fuerte
-* Por existencia. Se les asigna una clave propia
+![Entidades y atributos](https://github.com/uuzii/my-notepad/wip/engineering/main/entities-attributes.jpg?raw=true)
 
+### Entidades débiles y fuertes
+
+Las *entidades fuertes*, se denominan así porque no dependen de ninguna otra entidad para existir, las débiles son justo lo opuesto: las *entidades débiles*, son entidades que dependen de otra entidad para tener sentido, en el siguiente ejemplo y se representan con un rectángulo doble.
+
+![Entidades fuertes y débiles](https://github.com/uuzii/my-notepad/wip/engineering/main/weak-strong.jpg?raw=true)
+
+Pueden determinarse débiles por dos motivos:
+  * Por identidad. No se direnecían entre sí, más que por la clave de su entidad fuerte, en el siguient ejemplo, vemos que los ejemplares (débiles) no se pueden diferenciar entre sí, más que por el id de su entidad fuerte
+
+  **Ejemplar** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Libro**
+  | id       | title             | libro_id | localización | edición  |
+  | -------- | ----------------- | -------- | ------------ | -------- |
+  | LKJ89KAS | Viaje al centr... | LKJ89KAS | pasillo 1    | 1        |
+  | KCO31OKJ | De la tierra a... | KCO31OKJ | pasillo 2    | 1        |
+  | NSDJOH12 | Rebelión en la... | NSDJOH12 | pasillo 1    | 3        |
+  | 09KSIHBD | El señor de lo... | 09KSIHBD | pasillo 1    | 3        |
+
+  * Por existencia. Para que no dependan del identificador de la entidad fuerte, se les asigna además una clave propia, aunque conceptualmente, seguirán dependiendo de ella. En el siguiente ejemplo, se le ha asignado una clave a cada ejemplar:
+
+  **Ejemplar** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Libro**
+  | id       | title             | libro_id   | localización | edición  |
+  | -------- | ----------------- | ---------- | ------------ | -------- |
+  | LKJ89KAS | Viaje al centr... | SDKJSD0012 | pasillo 1    | 1        |
+  | KCO31OKJ | De la tierra a... | NVDUNDLO08 | pasillo 2    | 1        |
+  | NSDJOH12 | Rebelión en la... | KNDEKNEU57 | pasillo 1    | 3        |
+  | 09KSIHBD | El señor de lo... | SDKNSDKJD6 | pasillo 1    | 3        |
+
+En estos ejemplos, se representa *ejemplares* como entidad débil de *libro*. Dicho de otro modo, una entidad débil no es otra cosa que una entidad que posee la definición de una entidad fuerte, solo se diferenciarán por el *id*.
+
+# Relaciones
+
+Es el otro elemento importante en los diagramas que hemos visto, se llama relación, nos indica cuántos elementos de una entidad corresponden a cuántos elementos de otra. Las relaciones se representan con un rombo.
+
+![Diagrama ER (Relación)](https://github.com/uuzii/my-notepad/wip/engineering/main/relations.jpg?raw=true)
+## Cardinalidad
+
+La cardinalidad nos propeorciona información acerca de las relaciones,
+* Uno a uno (1:1). Ejemplo, un automóvil solo tiene un dueño.
+* Cero a uno (0:1) ó 1:1 opcional. Ejemplo, un usuario puede o no tener una sesión activa.
+* Uno a n (1:n). Ejemplo, un dueño puede tener muchos automóviles.
+* Cero a n (0:n) ó 0 a n opcional. Ejemplo, un paciente puede estar internado en una habitación, pero no necesariamente una habitación debe tener un paciente.
+* Muchos a muchos (n:n). Ejemplo, un alumno puede estar inscrito a muchas clases, a su vez una clase puede tener muchos alumnos.
+
+![Cardinalidades](https://github.com/uuzii/my-notepad/wip/engineering/main/cardinalities.jpg?raw=true)
