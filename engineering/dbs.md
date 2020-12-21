@@ -77,7 +77,7 @@ En estos ejemplos, se representa *ejemplares* como entidad débil de *libro*. Di
 
 Es el otro elemento importante en los diagramas que hemos visto, se llama relación, nos indica cuántos elementos de una entidad corresponden a cuántos elementos de otra. Las relaciones se representan con un rombo.
 
-![Diagrama ER (Relación)](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/relations.jpeg?raw=true)
+![Diagrama ER (Relación)](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/relations.png?raw=true)
 ## Cardinalidad
 
 La cardinalidad nos propeorciona información acerca de las relaciones,
