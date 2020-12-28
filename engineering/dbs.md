@@ -33,14 +33,294 @@ Uno de los objetos principales de las bases de datos, son las entidades. Una ent
   * Naturales. Número de serie asignado
   * Clave artificial. Se le asigna de manera arbitraria
 
-> Ejemplo de entidad: un automovil que tiene volante, llantas (atributo multivaluado), motor (atributo compuesto), antigüedad (atributo inferido)
+En el siguiente ejemplo, vemos un ejemplo de entidades y atributos:
 
-### Entidades fuertes
-Son entidades que pueden sobrevivir por sí solas
-> Ej. Libro > Ejemplares, el libro es la entidad fuerte que sostiene el sentido de los ejemplares.
+* **Automóvil.** Es la entidad, se representa con un rectángulo.
+* **Volante y modelo.** Son atributos simples.
+* **Llantas.** Es un atributo *multivaluado*, es decir que tiene más de uno, se representa con un óvalo doble.
+* **Motor.** Es un atributo *compuesto* pues está formado por múltiples atributos.
+* **Antigüedad.** Es un atributo autoinferido, pues se deduce del modelo.
+* **No. de serie.** Es un dato que lo diferenciará de otras entidades que sean idénticas.
 
-### Entidades fuertes
-No pueden existir sin una entidad fuerte
-* Por identidad. No se diferencían entre sí más que por la clave de su entidad fuerte
-* Por existencia. Se les asigna una clave propia
+![Entidades y atributos](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/entities-attributes.jpeg?raw=true)
 
+### Entidades débiles y fuertes
+
+Las *entidades fuertes*, se denominan así porque no dependen de ninguna otra entidad para existir, las débiles son justo lo opuesto: las *entidades débiles*, son entidades que dependen de otra entidad para tener sentido, en el siguiente ejemplo y se representan con un rectángulo doble.
+
+![Entidades fuertes y débiles](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/weak-strong.jpeg?raw=true)
+
+Pueden determinarse débiles por dos motivos:
+  * Por identidad. No se direnecían entre sí, más que por la clave de su entidad fuerte, en el siguient ejemplo, vemos que los ejemplares (débiles) no se pueden diferenciar entre sí, más que por el id de su entidad fuerte
+
+  **Ejemplar** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Libro**
+  | id       | title             | libro_id | localización | edición  |
+  | -------- | ----------------- | -------- | ------------ | -------- |
+  | LKJ89KAS | Viaje al centr... | LKJ89KAS | pasillo 1    | 1        |
+  | KCO31OKJ | De la tierra a... | KCO31OKJ | pasillo 2    | 1        |
+  | NSDJOH12 | Rebelión en la... | NSDJOH12 | pasillo 1    | 3        |
+  | 09KSIHBD | El señor de lo... | 09KSIHBD | pasillo 1    | 3        |
+
+  * Por existencia. Para que no dependan del identificador de la entidad fuerte, se les asigna además una clave propia, aunque conceptualmente, seguirán dependiendo de ella. En el siguiente ejemplo, se le ha asignado una clave a cada ejemplar:
+
+  **Ejemplar** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Libro**
+  | id       | title             | libro_id   | localización | edición  |
+  | -------- | ----------------- | ---------- | ------------ | -------- |
+  | LKJ89KAS | Viaje al centr... | SDKJSD0012 | pasillo 1    | 1        |
+  | KCO31OKJ | De la tierra a... | NVDUNDLO08 | pasillo 2    | 1        |
+  | NSDJOH12 | Rebelión en la... | KNDEKNEU57 | pasillo 1    | 3        |
+  | 09KSIHBD | El señor de lo... | SDKNSDKJD6 | pasillo 1    | 3        |
+
+En estos ejemplos, se representa *ejemplares* como entidad débil de *libro*. Dicho de otro modo, una entidad débil no es otra cosa que una entidad que posee la definición de una entidad fuerte, solo se diferenciarán por el *id*.
+
+# Relaciones
+
+Es el otro elemento importante en los diagramas que hemos visto, se llama relación, nos indica cuántos elementos de una entidad corresponden a cuántos elementos de otra. Las relaciones se representan con un rombo.
+
+![Diagrama ER (Relación)](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/relations.png?raw=true)
+## Cardinalidad
+
+La cardinalidad nos propeorciona información acerca de las relaciones,
+* Uno a uno (1:1). Ejemplo, un automóvil solo tiene un dueño.
+* Cero a uno (0:1) ó 1:1 opcional. Ejemplo, un usuario puede o no tener una sesión activa.
+* Uno a n (1:n). Ejemplo, un dueño puede tener muchos automóviles.
+* Cero a n (0:n) ó 0 a n opcional. Ejemplo, un paciente puede estar internado en una habitación, pero no necesariamente una habitación debe tener un paciente.
+* Muchos a muchos (n:n). Ejemplo, un alumno puede estar inscrito a muchas clases, a su vez una clase puede tener muchos alumnos.
+
+![Cardinalidades](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/cardinalities.jpeg?raw=true)
+
+# Diagrama Entidad - Relación
+
+Nos permite visualizar cómo interaccionan las entidades conectadas por sus respectivas cardinalidades, en el siguiente ejemplo, vemos un diagrama de un blogpost:
+
+![Diagrama entidad relación](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/er-diagram.jpeg?raw=true)
+
+# Diagrama físico
+
+Una vez teniendo claras las entidades que van a interactuar en el sistema, nos hace falta aterrizar nuestro diseño de una manera más precisa para llevarlo a la práctica, esto lo haremos con el diagrama físico, que nos ayudará para transicionar eventualmente a una base de datos. Aquí veremos los símbolos de las cardinalidades y también los tipos de datos:
+
+## Tipos de datos
+
+### De texto
+* **CHAR(n).** Nos permite almacenar caracteres y strings
+* **VARCHAR(n).** Es parecido a CHAR(n), toma un espacio inicial en memoria pero su tamaño es dinámico, es decir que puede crecer conforme se requiera (hasta 250 caractéres).
+* **TEXT.** Permite almacenar cadenas de más de 250 carcatéres.
+
+### Números
+* **INTEGER.** Son números que no tienen partes fraccionarias.
+  *** BIGINT.** Nos permite para declarar enteros que de antemano sabemos que será muy grande.
+  *** SMALLINT.** Nos permite para declarar enteros que de antemano sabemos que será muy chico.
+* **DECIMAL(n, s).** Recibe dos parámetros, n: el número y s: sus decimales, nos servirá para manejar números con parte fraccionaria
+* **NUMERIC(n, s).** Misma definición que DECIMAL(n, s).
+
+### Fecha/hora
+* **DATE.** Solamente almacena fecha (año, mes, día)
+* **TIME.** Alamacena la hora del día
+* **DATETIME.** Almacena la hora aún con milisegundos, es muy precisa
+* **TIMESTAMP.** Misma definición que DATETIME.
+
+### Lógicos
+* **BOOLEAN.** Dato binario que almacena cierto/falso, 1/0 nos servirá para almacenar banderas
+
+## Constraints
+
+Son las reglas que le definimos a una base de datos:
+*** NOT NULL.** Se asegura que la columna no tenga valores nulos, nos ayudará a definir los datos obligatorios del sistema.
+* **UNIQUE.** Se asegura que cada valor en la caloumna se repita, se utiliza por ejemplo, para validar que no se repita un correo electrónico.
+* **PRIMARY KEY.** Es una combinación de NOT NULL y UNIQUE, valida que sea único un elemento y que no esté vacío.
+* **FOREGIN KEY.** Identifica de manera única una tupla en otra tabla (convivirá quizá con una PRIMARY KEY, pero sí se puede repetir).
+* **CHECK.** Se asegura que el valor en la columna cumpla una condición dada
+* **DEFAULT.** Coloca un valor por defecto cuando no hay un valor especificado (que no sea NULL).
+* **INDEX.** Se crea por columna para permitir búsquedas más rápidas, su desventaja es que si la base de datos crece mucho, se realentiza, se usa mejor cuando la tabal es estática.
+
+## Normalización
+
+Nos permite separar los componentes de una base de datos para que obedezcan a las reglas de Codd. Llegar a este punto es la aspiración de todo diseñador de base de datos.
+
+Veamos una tabla sin normalizar:
+
+| alumno  | nivel_curso  | nombre_curso     | materia_1 | materia_2 |
+| ------- | ------------ | ---------------- | --------- | --------- |
+| Juanito | Maestría     | Data engineering | MySQL     | Python    |
+| Pepito  | Licenciatura | Programación     | MySQL     | Python    |
+
+Para ir separando la información y normalizándola se usan las siguientes formas:
+
+### Primera forma normal (1FN)
+Esta norma nos habla acerca de atributos atómicos, quiere decir que no puede haber campos repetidos, aplicando esta norma, tendríamos este resultado, reduciendo dos columnas (materias 1 y 2) a una:
+
+| alumno_id | alumno  | nivel_curso  | nombre_curso     | materia   |
+| --------- | ------- | ------------ | ---------------- | --------- |
+| 1         | Juanito | Maestría     | Data engineering | MySQL     |
+| 1         | Juantio | Maestría     | Data engineering | Python    |
+| 1         | Pepito  | Licenciatura | Programación     | MySQL     |
+| 1         | Pepito  | Licenciatura | Programación     | Python    |
+
+### Segunda forma normal (2FN)
+Indica que primero debe estar en la primera forma normal y cada campo en la tabla debe depender de una clave única, aplicándola, tendríamos ahora dos tablas, una para guardar la relación de los alumnos y otra para las materias:
+
+**alumnos:**
+
+| alumno_id | alumno  | nivel_curso  | nombre_curso     |
+| --------- | ------- | ------------ | ---------------- |
+| 1         | Juanito | Maestría     | Data engineering |
+| 2         | Pepito  | Licenciatura | Programación     |
+
+**materias:**
+
+|materia_id|alumno_id|materia|
+|-|-|-|
+|1|1|MySQL|
+|2|1|Python|
+|3|2|MySQL|
+|4|2|Python|
+
+Vemos que esta tabla tiene mayor sentido, ya que loas alumnos y materias no representan las mismas entidades en el mundo real.
+
+### Tercera forma normal (3FN)
+Nos dice que se deben cumplir las primeras dos formas normales y que los campos que no son clave, no deben tener dependencias, aplicándolo a las tablas anteriores, tendríamos los siguientes resultados (separando alumnos de cursos):
+
+
+**alumnos:**
+
+|alumno_id|alumno|cusro_id|
+|-|-|-|
+|1|Juanito|1|
+|2|Pepito|2|
+
+**cursos:**
+
+|cusro_id|nivel_curso|nombre_curso|
+|-|-|-|
+|1|Maestría|Data engineering|
+|2|Licenciatura|Programación|
+
+**materias:**
+
+|materia_id|alumno_id|materia|
+|-|-|-|
+|1|1|MySQL|
+|2|1|Python|
+|3|2|MySQL|
+|4|2|Python|
+
+### Cuarta forma normal (4FN)
+Debe incluir las primeras tres formas normales, pero además, los campos multivaluados, se identificarçan por una clave única, veamos cómo nos quedaría (agregamos una tabla con un id artificial y los números que relacionan a los alumnos con cada materia):
+
+**alumnos:**
+
+|alumno_id|alumno|cusro_id|
+|-|-|-|
+|1|Juanito|1|
+|2|Pepito|2|
+
+**cursos:**
+
+|cusro_id|nivel_curso|nombre_curso|
+|-|-|-|
+|1|Maestría|Data engineering|
+|2|Licenciatura|Programación|
+
+**materias:**
+
+|materia_id|materia|
+|-|-|
+|1|MySQL|
+|2|Python|
+
+**materias_por_alumno:**
+
+|mpa_id|materia_id|alumno_id|
+|-|-|-|
+|1|1|1|
+|2|2|1|
+|3|1|2|
+|4|2|2|
+
+> Aunque pareciera un diseño más rebuscado, nos ayudará a que la computadora pueda identificar de mejor manera todas las entidades y que no haya datos repetidos, eventualmente también nos permitirá hacer querys más precisos.
+
+Después de este proceso, ya tenemos todos los elementos para hacer nuestro diagrama físico.
+
+![Diagrama físico](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/physic-er.jpeg?raw=true)
+
+# RDBMS
+
+Son siglas de **R**elational **D**ata**B**ase **M**anagement **S**ystem, es decir, un manejador de bases de datos, son programas que nos permiten llevar a la realidad nuestras bases de datos. Las más importantes son:
+
+* MySQL
+* PostgreSQL
+* Oracle
+
+Para descargar MySQL, podemos buscar un instablable en este [link](https://downloads.mysql.com/archives/community/)
+
+También requerimos el **WorkBench**, que nos permitirá visualizar de manera más fácil nuestras bases de datos. A este se le denomina *cliente gráfico* la forma más simple de abstraer una base de datos, es a modo de una tabla, para eso nos ayudan los clientes gráficos.
+
+Al abrirlo, seleccionamos nuestro servidor, y vemos que podemos crear *schemas* que no son otra cosas sino bases de datos, seleccionamos el encoding y si lo requerimos para algún idioma específico.
+
+# Servicios administrados
+
+Los servicios *cloud* o servicios administrados, son aquellos que no están en equipos propios o de la empresa, sino que se encuentran en equipos de terceros, nos evitan preocuparnos por la seguridad y configuraciones y así concentrarnos en las bases de datos per se. Los servicios más populares que se proporcionan en el mercado son:
+* AWS
+* Google Cloud Platform
+* Microsoft Azure
+
+# SQL
+
+Es un lenguaje que nos permite hacer consultas a bases de datos, llamado así por sus siglas **S**tructured **Q**uery **L**anguage, surge de la necesidad de hacer un estándar para hacer consultas a bases de datos. Anteriormente existían múltiples RDBS, también muchos trabataban de leer archivos de texto o de diferentes tipos, por ello era necesario estandarizarlo.
+
+## NOSQL
+
+Hoy en día existen algunos manejadores de bases de datos que no son relacionales, utilizan lenguajes más amplios, pero muchas veces, tienen como base SQL, a éstas se les denomina **NOSQL**, pero no porque no tengan nada que ver con SQL, sino porque son *Not Only* - SQL, ejemplos de ello son:
+* Big query
+* Cassandra
+
+## DDL
+Es un sub-lenguje de SQL, se denomina por las siglas de **D**ata **D**efinition **L**anguage, éste nos ayuda a crear la estructura de una base de datos: entidades y relaciones. Existen tres grandes comandos en DDL:
+* **Create.** Nos permitirá crear bases de datos, tablas, índices, etc.
+* **Alter**. Nos permite modificar DBs, por ejemplo agregar columnas, quitándolas, cambiando el tipo de dato, etc.
+* **Drop.** Nos ayuda a borrar elementos, debemos tener mucho cuidado con ella.
+
+Los elementos que vamos a estar manejando son:
+* **Database.** Es la base de datos.
+* **Table.** Es la proyección o tradcción a SQL de nuestras entidades.
+* **View.** Son las proyecciones de nuestras bases de datos, de modo que son entendibles.
+
+### Crear una Base de Datos
+
+Para crear una base de datos y usarla usaremos esta sintaxis:
+
+```sql
+CREATE DATABASE test_db;
+
+USE DATABASE test_db;
+```
+
+Un equivalente en Workbench, damos click derecho en la columna SCHEMAS y luego click  en *Create Schema*, nombremos nuestra base de datos, y veremos cómo se escribe el comando CREATE con un cierto encoding. Para usarlo por default, damos click derecho a nuestro Schema y seleccionamos *Set as default schema*.
+
+### Crear una tabla
+
+Los comandos para crear una tabla son más complejos, pues implican más campos (constrins), esta sería la forma de hacerlo:
+
+```sql
+CREATE TABLE people (
+  person_id int,
+  last_name varchar(255),
+  fisrt_name varchar(255),
+  address varchar(255),
+  city varchar(255)
+)
+```
+
+En la consola, desplegamos nuestra schema, y damos click derecho en Tablas luego en la opción Create Table. Colocamos un nombre a nuestra tabla y veremos que por default nos crea un campo id, lo modificamos a nuestro gusto, generalmente para un id, seleccionaremos el campo AI (automatic increment) que lo incrementará automáticamente cuando se agregue más registros, agregamos los campos mencionados arriba con sus tipos y al darle apply, veremos algo así:
+
+```sql
+CREATE TABLE `platziblog`.`people` (
+  `person_id` INT NOT NULL AUTO_INCREMENT,
+  `last_name` VARCHAR(255) NULL,
+  `first_name` VARCHAR(255) NULL,
+  `address` VARCHAR(255) NULL,
+  `city` VARCHAR(255) NULL,
+  PRIMARY KEY (`person_id`));
+```
+
+Posteriormente, dentro de Tables, veremos que ya existe la tabla people. Para hacer una consulta, podemos dar click derecho y hacer click en Select Rows - Limit 1000 para ver los primeros 1000 registros.
