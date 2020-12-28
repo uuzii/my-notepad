@@ -93,7 +93,7 @@ La cardinalidad nos propeorciona información acerca de las relaciones,
 
 Nos permite visualizar cómo interaccionan las entidades conectadas por sus respectivas cardinalidades, en el siguiente ejemplo, vemos un diagrama de un blogpost:
 
-// ER 1
+![Diagrama entidad relación](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/er-diagram.jpeg?raw=true)
 
 # Diagrama físico
 
@@ -241,7 +241,7 @@ Debe incluir las primeras tres formas normales, pero además, los campos multiva
 
 Después de este proceso, ya tenemos todos los elementos para hacer nuestro diagrama físico.
 
-// Diagrama físico
+![Diagrama físico](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/physic-er.jpeg?raw=true)
 
 # RDBMS
 

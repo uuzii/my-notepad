@@ -1,3 +1,5 @@
+🧮 v0.1.0
+
 # Algoritmos
 
 ¿Qué entiende una computadora?

@@ -1,3 +1,5 @@
+🖼 v0.1.0
+
 # Metodologías de CSS
 Nos pueden ayudar a mantener mejor organizado nuestro código y hacerlo más escalable
 

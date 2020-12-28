@@ -1,3 +1,5 @@
+🗿 v0.1.0
+
 # Punteros
 
 Para entenderlos, tenemos que entender cómo está hecha la memoria de la computadora, de antemano sabemos que son *tablas*, donde los datos se arreglan en conjuntos de 8 bits (1 byte). Esto significa que en un byte podemos guardar los números posibles de 0 a 255, si queremos guardar números más grandes, haremos uso de más bytes.

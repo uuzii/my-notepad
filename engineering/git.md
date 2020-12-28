@@ -1,3 +1,5 @@
+🔥 v0.1.0
+
 # Primeros conceptos
 
 * **Archivos de texto plano.** Son aquellos que no están en formato binario y presentan solo texto, git los maneja con precisión.
