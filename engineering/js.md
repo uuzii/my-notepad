@@ -172,10 +172,65 @@ para declarar un objeto, podemos emplear diferentes técnicas:
 # Clases
 Las clases en Js, no son iguales que en otros lenguajes, realmente son prototipos con *sugar syntax*. Si queremos, por ejemplo crear un prototipo (o función constructura) e instanciarlo, hacemos lo siguiente:
   ```javascript
-    function Persona(name) {
+  function Persona(name) {
+    this.name = name
+  }
+  var person = new Persona('Uzi')
+  ```
+
+Con esto, nos damos cuenta de que no existe la herencia de clases, sino solo la *herencia prototipal*. Los prototipos únicamente buscan si pueden responder a los métodos o properties que señalemos, si no puede, hace un escalamiento en su prototipo padre y así sucesivamente hasta llegar al prototype Object.
+
+  ```javascript
+  function heredaDe(sonPrototype, fatherPrototype) {
+    var fn = function() {}
+    fn.prototype = fatherPrototype.prototype
+    sonPrototype.prototype = new fn
+    sonPrototype.prototype.constructor = sonPrototype
+  }
+
+  function Persona(name) {
+    this.name = name
+  }
+
+  Persona.prototype.saludar() = function() { console.log('Hola ', this.name) }
+
+  function Desarrollador(name, lastName) {
+    this.name = name;
+    this.lastName = lastName;
+  }
+
+  heredaDe(Desarrollador, Persona)
+  ```
+
+De la manera mencionada, se hace una herencia, vemos que realmente la herencia consiste en añadir el prototipo a u  hijo mediante una función vacía así como el constructor, lo que sucederá, es que el prototipo hijo obtendrá las propiedades y métodos de su padre. Si se le pide que resuelva alguna propiedad o método que no tiene en su prototype y no las tiene, las buscará en los prototipos padres (__proto__) hasta llegar a Object, que es el prototipo más grande.
+
+A partir del 2015, JavaScript se ha actualizado año con año a través del estándar *ECMA*, en estas actualziaciones, se ha agregado cierta sintáxis que nos permite generar herencias de una manera más simple (aunque en el fondo siguen siendo prototipos) lo haremos de esta manera:
+
+  ```javascript
+  class Persona {
+    constructor(name, lastName) {
       this.name = name
+      this.lastName = lastName
     }
-    var person = new Persona('Uzi')
+    greeting() {
+      console.log('Hola, me llamo', this.name + ' ' + this.lastName)
+    }
+  }
+  ```
+
+Para generar herencia en esta nueva sintáxis, usaremos la palabra reservada *extends*:
+
+  ```javascript
+  class Persona { ... }
+
+  class Desarrollador extends Persona {
+    constructor(name, lastName) {
+      super(name, lastNAme); // para llamar al constructor de la clase padre
+    }
+    greeting() {
+      console.log('Hola, me llamo', this.name + ' ' + this.lastName + ' y soy developer')
+    }
+  }
   ```
 
 
@@ -267,3 +322,258 @@ Pero con `reduce`, podemos hacer esta acción de una manera alternativa:
   // acum = 19
   ```
 Donde el primer argumento, es la función reductora, el segundo argumento es el valor inicial de un acumulador
+
+# Asincronismo
+
+Para empezar a hablar de asincronismo, es importante entender, que en Js es posible pasar funciones como parámetros de una función, recordemos que las funciones son consideradas *first class citizens*:
+
+  ```javascript
+  function greeting(fn) {
+    console.log('Hola')
+    if(fn) {
+      fn('uzi', 'rodriguez', true);
+    }
+  }
+
+  function replyGreeting(name, lastName, isDev) {
+    console.log('Buen dia ' + name + ' ' + lastName)
+
+    if(isDev) {
+      console.log('No sabia que eres dev')
+    }
+  }
+
+  greeting(replyGreeting)
+  ```
+
+## ¿Cómo funciona el asincronismo?
+
+Tomemos en cuenta que, JavaScript no puede ejcutar múltiples tareas a la vez, pero aún así, tiene la capacidad de delegar la ejecución de ciertas funciones a otros procesos. Este modelo de concurrencia, se llama *Eventloop*.
+
+Para entenderlo, consideremos que la pila de ejecución de funciones que obedecerá JS, se llama *callstack*. En esta pila, existen determinados procesos, que se delegarán directamente al navegador, por ejemplo una petición a un servidor. Dichas funciones llevan consigo otra función denominada *callback*, misma que, una vez resuelta la tarea por el navegador, estará lista para ser ejecutada.
+
+Mientras tanto, se seguirá ejecutando el programa principal, pero no es hasta que el programa principal se quede sin funciones en su *callstack*, que irá a ver qué *callbacks* ya están listos en la *pila de ejecuciones* que se llena con todos los callbacks "resueltos" por el navegador. Por ello es importante no saturar el callstack con funciones muy pesadas, ya que los callbacks se quedarán bloqueados hasta que el programa principal se libere.
+
+Nótese que las funciones que se "delegarán" al navegador, son las que corresponden a API's del mismo, funciones como `setTimeout`, `alert`, `fetch`, entre otras.
+
+Veamos un ejemplo, en el siguiente código, evidentemente veremos en consola cada letra seguida de la otra en el mismo orden del código, pues la función `console.log` solo se carga en el callstack:
+
+  ```javascript
+  console.log('a')
+  console.log('b')
+  console.log('c')
+  ```
+
+Pero si introducimos un proceso asíncrono, no se cumplirá dicho orden, dado que la segunda línea, se entregará al navegador para que ejecute una función después de 0 segundos, si bien, esto no representa ningún tiempo, veremos que su callback se ejecutará al final, puesto que JS siguió con el programa principal y hasta que se liberó de sus tareas, fue por el callback que estaba en lista de espera:
+
+  ```javascript
+  console.log('a')
+  setTimeout(() => console.log('b'), 0)
+  console.log('c')
+  // a c b
+  ```
+
+Si delegáramos un proceso al navegador que fuera muy ligero, pero nuestro programa principal fuera demasiado pesado, veremos que hasta después de que termine su callstack, se ejcutará nuestro callback:
+
+  ```javascript
+  setTimeout(() => console.log('d'), 1000)
+  for(var i = 0; i< 100000000000; i++) {}
+  ```
+
+Aquí radica la importancia de nosaturar nunca el eventloop con tareas muy pesadas.
+
+## Manejando el asincronismo
+
+Dado que las respuestas de las operaciones asíncronas no necesariamente se ejecutarán en un orden determinado, surge la necesidad de encolar una función después de otra, esto lo podemos hacer de la siguiente manera:
+
+  ```javascript
+  function getContentFromServer(param, fn) {
+    fetch(`http://example.com/${param}`)
+      .then(data => {
+        console.log(data)
+        if(fn) {
+          fn()
+        }
+      })
+      .catch(error => console.error('Error: ', error))
+  }
+
+  getContentFromServer('1', function() {
+    getContentFromServer('2', function() {
+      getContentFromServer('3')
+    })
+  })
+  ```
+
+Donde observamos que la función asíncrona recibe como parámetro una función **anónima**, misma que seria la siguiente en orden de ejecución. Pero escribir nuestro código de esta manera, haría que nuestro código se hiciera horizontal, a este fenómeno se le llama *callback hell*.
+
+Tambié observamos que hemos pasado una función en un `catch()`, mismo que nos ayudaría si hubiese algún problema en el navegador para ejecutar la llamada a servidor.
+
+# ES6
+
+ECMAScript es una especificación propuesta por ECMA, que es una organización de estándares. ES6, fue un estándar lanzado en 2015 que permite agregar características nuevas a JavaScript, a partir de ahí, cada año ha salido una nueva versión de ECMAScript.
+
+## Default params
+Nos permite agregar parámetros por defecto a una función para no tener que validarlos dentro de la misma:
+
+  ```javascript
+  // Antes
+  function newFunction(name, age, country) {
+    var name = name || 'uzi'
+    var age = age || 23
+    var country = country || 'MX'
+    console.log(name, age, country);
+  }
+
+  // ES6
+  function newFunction(name = 'uzi', age = 23, country = 'MX') {
+    console.log(name, age, country);
+  }
+  ```
+
+## Template literals
+Nos permite unir varios elementos en un string:
+
+  ```javascript
+  // Antes
+  let hello = 'hello'
+  let world = 'world'
+  let phrase = hello + ' ' + world
+  console.log(phrase)
+
+  // ES6
+  console.log(`${hello} ${world}`)
+  ```
+
+## Strings Multilínea
+Los backticks, también nos permiten hacer textos multilínea:
+
+  ```javascript
+  // Antes
+  let lorem = 'lorem ipsum dolor siamet commodi vel dius yet minima\n'
+  + 'otra linea'
+
+  // ES6
+  let lorem2 = `lorem ipsum dolor siamet commodi vel dius yet minima
+  ahora es otra línea
+  `;
+  ```
+
+## Destructuración de objetos
+Nos permite traer hacia un contexto, solo los elementos que necesitamos de un objeto:
+
+  ```javascript
+  let obj = {
+    name: 'Uzi',
+    age: 23,
+    country: 'MX'
+  }
+
+  // Antes
+  console.log(obj.name, obj.age, obj.country)
+
+  // ES6
+  let { name, age } = obj
+  console.log(name, age)
+  ```
+
+## Spread operator
+Nos permite expandir objetos dentro de otros de una manera muy sencilla para unirlos:
+  ```javascript
+  let team1 = ['Person 1', 'Person 2', 'Person 3']
+  let team2 = ['Person 4', 'Person 5', 'Person 6']
+
+  let education = ['Person 7', ...team1, ...team2]
+  ```
+
+## Let y Const
+* **Let.** Es una nueva forma para declarar nuestras variables, a diferencia de *var*, solo está disponible en el scope en el que es declarado.
+* **Const.** Es lo mismo que let, pero no se le puede reasignar un valor.
+
+## Parámetros en objetos
+Podemos llenar un objeto como elementos llave-valor (variable-valor) sin necesidad de especificar toda su estructura:
+  ```javascript
+  let name = 'uzi'
+  let age = 23
+
+  obj = {name, age}
+  ```
+
+## Arrow functions
+
+## Promises
+Nos ahorran escribir funciones como parámetros (callbacks) evitándonos la posibilidad de escribir un código horizontal:
+  ```javascript
+  const helloPromise = () => {
+    return new Promise((resolve, reject) => {
+      if(true) {
+        resolve('Promesa resuelta')
+      } else {
+        reject('Promesa fallida')
+      }
+    })
+  }
+
+  helloPromise()
+    .then(response => console.log(response))
+    .catch(error => console.error(error))
+  ```
+
+## Clases
+
+## Módulos
+Son archivos externos a nuestro código en los que podremos separar algunos elementos de nuestro programa:
+
+  ```javascript
+  const mod = () => {
+    return 'hello'
+  }
+
+  export default mod
+
+  // Another js file...
+  import { mod } from './module';
+  ```
+
+## Generators
+Es una función especial que retorna determinados valores según un algoritmo definido
+  ```javascript
+  function* helloWorld() {
+    if(true) {
+      yield 'Hello, '
+    }
+    if(true) {
+      yield 'World'
+    }
+  }
+
+  const generatorHello = helloWorld();
+  console.log(generatorHello.next().value) // Hello,
+  console.log(generatorHello.next().value) // World
+  console.log(generatorHello.next().value) // undefined
+  ```
+
+# ES7
+
+Es la versión de ECMA que fue lanzada en 2016, contiene algunas herramientas cómo:
+
+## Includes
+Nos permite saber si un elemento se encuentra en un array
+
+  ```javascript
+  let numbers = [1,2,3,4,5,6,7]
+  if(numbers.includes(7)) {
+    console.log('Sí se encuentra el 7')
+  } else {
+    console.log('No se encuentra el 7)
+  }
+  ```
+
+## Exponent
+Nos permite elevar una base a un determinado exponente
+
+  ```javascript
+  let base = 4
+  let exponent = 3
+  let result = base ** exponent
+  ```

@@ -188,7 +188,7 @@ Si configuramos un servidor y en él hacemos un pull de nuestro repositorio, pod
 
 # Ignorar archivos
 
-No todos los archivos que tenemos en un repositorio local tienen que subirse al repositorio remoto, para eso existen los .gitignore, este archivo se guarda en la raíz de nuestro proyecto, contendrá una lista de los archivos que se han de ignorar, ejemplo:
+No todos los archivos que tenemos en un repositorio local tienen que subirse al repositorio remoto, para eso existen los **.gitignore**, este archivo se guarda en la raíz de nuestro proyecto, contendrá una lista de los archivos que se han de ignorar, ejemplo:
 
 ```txt
 *.jpg
