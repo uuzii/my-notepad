@@ -178,7 +178,7 @@ var me = new Person('Uzi', 'Rodriguez');
 Obj.prototype.newMethod = function() { ... }
 ```
 
-# Clases {#classes}
+# Clases
 Las clases en Js, no son iguales que en otros lenguajes, realmente son prototipos con *sugar syntax*. Si queremos, por ejemplo crear un prototipo (o función constructura) e instanciarlo, hacemos lo siguiente:
 ```javascript
 function Persona(name) {
@@ -743,7 +743,7 @@ helloPromise()
   .catch(error => console.error(error))
 ```
 
-## [Clases](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#classes)
+## [Clases](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#clases)
 
 ## Módulos
 Son archivos externos a nuestro código en los que podremos separar algunos elementos de nuestro programa:
