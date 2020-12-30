@@ -285,7 +285,7 @@ Los elementos que vamos a estar manejando son:
 * **Table.** Es la proyección o tradcción a SQL de nuestras entidades.
 * **View.** Son las proyecciones de nuestras bases de datos, de modo que son entendibles.
 
-### Crear una Base de Datos
+### Crear una Base de Datos (CREATE DATABASE)
 
 Para crear una base de datos y usarla usaremos esta sintaxis:
 
@@ -297,9 +297,9 @@ USE DATABASE test_db;
 
 Un equivalente en Workbench, damos click derecho en la columna SCHEMAS y luego click  en *Create Schema*, nombremos nuestra base de datos, y veremos cómo se escribe el comando CREATE con un cierto encoding. Para usarlo por default, damos click derecho a nuestro Schema y seleccionamos *Set as default schema*.
 
-### Crear una tabla
+### Crear una tabla (CREATE TABLE)
 
-Los comandos para crear una tabla son más complejos, pues implican más campos (constrins), esta sería la forma de hacerlo:
+Los comandos para crear una tabla son más complejos, pues implican más campos (constrains), esta sería la forma de hacerlo:
 
 ```sql
 CREATE TABLE people (
@@ -324,3 +324,75 @@ CREATE TABLE `platziblog`.`people` (
 ```
 
 Posteriormente, dentro de Tables, veremos que ya existe la tabla people. Para hacer una consulta, podemos dar click derecho y hacer click en Select Rows - Limit 1000 para ver los primeros 1000 registros.
+
+### Crear una vista (CREATE VIEW)
+
+Los views toman datos de una base de datos, los ponen en una forma presentable y los convierten en una consulta recurrente.
+
+```sql
+CREATE VIEW v_brasil_customers AS
+  SELECT customer_name, contact_name
+  FROM customers
+  WHERE country = "Brasil"
+```
+
+Donde:
+* El profijo `v`se antepone como un estándar para identificar que no es una base de datos sino una vista
+* SELECT y las demás sentencias nos ayudarán a consultar solo los clientes de Brasil.
+
+Para hacerlo en la consola seguimos estos pasos:
+1. Hacemos una consulta de los primeros 1000 registros dando click derecho a nuestra tabla > Select rows limit 1000
+2. Copiamos el comando de esta selección
+3. Damos click derecho en Views > create view
+4. Pegamos nuestro SELECT en la segunda línea
+5. Editamos el nombre de la vista
+6. Damos click en apply y revisamos
+7. Veremos nuestro view guardado y podemos consultarlo
+
+Estas vistas nos ayudarán para crear querys más avanzados que combinen tablas, hagan búsquedas avanzadas y que se hagan recurrentemente.
+
+### Modificar una tabla (ALTER TABLE)
+
+Son comandos que nos permitirán modificar valores en una tabla
+
+```sql
+ALTER TABLE people
+ADD date_of_birth date;
+
+ALTER TABLE people
+ALTER COLUMN date_of_birth year;
+
+ALTER TABLE people
+DROP COLUMN date_of_birth;
+```
+
+Para hacerlo en Workbench:
+1. Damos click derecho en la tabla > alter table
+2. Veremos el modo de edición y podremos añadir columnas
+3. Pulsamos apply y revisamos
+4. Veremos que hemos alterado la tabla
+
+De esta manera podemos alterar la tabla, agregando, quitando columnas (DROP), modificando los tipos de datos, etc.
+
+### Eliminar tabla/base de datos (DROP)
+
+Esta sentencia es muy delicada, pues consiste en eliminar datos de nuestra base de datos. Ejemplo, para borrar una tabla o una base de datos respectivamente, se usa:
+
+```sql
+DROP TABLE people;
+
+DROP DATABASE test_db;
+```
+
+Para borrar una tabla en Workbench:
+1. Damos click derecho en la tabla > drop table
+2. Revisamos la sentencia
+3. Ejecutamos
+
+Para borrar una base de datos/schema en Workbench:
+1. Damos click derecho en la db > drop schema
+2. Revisamos la sentencia
+3. Ejecutamos
+
+Los comandos DDL, se usan mayormente al inicio del proyecto, posteriormente, usaremos los comandos **DML**.
+
