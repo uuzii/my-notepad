@@ -8,7 +8,7 @@ La diferencia entre ambas, es que a las funciones declarativas se les aplica hoi
 
 Lo que quiere decir que con las funciones declarativas, podemos mandar llamar la función antes de que ésta sea declarada, y con la expresión de función, no, tendríamos que declararla primero, y después mandarla llamar.
 
-# Arrow functions {#arrow-functions}
+# Arrow functions
 Son una manera alterna para generar funciones. Previamente tenemos que considerar que en JavaScript se pueden almacenar funciones *anónimas* dentro de una variable:
 
 ```javascript
@@ -724,7 +724,7 @@ let age = 23
 obj = {name, age}
 ```
 
-## [Arrow functions](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#arrow-functions)
+## [Arrow functions](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#arrow-functions-arrow-functions)
 
 ## Promises
 Nos ahorran escribir funciones como parámetros (callbacks) evitándonos la posibilidad de escribir un código horizontal:
