@@ -2,7 +2,7 @@
 This file contains some words I've learned trough my english career :)
 
 |**English word**|Spanish approximations|
-|-|-|-|-|
+|-|-|
 |**apart**|separado, alejado, aparte, en pedazos, fuera de, excepto, independiente|
 |**haunt**|rondar, aparecerse, frecuentar, obsesionar, perseguir, lugar predilecto|
 |**chasing**|persecusión, cincelado, averiguar, hacer un recordatorio|
