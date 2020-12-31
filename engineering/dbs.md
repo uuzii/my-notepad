@@ -396,3 +396,72 @@ Para borrar una base de datos/schema en Workbench:
 
 Los comandos DDL, se usan mayormente al inicio del proyecto, posteriormente, usaremos los comandos **DML**.
 
+## DML
+Es otro sub-lenguaje de SQL, que tiene que ver con el manejo del contenido de la base de datos, no tanto de la base de datos per se. Quiere decir *Data Manipulation Language*, algunas de las acciones principales son:
+* Insert
+* Update
+* Delete
+* Select
+
+### INSERT
+Agrega nuevos registro o tuplas en una tabla de una base de datos, sería un equivalente a agregar *filas* a una tabla:
+
+```sql
+INSERT INTO people (last_name, first_name, address, city)
+VALUES ('Rodriguez', 'Uzi', 'Calle X', 'HMO')
+```
+
+* `INSERT` indica en qué tabla se van a introducir los datos y cuáles serán los argumentos
+* `VALUES` representa una de las *filas* a insertar, en este punto es muy importante mantener el orden en el que se introducen los campos
+
+PAra hacerlo en workbench, introducimos directamente el comando anterior en la tabla.
+
+### UPDATE
+Nos permitirá modificar datos ya existentes en nuestra tabla
+
+```sql
+UPDATE people
+SET last_name = 'Alcantara', city = 'MEX'
+WHERE person_id = 1;
+
+UPDATE people
+SET last_name = 'Alcantara'
+WHERE city = 'MEX';
+
+UPDATE people
+SET first_name = 'Uzi';
+```
+
+Donde:
+* `UPDATE` contiene la tabla
+* `SET` especifica qué campo se tiene que cambiar y por qué valor
+* `WHERE` detalla qué condiciones debe cumplir el ítem que se va modificar
+
+En el primer caso, cambiamos apllido y ciudad de un row puntual, en el segundo caso afectamos a todos los rows que sean de la ciudad MEX; en el tercer caso no especificamos qué ítem se debe modificar.
+
+### DELETE
+Puede borrar el contenido de una tabla, en el primer caso, borra un ítem puntual, si no especificamos dónde como en el segundo caso de abajo, se puede borrar toda la tabla.
+
+```sql
+DELETE FROM people
+WHERE person_id = 1;
+
+DELETE FROM poeple;
+```
+## SELECT
+Nos consulta información de una base de datos:
+
+```sql
+SELECT first_name, last_name
+FROM people;
+```
+
+Donde:
+* `SELECT` nos permitirá ver los campos indicados
+* `FROM` especifica la tabla
+* `WHERE` especifica argumentos de los ítems que queremos consultar
+
+## ¿Qué tan estándar es SQL?
+El lenguaje SQL, unificó la forma en la que se hacían consultas a una base de datos. Aún actualmente, muchas tecnologías modernas siguen usando su estructura sintáctica.
+
+> 💡 Para todos los manejadores de bases de datos relacionales que usan SQL, el lenguaje DDL y DML se utilizan igual

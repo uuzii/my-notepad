@@ -798,3 +798,146 @@ let base = 4
 let exponent = 3
 let result = base ** exponent
 ```
+
+# ES8
+
+## Object.entries
+Nos permite convertir un Objeto a una matriz de arreglos
+
+```javascript
+const data = {
+  frontend: 'uzi',
+  backend: 'fili',
+  design: 'uzi'
+}
+const entries = Object.entries(data);
+console.log(entries) // matrix with three [key, value] items
+console.log(entries.length) // 3
+```
+
+## Object.values
+Nos permite generar un arreglo con todos los valores del objeto
+
+```javascript
+const data = {
+  frontend: 'uzi',
+  backend: 'fili',
+  design: 'uzi'
+}
+const values = Object.values(data);
+console.log(values) // matrix with three items with [values...]
+console.log(values.length) // 3
+```
+
+## Padding
+Nos permite anteponer o sobreponer elementos a un string
+
+```javascript
+const string = 'hello'
+console.log(string.padStart(7, 'hi')) // hihello
+console.log(string.padEnd(12, ' ------')) // hello -----
+```
+
+## Trailing comma
+Nos permite dejar una coma al final de un objeto
+
+```javascript
+const obj = {
+  name: 'uzi',
+}
+```
+
+## [Async-await](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#async-await-async-await)
+
+# ES9
+
+## [Spread operator](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#spread-operator-spread-operator)
+
+## Promise.finally
+Nos permitirá ejecutar un cloque de código cuándo se completó una promesa
+
+```javascript
+const helloWorld = () => {
+  return new Promise((resolve, reject) => {
+    (true)
+      ? resolve('Hello world')
+      : reject(new Error('Test error'))
+  })
+}
+helloWorld()
+  .then(response => console.log(response))
+  .catch(error => console.log(error))
+  .finally(() => console.log('fin'))
+```
+
+## Mejoras Regex
+Nos permite agrupar elementos de una expresión regular para posteriormente tenerlos dentro de un array
+
+```javascript
+const regexDAta = /([0-9]{4})-([0-9]{2})-([0-9]{2})/
+const match = regexData.exec('2018-04-20')
+const year = match[1]
+const mont = match[2]
+const day = match[3]
+console.log(year, month, day)
+```
+
+# ES10
+
+##  Array.prototype.flat
+Nos permitirá aplanar un arreglo que tenga determinados elementos de profundidad
+
+```javascript
+let array = [1,2,3, [1,2,3, [1,2,3]]]
+console.log(array.flat()) // [1,2,3,1,2,3, [1,2,3]]
+console.log(array.flat(2)) // [1,2,3,1,2,3,1,2,3]
+```
+
+##  Array.prototype.flatMap
+Nos permite aplanar un array utilizando cierto mapeo en la estrucutra resultante
+
+```javascript
+let array = [1,2,3,4,5]
+console.log(array.flatMap(value => [value, value * 2])) // [1,2,2,4,3,6,4,8,5,10]
+```
+
+## String.protoype.trimStart y trimEnd
+Nos permite eliminar espacios en blanco al inicio o al final de un string
+
+```javascript
+let hello = '      hello'
+console.log(hello.trimStart()) // hello
+```
+
+## Optional try binding
+Nos permite pasar de manera opcional el parámetro de error al `catch`
+
+```javascript
+try {
+
+} catch {
+  // se puede usar el `error`
+}
+```
+
+## Object.fromEntries
+Transforma una matriz clave-valor a un objeto, es decir, lo inverso de Object.entries
+
+```javascript
+let entries = [['name', 'uzi'], ['age', '23']]
+console.log(Object.fromEntries(entries))
+```
+
+## Symbol.prototype.description
+Nos permite agregar una descripción a un elemento de tipo ´Symbol´
+
+```javascript
+let mySymbl = `My Symbol`
+let symbol = Symbol(mySymbol)
+console.log(symbol.descriptiom)
+```
+
+# ES.next
+ES.next se refiere a la siguiente versión de JS que saldrá, el equipo técnico que se encarga de validar estos avances se llama [TC39](https://tc39.es), cuyos integrantes revisan las propuestas y eventualmente las autorizan. Nosotros también podemos colaborar en ellas y pasan las siguientes etapas:
+
+> Stage 0: Idea > Stage 1: Proposal > Stage 2: Draft > Stage 3: Candidate > Stage 4: Ready

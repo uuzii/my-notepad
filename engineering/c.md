@@ -598,3 +598,197 @@ Otras estrucutras avanzadas que se pueden implementar en C, son:
 * Listas circulares
 * Áboles binarios
 * Grafos
+
+# Cálculos complejos
+Existe una librería que nos permite hacer cálculos complejos: `Math.h`. En el siguiente ejemplo, hacemos un programa que calcula la hipotenusa de un triángulo, dados como argumentos principales del programa lado a y lado b:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+int main(int argc, char * argv[]) {
+  int a, b;
+  a = atoi(argv[1]);
+  b = atoi(argv[2]);
+  printf("La hipotenusa mide %.2f\n", sqrt(pow(a,2) + pow(b,2)));
+  return 0;
+}
+```
+
+Para generar números de manera *aleatoria* tenemos la biblioteca `time`:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+  srand(time(NULL));
+  printf("%d\n", rand());
+  return 0;
+}
+```
+
+`time` también nos ayuda para realizar cálculos de fechas:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(int argc, char * argv[]) {
+  // time_t es una estructura de la librería time
+  // today es el tiempo en segundos desde el segundo 0 de unix
+  time_t oneDay = 24 * 60 * 60, today = time(NULL), nextDate;
+  nextDate = today + oneDay * atoi[argv[1]];
+  // ctime permite tomar una estructura de tipo time_t a un string formateado a fecha
+  printf("%s\n", ctime(&nextDate));
+  return 0;
+}
+```
+
+# Manejo de archivos de texto
+Veremos cómo abrir y guardar archivos de texto. Para leerlos:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char * argv[]) {
+  /**
+    FILE, de stdlib, permite trabajar con archivos del sistema de archivos
+    fopen() hace un llamado al sistema operativo para levantarlo en memoria
+    y abrirlo, recibe el nombre del archivo y el modo en el que lo queremos
+    abrir
+   */
+  FILE * fp = fopen(argv[1], "r");
+  char c;
+  /**
+   * fgetc obtiene un caracter de un archivo abierto
+   * EOF es una constante que marca el fin del archivo (end of file)
+   */ 
+  while((c = fgetc(fp)) != EOF) {
+    printf("%c", c);
+  }
+  // liberamos los recursos que el archivo haya usado
+  fclose(fp);
+  return 0;
+}
+```
+
+Para escribir un archivo de texto:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char * argv[]) {
+  FILE * out;
+  char buffer[100];
+  // Si el archivo no se puede abrir por alguna razón
+  if(!(out = fopen(argv[1], "w"))) {
+    printf("No puedo escribir el archivo %s\n", argv[1]);
+    return -1;
+  }
+  do {
+    printf("Ingrese una palabra:");
+    scanf("%99s", buffer);
+    fputs(buffer, out);
+    fputs("\n", out);
+    printf("Grabada! Otra? (s/n):");
+    scanf("%1s", buffer);
+  } while(buffer[0] != 'n');
+  // es muy importante cerrar el archivo antes de salir
+  fclose(out);
+  return 0;
+}
+````
+
+En este caso ejecutaremos con:
+```bash
+$ ./file [destination file]
+```
+Y el programa nos pedirá ir introduciendo palabras hasta que pulsemos n. Si queremos corroborar que ha quedadob bien escrito el archivo, usamos el programa anterior de lectura.
+
+# Leer y escribir archivos binarios
+Lo anterior también lo podemos hacer para archivos binarios:
+
+Ecritura (el programa requerirá como argumento el nombre del archivo que queremos escribir):
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct person {
+  char name[100];
+  unsigned int age;
+};
+
+int main(int argc, char * argv[]) {
+  FILE * out;
+  char buffer[100];
+  // Si el progrma no recibe el argumento:
+  if(argc < 2) {
+    printf("Indique el nombre del archivo de salida\n");
+    return -1;
+  }
+  // Si el alrchivo no se puede abrir
+  if(!(out = fopen(argv[1], "w"))) {
+    printf("No puedo escribir en el archivo %s\n", argv[1]);
+    return -2;
+  }
+  struct person p;
+
+  do {
+    printf("Ingrese el nombre de la persona: ");
+    scanf("%99s", p.name);
+    printf("Ingrese la edad de la persona: ");
+    scanf("%d", &(p.age));
+    /**
+     * fwrite escribe directamente en binario, recibe la dirección donde
+     * queremos guardar, luego el tamaño de lo que quiero guardar, luego
+     * cuántos queremos guardar, por último dónde queremos guardar
+     */ 
+    fwrite(&p, sizeof(struct person), 1, out);
+    printf("Grabada! Otra?: (s/n): ");
+    scanf("%1s", buffer);
+  } while(buffer[0] != 'n');
+  fclose(out);
+  return 0;
+}
+```
+
+Lectura (el programa requerirá como argumento el nombre del archivo que queremos leer):
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct person {
+  char name[100];
+  unsigned int age;
+};
+
+int main(int argc, char * argv[]) {
+  FILE * in;
+  char buffer[100];
+  // Si el progrma no recibe el argumento:
+  if(argc < 2) {
+    printf("Indique el nombre del archivo de entrada\n");
+    return -1;
+  }
+  // Si el alrchivo no se puede leer
+  if(!(in = fopen(argv[1], "r"))) {
+    printf("No puedo leer en el archivo %s\n", argv[1]);
+    return -2;
+  }
+  struct person p;
+  /**
+     * fread lee directamente un binario, recibe la dirección donde
+     * queremos leer, luego el tamaño de lo que quiero leer, luego
+     * cuántos queremos leer, por último dónde queremos leer
+     */ 
+  while(fread(&p, sizeof(struct person), 1, in)) {
+    printf("%s tiene %d años\n", p.name, p.age);
+  }
+  fclose(in);
+  return 0;
+}
+```
