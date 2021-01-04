@@ -62,6 +62,7 @@ This file contains some words I've learned trough my english career :)
 |**yell**|gritar, chillar|
 ## List 3
 |**English word**|Spanish approximations|
+|-|-|
 |**beady**|pequeño y brillante|
 |**deaf**|sordo|
 |**envelop**|envolver|
