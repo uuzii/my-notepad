@@ -87,3 +87,38 @@ This file contains some words I've learned trough my english career :)
 |**stitch**|puntada, sutura, punzada|
 |**swank**|fanfarronear|
 |**underneath**|debajo de|
+## List 4
+|**English word**|Spanish approximations|
+|-|-|
+|**allegedly**|presuntamente, supuestamente|
+|**ancient**|antiguo, viejo, prehistórico, anciano|
+|**bagpipe**|gaita|
+|**bark**|ladrar, gritar, rascarse|
+|**bondage**|esclavitud, cautiverio, servidumbre|
+|**burst**|cepillo, brocha, pincel, maleza, roce|
+|**chick**|pollito|
+|**couturier**|modista|
+|**crawl**|gatear, arrastrasrse, avanzar lentamente, rebajarse|
+|**drove**|manada|
+|**enforced**|forzoso, impuesto|
+|**frightened**|asustado, tener miedo|
+|**gather**|recoger, reunir, juntar, recolectar, acumular|
+|**harsh**|duro, severo, riguroso, violento|
+|**lying**|yacer, estar tendido, radicar, mentir|
+|**marshmallow**|malvavisco, esponjita, nube|
+|**punish**|castigar, sancionar|
+|**realised**|darse cuenta, reconocer, desarrollar, realizar, producir|
+|**robbery**|robo, atraco, asalto|
+|**shamrock**|trébol|
+|**stiff**|duro, rígido, tiezo, consistente, agarrotado, entumecido|
+|**stinging**|punzante, hiriente|
+|**stray**|extraviado, perdido, descarriado, callejero|
+|**tailor**|sastre, confeccionar, adaptar|
+|**thigh**|muslo|
+|**though**|aunque, pero|
+|**thoughtful**|pensativo, serio|
+|**trusty**|fiel, leal, de confianza|
+|**twist**|girar, retorcer, tergiversar|
+|**unwillingly**|de mala gana|
+|**winged**|con alas|
+|**yeast**|levadura|
