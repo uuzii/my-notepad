@@ -792,3 +792,174 @@ int main(int argc, char * argv[]) {
   return 0;
 }
 ```
+
+# Paralelismo
+Siempre existen procesos que toman más tiempo que otros, por lo cuál muchas veces es necesario generar procesos parlelos para eficientr tiempos, para ello usaremos la herramienta `fork`. Veamos su implementación:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
+int main(int argc, char * argv[]) {
+  /**
+   * Una variable que nos permitirá almacenar el id de un proceso
+   * pues cada proceso tiene un id en el sistema operativo
+   * fork crea un nuevo proceso que ejecuta el mismo código
+   * que estamos escribiendo, para identificar el proceso original (=! 0)
+   * del generado, usamos el id
+   */
+  int pid = fork();
+  // pid diferente de cero será el padre
+  if(pid)
+  {
+    printf("Luke, im ur father, MyPID is %d and ur PID is %d\n", getpid(), pid);
+  } else {
+    printf("I am Luke. My PID is %d\n", getpid());
+  }
+  // hacemos que corra indefinidamente
+  while(1);
+  return 0;
+}
+```
+
+Para corroborar que los procesos están corriendo de manera paralela, ejecutamos:
+
+```bash
+$ ps ax
+```
+
+Veremos algo parecido a lo siguiente, que nos indica que en el mismo porgrama corren dos procesos:
+```bash
+52657 s001  R+     0:15.94 ./paralelism
+52658 s001  R+     0:15.94 ./paralelism
+```
+
+Para que el proceso padre espera a que los procesos hijos terminen sus tareas y continuar con otro flujo, usaremos `wait`:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main(int argc, char * argv[]) {
+  int pid = fork();
+  if(pid)
+  {
+    printf("Luke, im ur father, MyPID is %d and ur PID is %d\n", getpid(), pid);
+    // usamos null para indicar que todos los hijos esperen
+    wait(NULL);
+    printf("Soy nuevamente el padre\n");
+  } else {
+    printf("I am Luke. My PID is %d\n", getpid());
+    // usamos sleep para detener el programa ds segundos
+    sleep(2);
+  }
+  return 0;
+}
+```
+
+Cuando ejecutamos un fork se crea una copia del programa que estamos ejecutando, pero las variables también se duplican; en este ejemplo, vemos que cada proceso tiene sus propias variables y uno no modifica a los otros:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main(int argc, char * argv[]) {
+  int shared = 2;
+  int pid = fork();
+  if(pid)
+  {
+    shared = 1;
+    printf("Luke, im ur father, MyPID is %d and ur PID is %d. Shared: %d\n", getpid(), pid, shared); // shared = 1
+    // usamos null para indicar que todos los hijos esperen
+    wait(NULL);
+    printf("Soy nuevamente el padre. Shared: %d\n", shared); // shared = 2
+  } else {
+    printf("I am Luke. My PID is %d. Shared: %d\n", getpid(), shared); // shared = 1
+    sleep(2);
+  }
+  return 0;
+}
+```
+
+# Pipes
+Cuando un proceso se bifurca, genera sus propias variables. Para comunicar dos procesos entre sí, requerimos que ambos tengan algo en común. Para ello utilizaremos los *pipes*. Son archivos en los que un proceso escribe y otro lee. Este programa leerá un archivo del proceso padre y alimentar con ello al proceso hijo:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <string.h>
+#define MSGIZE 16
+int main(int argc, char * argv[]) {
+  // Puntero al archivo de entrada
+  FILE * in;
+  /**
+   * PID y un arreglo de dos enteros que se usará en la función
+   * pipe (que devuelve los números que identifican los pipes en el SO)
+   */
+  int pid, p[2];
+  // Si por algún motivo no se pueden crear los pies, terminamos
+  if(pipe(p) < 0) {
+    printf("No pude crear los pipes\n");
+    return -2;
+  }
+  // Si por algún motivo no se puede abrir el archivo, terminamos
+  if(!(in = fopen(argv[1], "r"))) {
+    printf("No pude leer el archivo %s\n", argv[1]);
+    return -1;
+  }
+  // Si todo sale bien y soy el proceso padre:
+  if((pid = fork())) {
+    // Creamos un buffer de tamaño 16
+    char buffer[MSGIZE];
+    printf("++ Soy el padre, voy a leer desde el archivo [%s]\n", argv[1]);
+    // Mientras sea posible obtener un buffer de tamaño 16, informo lo que he leído
+    while (fgets(buffer, MSGIZE, in)) {
+      printf("Leí '%s'. Dime process [%d]: cuál es el caractér más grande?\n", buffer, pid);
+      // Escribimos en el pipe 1 la información obtenida
+      write(p[1], buffer, MSGIZE);
+    }
+    // Crerramos el pipe para que no se puede leer ni escribir ahí
+    close(p[1]);
+    // esperamos a que terminen los procesos paralelos
+    printf("++ Esperando a mis hijos...\n");
+    wait(NULL);
+    fclose(in);
+  } 
+  // Lectura del hijo
+  else {
+    // ya que el hijo no manda información al padre, cerramos el pipe de escritura
+    close(p[1]);
+    printf("-- Soy el hijo, espero que aparezca algo en el pipe\n");
+    char buffer[MSGIZE], max;
+    // iré leyendo todo lo que aparezca en el pipe 0 mientras sea mayor que 0
+    while(read(p[0], buffer, MSGIZE) > 0) {
+      printf("-- Leí %s desde el pipe\n", buffer);
+      // recorremos todo el buffer para obtener el mayor caractér
+      max = buffer[0];
+      for(int i = 0; i < MSGIZE; i++) {
+        if(buffer[i] > max) {
+          max = buffer[i];
+        }
+      }
+      printf("Max: %c\n", max);
+    }
+  }
+  return 0;
+}
+```
+
+Nótese lo siguiente:
+* Los pipes son un canal de comunicación para pasar información entre procesos (como pub-sub)
+* El proceso lector espera hasta que exista algo en la entrada del pipe
+* Para generar un pipe, creamos un arreglode dos posiciones, la primera [0] se usa para el modo de lectura y la segunda [1] para el modo de escritura
+* Los pipes son unidireccionales

@@ -618,6 +618,169 @@ function someReturn() {
 
 En este caso, obtendremos un error, debido a que después del return, se considera que hay un ;
 
+# Asincronismo
+Hay que comprender que Js es un lenguaje no bloqueante, con un manejador de eventos conocido como *envent loop*, mismo que está implementado como un único hilo para sus interfaces de entrada y salida. La palabra *asinconismo* hace referencia a eventos que no suceden al mismo tiempo.
+
+> Un ejemplo de asincrnismo, sería una pista de aterrizaje de un aeropuerto, ya que no permite el aterrizaje de varios aviones a la vez. 🛬
+
+## Conceptos importantes:
+Memory heap
+: Espacio en memoria compartido para toda una aplicación
+
+Pila de ejecución o *callstack*
+: Pila en la que las funciones se ejecutan con un orden consecutivo
+
+Cola de tareas
+: Pila secundaria en la que se encolan las tareas asíncronas
+
+Eventloop
+: *Observer* de la pila de ejecución que valida que tiene la finalidad de darle lugar a las funciones de la cola de tareas o *callbacks*
+
+## Callbacks
+Un callback es una función que es pasada como parámetro a otra función, misma que se ejecutará cuando los proceso de la función principal termine.
+
+En el siguiente ejemplo, vemos un callback pasado a una función:
+
+```javascript
+function sum(num1, num2) {
+  return num1 + num2
+}
+function calc(num1, num2, callback) {
+  return callback(num1, num2)
+}
+console.log(calc(1, 5, sum)) // 6
+```
+
+Veamos otro ejemplo, que nos permitirá manejar tiempos de ejecución
+
+```javascript
+function printDate(nowDate) {
+  console.log(nowDate)
+}
+function createDate(callback) {
+  console.log(new Date) // 2021-01-05T02:04:01.154Z
+  setTimeout(function() {
+    let date = new Date
+    callback(date)
+  }, 3000)
+}
+createDate(printDate) // 2021-01-05T02:04:04.157Z
+```
+
+En el siguiente ejemplo, haremos la implementación de un callback dentro de una función llamada `fetchData` que hace un llamado a la api de Rick and Morty mediante `XMLHttpRequest`, nótese que este programa cae en un vicio que se conoce como *callback hell*, dado que encadena múliples procesos asíncronos y genera un código que crece horizontalmente.
+
+```javascript
+let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
+const API = 'https://rickandmortyapi.com/api/character/'
+
+console.log(API)
+
+function fetchData(api_url, callback) {
+  let xthttp = new XMLHttpRequest()
+  // Definiendo el método, la url y activando el asincronismo de nuestra petición
+  xthttp.open('GET', api_url, true);
+  xthttp.onreadystatechange = function(event) {
+    // Leyendo el estado en el que senencuentra xhttp (1-5)
+    if(xthttp.readyState === 4) {
+      // Leyendo el código del status http
+      if(xthttp.status === 200) {
+        // Nuestro callback recibiría un error y luego la respuesta
+        callback(null, JSON.parse(xthttp.responseText))
+      } else {
+        const error = new Error(`Error en la consulta a ${api_url}`)
+        return callback(error, null)
+      }
+    }
+  }
+  xthttp.send()
+}
+fetchData(API, function(firstError, firstResponse) {
+  if(firstError) return console.error(firstError)
+  fetchData(API + firstResponse.results[0].id, function(secondError, secondResponse) {
+    if(secondError) return console.error(secondError)
+    fetchData(secondResponse.origin.url, function(thirdError, thirdResponse) {
+      if(thirdError) return console.error(thirdError)
+      console.log(firstResponse.info.count)
+      console.log(secondResponse.name)
+      console.log(thirdResponse.dimension)
+    })
+  })
+})
+```
+
+## Promesas
+Son objetos definidos en el estándar de JS, que nos permitirán administrar procesos asíncronos de una manera más amigable.
+
+en el siguiente ejemplo, implementamos la estructura básica de una promesa con la finalidad de entender su funcionamiento, en ella veremos el uso del prototipo `Promise` y de las funciones `then` y `catch`
+
+```javascript
+const sometimesWillHappen = () => {
+  /**
+   * Generamos una nueva promesa que recibe como parámetro dos
+   * funciones: una que se ejecutará si el resultado es exitoso y otra
+   * que se ejecutará si el resultado es negativo
+   */
+  return new Promise((resolve, reject) => {
+    if(true) {
+      resolve('Success message')
+    } else {
+      reject('Error message')
+    }
+  })
+}
+// Implementando la función asíncrona
+sometimesWillHappen()
+  // lo que sucede después de que se resuelve la promesa
+  .then(response => console.log(response))
+  // lo que sucede cuando no se puede resolver exitósamente
+  .catch(error => console.error(error))
+```
+
+Podemos generar un módulo en el que encapsulemos nuestra función del ejercicio anterior `fetchData`pero traducido a sintaxis de promesas:
+
+```javascript
+let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
+const fetchData = api_url => {
+  return new Promise((resolve, reject) => {
+    const xthttp = new XMLHttpRequest()
+    xthttp.open('GET', api_url, true);
+    xthttp.onreadystatechange = (() => {
+      if(xthttp.readyState === 4) {
+        xthttp.status === 200 ?
+          resolve(JSON.parse(xthttp.responseText)) :
+          reject(new Error(`Error en la consulta a ${api_url}`))
+      }
+    })
+    xthttp.send()
+  })
+}
+module.exports = fetchData
+```
+
+Posteriormenre, para utilizar este módulo y hacer el mismo encadenamiento pero con la sintaxis de promesas:
+```javascript
+const fetchData = require('../utils/fetchData')
+const API = 'https://rickandmortyapi.com/api/character/'
+
+fetchData(API)
+  .then(data => {
+    console.log(data.info.count)
+    return fetchData(`${API + data.results[0].id}`)
+  })
+  .then(data => {
+    console.log(data.name)
+    return fetchData(data.origin.url)
+  })
+  .then(data => {
+    console.log(data.dimension)
+  })
+  .catch(error => {
+    console.error(error)
+  })
+```
+
+Nótese que el código se hace vertical, modularizable y más legible con el uso de promesas.
+
 # ES6
 
 ECMAScript es una especificación propuesta por ECMA, que es una organización de estándares. ES6, fue un estándar lanzado en 2015 que permite agregar características nuevas a JavaScript, a partir de ahí, cada año ha salido una nueva versión de ECMAScript.
