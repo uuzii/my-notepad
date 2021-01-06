@@ -122,3 +122,35 @@ This file contains some words I've learned trough my english career :)
 |**unwillingly**|de mala gana|
 |**winged**|con alas|
 |**yeast**|levadura|
+## List 5
+|**English word**|Spanish approximations|
+|-|-|
+|**avert**|apartar, desviar|
+|**berserk**|loco|
+|**complaint**|queja, reclamación, denuncia|
+|**dash**|pizca, gota|
+|**derelict**|en ruinas, abandonado|
+|**dilapidated**|destartalado, ruinoso|
+|**feed**|alimentar|
+|**fussy**|quisquilloso, exigente|
+|**garish**|chillón, llamativo|
+|**hallway**|pasillo|
+|**indeed**|ciertamentte|
+|**inmate**|preso, recluso, paciente,enfermo|
+|**mistreatment**|maltrato|
+|**proper**|correcto, apropiado, adecuado|
+|**punchline**|remate, final|
+|**sack**|saco, costal, saqueo, sobre|
+|**scowl**|ceño fruncido|
+|**scum**|capa de suciedad, espuma, basura|
+|**shake**|agitar, sacudir|
+|**shelve**|colocar en estantes, aparcar|
+|**slime**|baba, canalla|
+|**smear**|mancha, calumnia, difamación|
+|**squidgy**|blando y húmedo|
+|**steep**|empinado, escarpado, abrupto, brusco, considerable|
+|**stink**|apestar|
+|**sturdy**|robusto, firme, tenaz|
+|**venue**|lugar, local, estadio, juristicción|
+|**wardrobe**|armario, ropero|
+|**whimpering**|gemidos, lloriqueo|
