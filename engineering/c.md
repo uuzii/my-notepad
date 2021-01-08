@@ -963,3 +963,63 @@ Nótese lo siguiente:
 * El proceso lector espera hasta que exista algo en la entrada del pipe
 * Para generar un pipe, creamos un arreglode dos posiciones, la primera [0] se usa para el modo de lectura y la segunda [1] para el modo de escritura
 * Los pipes son unidireccionales
+
+# Sockets
+Otra forma de comunicar procesos entre sí, son los sockets, que nos permitirán conectar procesos cualquiera, incluso en computadoras distinas de manera bidireccional. Esta herramienta se utiliza en arquitecturas *cliente-servidor*, donde hay:
+* Un proceso pasivo (**servidor**) que espera a que le soliciten una conexión
+* Un proceso activo (**cliente**) que solicita una conexión con el servidor para empezar a intercambiar información.
+
+Para esto, hacemos uso de algunas estructuras que nos ayudarán a definir la información de ambos procesos:
+```c
+struct sockaddr_in {
+  short int sin_family;
+  unsigned short int sin_port;
+  struct in_addr sin addr;
+  unsigned char sin_zero[8]
+}
+```
+
+Una estrucutra que contiene el **endpoint** o ip de quien esté hablando:
+```c
+struct sockaddr {
+  unsigned short sa_family;
+  char sa_data[14]
+}
+```
+
+La función que nos permitirá crear un socket:
+```c
+int socket(int domain, int type, int protocol);
+```
+
+La función que nos permitirá asociar el socket a un puerto:
+```c
+int bind(int sockfd, const structu sockaddr *myaddr, int addrlen);
+```
+
+La función para pedirle al sistema operativo que un puerto esté abierto para escuchar conexiones:
+```c
+int listen()int s, int backlog;
+```
+
+La función que nos permitirá darle servicio a un cliente (escucharlo)
+```c
+int accept(int sockfd, structu sockaddr *addr, socklen_t addlen);
+```
+
+La función que nos permitirá enviar información del lado del servidor:
+```c
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+```
+
+La función que nos permitirá recibir información del lado del cliente:
+```c
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+```
+
+Y la función que nos permitirá cerrar la conexión:
+```c
+int shutdown(int socket, int how);
+```
+
+Nótese que estamos generando dos sockets, uno que siempre está escuchando y otro genérico, pues es muy común que un solo servidor habla con muchos clientes a la vez.

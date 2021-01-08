@@ -465,3 +465,65 @@ Donde:
 El lenguaje SQL, unificó la forma en la que se hacían consultas a una base de datos. Aún actualmente, muchas tecnologías modernas siguen usando su estructura sintáctica.
 
 > 💡 Para todos los manejadores de bases de datos relacionales que usan SQL, el lenguaje DDL y DML se utilizan igual
+
+# Creando una base de datos para un Blogpost
+Para crear la DD del diagrama físico que tenemos arriba, necesitamos seguir los siguientes pasos:
+1. Identificar qué entidades NO poseen llaves fóraneas, pues éstas entidades, dependen de otras.
+2. Proceder a crear las tablas de las entidades que no poseen llaves primarias, cuidando que tengan bien asignados sus tipos de dato, valores por defecto, así como sus constrains, que pueden ser:
+  * **PK** PRIMARY KEY
+  * **NN** NOT NULL
+  * **UQ** UNIQUE
+  * **AI** AUTO INCREMENT
+3. Proceder a crear las *tablas dependientes*, es decir, las que tienen llaves foráneas cuidando que éstas últimas correspondan a entidades de las que ya tenemos tabla creada.
+4. Configurar las llaves foráneas especificando las tablas referenciadas y sus acciones, que pueden ser:
+  * **RESTRICT** Para impedir que se borre información debajo de este ítem.
+  * **CASCADE** Para re-etiquetar todos los elementos de una columna.
+  * **SET NULL** Para poner un null en lugar del ítem (cuidado con los campos NN).
+  * **NOT ACTION** Para no hacer nada.
+  Éste es un ejemplo de la forma SQL de crear una FK:
+  ```sql
+  ALTER TABLE `uziblog`.`posts` -- Modificando la tabla
+  ADD INDEX `posts_users_idx` (`user_id` ASC); -- Añadiendo un index al campo user_id
+  ;
+  ALTER TABLE `uziblog`.`posts` -- Altera la tabla añadiendo un constrain
+  ADD CONSTRAINT `posts_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `uziblog`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
+  ```
+5. Crear las tablas que tienen llaves foráneas de tablas dependientes
+6. Crear las *tablas transitivas*, es decir, aquellas que en nuestro diagrama físico, descomponen las relaciones N:N. Dichas tablas, no poseen información per se, sino solo contendrán llaves foráneas a modo de pivote para generar las relaciones N:N entre dos entidades.
+
+> 💡  Pro tip: En Workbench, una vez generada nuestra BD, podemos usar Database/Reverse engineer... para generar el diagrama físico de nuestra base de datos si es que estamos en un lugar en el que no conocemos a detalle cómo se ha diseñado una instancia.
+
+# Consultas o querys
+Es importante saber hacer consultas correctas a las bases de datos, muchas veces, puede exisitr una gran cantidad de información distribuida en múltiples tablas, lo cuál de manera estática muchas veces carece de sentido, pero cuando sabemos consultar esa información para presentarla de modos útiles, podemos aportar mucho valor a una organización. Hacer query's es el quehacer diario del administrador de bases de datos.
+
+> Cualquier duda de negocio se puede resolver haciendo un buen query
+
+## Estructura básica de un query
+Las partes esenciales de una consulta son: `WHERE`y `FROM`. El siguiente es un ejemplo de un query:
+```sql
+SELECT city, count(*) AS total -- proyectamos ciertos datos como total
+FROM people -- de la tabla people
+WHERE active = true -- agregamos una condición
+GROUP BY city -- agrupamos por ciudad
+ORDER BY total DESC -- ordenamos de manera descendente
+HAVING total >= 2; -- filtra el total de los que tienen más de dos
+```
+
+Veamos a detalle algunas consultas básicas para nuestro blog:
+* Consulta básica de todos los elementos de una tabla
+  ```sql
+  SELECT *
+  FROM posts;
+  ```
+* Consulta de todos los elementos que sean de fechas menores a 2020:
+  ```sql
+  SELECT *
+  FROM posts
+  WHERE post_date < '2020';
+  ```
+
+## SELECT
