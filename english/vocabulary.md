@@ -154,3 +154,31 @@ This file contains some words I've learned trough my english career :)
 |**venue**|lugar, local, estadio, juristicción|
 |**wardrobe**|armario, ropero|
 |**whimpering**|gemidos, lloriqueo|
+## List 6
+|**English word**|Spanish approximations|
+|-|-|
+|**befall**|suceder, ocurrir|
+|**bunk**|litera|
+|**clumsy**|torpe, brusco|
+|**counsel**|consejo, aconsejar, recomendar|
+|**downturn**|disminución, contracción, deterioro|
+|**erupt**|estallar|
+|**fours**|en cuatro patas|
+|**frantic**|frenético, desesperado|
+|**glean**|recoger, cosechar|
+|**hassle**|lío, problema, molestar|
+|**kidney**|riñón|
+|**merely**|simplemente, solamente, meramente|
+|**midst**|medio, mitad|
+|**nap**|siesta|
+|**peer**|par, igual|
+|**praise**|elogiar, alabar|
+|**relive**|revivir|
+|**ripple**|onda|
+|**scrambled**|codificado, cifrado|
+|**sniper**|francotirador|
+|**stumble**|tropezar|
+|**threatening**|amenazante|
+|**towards**|a, hacia, para|
+|**undergirds**|sustentar, basar|
+|**worth**|valor|
