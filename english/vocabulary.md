@@ -182,3 +182,16 @@ This file contains some words I've learned trough my english career :)
 |**towards**|a, hacia, para|
 |**undergirds**|sustentar, basar|
 |**worth**|valor|
+## List 7
+|**English word**|Spanish approximations|
+|-|-|
+|**bleed**|sangrar|
+|**carnation**|clavel|
+|**decorate**|decorar, condecorar|
+|**mourning**|luto, duelo|
+|**overwhelmed**|abrumado, agobiado|
+|**personnel**|personal, staff|
+|**sail**|navegar, zarpar, salir|
+|**stepmothers**|madrastra|
+|**unwind**|desenrollar, relajarse|
+|**widely**|mucho, ampliamente|
