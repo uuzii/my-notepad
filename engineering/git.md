@@ -50,6 +50,9 @@ El primero es referente al stagging de archivos, el segundo es referente a commi
 * `git branch [branch]`: Para crear una rama en el ultimo commit en el que estamos
 * `git checkout [branch]`: Para apuntar el HEAD apuntando a nuestra nueva rama
 * `git merge [branch]`: Fusiona la rama en la que estamos parados con la rama que le indiquemos
+* `git branch -a`: Nos muestra todas las ramas locales y las ramas remotas.
+* `git branch -D [branch]`: Borra una rama local de manera forzada
+* `git push origin --delete [branch]`: Borrauna rama remota de manera forzada
 
 **Conflictos.** Se generan cuando se superponen cambios en las mismas líneas. Para resolverlos, tenemos que identificar cuáles son los cambios que queremos conservar y generar otro add + commit.
 

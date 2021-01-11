@@ -781,6 +781,54 @@ fetchData(API)
 
 Nótese que el código se hace vertical, modularizable y más legible con el uso de promesas.
 
+# Async-await
+Es una forma que nos proporciona JavaScript para gestionar la ejecución de promesas de manera que no ejecutemos las siguientes líneas de código después de una línea que marcamos con la palabra reservada `await`. Veamos un ejemplo de la implementación de manera básica:
+```javascript
+const doSomethingAsync = () => {
+  return new Promise((resolve, reject) => {
+    (true) ?
+    setTimeout(() => {
+      resolve('Do something async')
+    }, 3000) :
+    reject(new Error('Test error'))
+  })
+}
+const anotherFunction = async () => {
+  try {
+    const something = await doSomethingAsync()
+    console.log(something)
+  } catch(error) {
+    console.error(error)
+  }
+}
+console.log('Before function execution')
+anotherFunction()
+console.log('After function excecution')
+```
+
+Nótese que para usar la palabra reservada `await` tenemos que ejecutar el proceso asíncrono dentro de una función que lleva el prefijo `async`. Adicional, que el await se usa dentro de un bloque `try-catch`. No se ejecutará ninguna línea de código posterior a la que hayamos usado await, en caso de fallo, nos iremos al catch.
+
+Para generar una implementación de peticiones al servidor como en los ejemplos de callbacks y promesas, hacemos lo siguiente (encapsulando la lógica del XMLHttpRequest en fetchData):
+```javascript
+const fetchData = require('../utils/fetchData')
+const API = 'https://rickandmortyapi.com/api/character/'
+const anotherFunction = async url => {
+  try {
+    const data = await fetchData(url)
+    const character = await fetchData(`${url + data.results[0].id}`)
+    const origin = await fetchData(`${character.origin.url}`)
+    console.log(data.info.count)
+    console.log(character.name)
+    console.log(origin.dimension)
+  } catch(error) {
+    console.error(error)
+  }
+}
+console.log('Before')
+anotherFunction(API)
+console.log('After')
+```
+
 # ES6
 
 ECMAScript es una especificación propuesta por ECMA, que es una organización de estándares. ES6, fue un estándar lanzado en 2015 que permite agregar características nuevas a JavaScript, a partir de ahí, cada año ha salido una nueva versión de ECMAScript.

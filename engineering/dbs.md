@@ -465,3 +465,155 @@ Donde:
 El lenguaje SQL, unificó la forma en la que se hacían consultas a una base de datos. Aún actualmente, muchas tecnologías modernas siguen usando su estructura sintáctica.
 
 > 💡 Para todos los manejadores de bases de datos relacionales que usan SQL, el lenguaje DDL y DML se utilizan igual
+
+# Creando una base de datos para un Blogpost
+Para crear la DD del diagrama físico que tenemos arriba, necesitamos seguir los siguientes pasos:
+1. Identificar qué entidades NO poseen llaves fóraneas, pues éstas entidades, dependen de otras.
+2. Proceder a crear las tablas de las entidades que no poseen llaves primarias, cuidando que tengan bien asignados sus tipos de dato, valores por defecto, así como sus constrains, que pueden ser:
+  * **PK** PRIMARY KEY
+  * **NN** NOT NULL
+  * **UQ** UNIQUE
+  * **AI** AUTO INCREMENT
+3. Proceder a crear las *tablas dependientes*, es decir, las que tienen llaves foráneas cuidando que éstas últimas correspondan a entidades de las que ya tenemos tabla creada.
+4. Configurar las llaves foráneas especificando las tablas referenciadas y sus acciones, que pueden ser:
+  * **RESTRICT** Para impedir que se borre información debajo de este ítem.
+  * **CASCADE** Para re-etiquetar todos los elementos de una columna.
+  * **SET NULL** Para poner un null en lugar del ítem (cuidado con los campos NN).
+  * **NOT ACTION** Para no hacer nada.
+  Éste es un ejemplo de la forma SQL de crear una FK:
+  ```sql
+  ALTER TABLE `uziblog`.`posts` -- Modificando la tabla
+  ADD INDEX `posts_users_idx` (`user_id` ASC); -- Añadiendo un index al campo user_id
+  ;
+  ALTER TABLE `uziblog`.`posts` -- Altera la tabla añadiendo un constrain
+  ADD CONSTRAINT `posts_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `uziblog`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
+  ```
+5. Crear las tablas que tienen llaves foráneas de tablas dependientes
+6. Crear las *tablas transitivas*, es decir, aquellas que en nuestro diagrama físico, descomponen las relaciones N:N. Dichas tablas, no poseen información per se, sino solo contendrán llaves foráneas a modo de pivote para generar las relaciones N:N entre dos entidades.
+
+> 💡  Pro tip: En Workbench, una vez generada nuestra BD, podemos usar Database/Reverse engineer... para generar el diagrama físico de nuestra base de datos si es que estamos en un lugar en el que no conocemos a detalle cómo se ha diseñado una instancia.
+
+# Consultas o querys
+Es importante saber hacer consultas correctas a las bases de datos, muchas veces, puede exisitr una gran cantidad de información distribuida en múltiples tablas, lo cuál de manera estática muchas veces carece de sentido, pero cuando sabemos consultar esa información para presentarla de modos útiles, podemos aportar mucho valor a una organización. Hacer query's es el quehacer diario del administrador de bases de datos.
+
+> Cualquier duda de negocio se puede resolver haciendo un buen query
+
+## Estructura básica de un query
+Las partes esenciales de una consulta son: `WHERE`y `FROM`. El siguiente es un ejemplo de un query:
+```sql
+SELECT city, count(*) AS total -- proyectamos ciertos datos como total
+FROM people -- de la tabla people
+WHERE active = true -- agregamos una condición
+GROUP BY city -- agrupamos por ciudad
+ORDER BY total DESC -- ordenamos de manera descendente
+HAVING total >= 2; -- filtra el total de los que tienen más de dos
+```
+
+Veamos a detalle algunas consultas básicas para nuestro blog:
+* Consulta básica de todos los elementos de una tabla
+  ```sql
+  SELECT *
+  FROM posts;
+  ```
+* Consulta de todos los elementos que sean de fechas menores a 2020:
+  ```sql
+  SELECT *
+  FROM posts
+  WHERE post_date < '2020';
+  ```
+
+## SELECT
+`SELECT` nos ayuda a hacer las diferentes proyecciones de nuestra base de datos. La forma mas básica de usar `SELECT` es:
+```sql
+SELECT * FROM [table];
+```
+
+Si qusiéramos seleccionar solo ciertos campos de una tabla:
+```sql
+SELECT [column1], ..., [columnN] FROM [table];
+```
+
+Si queremos cambiar el nombre que se le da al campo en la consulta:
+```sql
+SELECT [column1] AS [alias1], ..., [columnN] AS [aliasN] FROM [table];
+```
+
+Si queremos hacer una agrupación sencilla, que nos arrojaría un conteo de los elementos de una tabla:
+```sql
+SELECT COUNT(*) AS [alias] FROM [table]
+```
+
+De este modo vemos que, si bien podemos consultar y filtrar datos de nuestra base de datos, también podemos construir *datos on the flight*.
+
+## FROM
+`FROM`, como hemos visto, nos ayuda a indicar de dónde se van a traer los datos. Hacer consultas a una sola tabla es sencillo, pero cuando queremos unir tablas para hacer proyecciones más específicas, requeriremos ser más minuciosos. Para esto, usaremos otra sentencia que es inseparable de `FROM` y esta es `JOIN`. Para entender esto, usaremos diagramas de Venn:
+
+### Diferencia
+Para la diferencia, hay dos tipos de `JOIN` que nos permiten proyectarla: *LEFT JOIN* y *RIGHT JOIN*. Consideremos que estamos haciendo una base de datos para un blog, sea **A** la tabla que trae los posts y **B** la tabla que trae los usuarios:
+
+![diferencia](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-1.jpg?raw=true)
+
+* El el primer caso de `LEFT JOIN`, traeríamos todos los usuarios, tengan o no tengan posts. En SQL ejecutaríamos
+  ```sql
+  SELECT *
+  FROM schema.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* En el segundo caso de `LEFT JOIN`, solo traeríamos los usuarios que no tengan posts. En SQL ejecutaríamos:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id
+    WHERE posts.user_id IS NULL;
+  ```
+* El el primer caso de `RIGHT JOIN`, traeríamos todos los posts, aunque ningún usuario los haya creado. En SQL:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* El el segundo caso de `RIGH JOIN` traeríamos todos los posts que ningún usuario haya creado.
+```sql
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id
+    WHERE posts.user_id IS NULL;
+  ```
+
+### Intersección
+Para la intersección, existe el *INNER JOIN*, que trerá los datos que compartan ambas tablas y el *OUTER JOIN*, que se presenta en dos casos: unión (traería todos los datos de las tablas) y la diferencia simétrica, que traería todos los datos de las tablas, excepto aquellos que tengan en común. Volviendo al ejemplo de la tabla **A** y **B**, veríamos lo siguiente:
+
+![imagen](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-2.jpg?raw=true)
+
+* El `INNER JOIN` traería los usuarios que tengan algún post asociado o viceversa. En SQL:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+	  INNER JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* El `OUTER JOIN` en el caso unión, traería todos los usuarios y todos los posts.
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id
+  UNION
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* El `OUTER JOIN` en el caso diferencia simétrica, traería todos los usuarios que no tengan posts asociados y todos los posts que no tengan usuario asociado. En SQL:
+  ```sql
+  SELECT *
+  FROM uziblog.users
+    LEFT JOIN uziblog.posts ON users.id = posts.user_id
+  WHERE posts.user_id IS NULL
+  UNION
+  SELECT *
+  FROM uziblog.users
+    RIGHT JOIN uziblog.posts ON users.id = posts.user_id
+  WHERE posts.user_id IS NULL;
+  ```
