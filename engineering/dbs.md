@@ -555,7 +555,7 @@ De este modo vemos que, si bien podemos consultar y filtrar datos de nuestra bas
 ### Diferencia
 Para la diferencia, hay dos tipos de `JOIN` que nos permiten proyectarla: *LEFT JOIN* y *RIGHT JOIN*. Consideremos que estamos haciendo una base de datos para un blog, sea **A** la tabla que trae los posts y **B** la tabla que trae los usuarios:
 
-[diferencia](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-1.jpg?raw=true)
+![diferencia](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-1.jpg?raw=true)
 
 * El el primer caso de `LEFT JOIN`, traeríamos todos los usuarios, tengan o no tengan posts. En SQL ejecutaríamos
   ```sql
@@ -587,7 +587,7 @@ Para la diferencia, hay dos tipos de `JOIN` que nos permiten proyectarla: *LEFT 
 ### Intersección
 Para la intersección, existe el *INNER JOIN*, que trerá los datos que compartan ambas tablas y el *OUTER JOIN*, que se presenta en dos casos: unión (traería todos los datos de las tablas) y la diferencia simétrica, que traería todos los datos de las tablas, excepto aquellos que tengan en común. Volviendo al ejemplo de la tabla **A** y **B**, veríamos lo siguiente:
 
-[imagen](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-2.jpg?raw=true)
+![imagen](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-2.jpg?raw=true)
 
 * El `INNER JOIN` traería los usuarios que tengan algún post asociado o viceversa. En SQL:
   ```sql
