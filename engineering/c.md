@@ -1023,3 +1023,197 @@ int shutdown(int socket, int how);
 ```
 
 Nótese que estamos generando dos sockets, uno que siempre está escuchando y otro genérico, pues es muy común que un solo servidor habla con muchos clientes a la vez.
+
+Ésta es la implementación mínima del código del servidor:
+
+```c
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char * argv[]) {
+  // pasaremos como argumento el puerto en el que está escuchando
+  if(argc > 1) {
+    // si existe el argumento, generamos las variables
+    int server_socket, client_socket, puerto;
+    unsigned int longitud_cliente;
+    puerto = atoi(argv[1]);
+    // definimos las direcciones de cliente y servidor
+    struct sockaddr_in server;
+    struct sockaddr_in client;
+    // configuramos el protocolo a utilizar (TCP/IP)
+    server.sin_family = AF_INET;
+    // configuramos el puerto con el tipo de dato que acepta la librería
+    server.sin_port = htons(puerto);
+    // configuramos la dirección de quién puede conectarse (cualquiera)
+    server.sin_addr.s_addr = INADDR_ANY;
+    // rellenamos el string con 8 ceros para poder utilizar las librerías
+    bzero(&(server.sin_zero), 8);
+    /**
+     * Intentamos crear el socket
+     * Lo ponemos en modo escucha
+     * Le pasamos: familia de protocolos a usar, el protocolo específico
+     *  y la opción de configuración automática.
+     */
+    if((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+      // mandaremos un error por la salida de error
+      perror("No pude abrir el socket\n");
+      return -1;
+    }
+    /**
+     * Aquí ya tendríamos el socket abierto:
+     * Conectaremos este socket a un puerto con la función bind
+     * Mandaremos un puntero a la estructura sock_addr
+     * Guardaremos la configuración de bind en la variable server y
+     * el tamaño de estructura
+     */
+    if(bind(server_socket, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+      // En el caso de obtener -1, lanzariamos error (puede estar ocupado ya)
+      printf("No pude abrir el puerto %s\n", argv[1]);
+      return -2;
+    }
+    /**
+     * Si todo se dió bien, podemos poner todo esto en modo escucha,
+     * donde configuraremos: el tamaño de la cola (clientes atendidos de
+     * manera simultánea)
+     */
+    if(listen(server_socket, 5) == -1) {
+      // Lanzamos un error si la orden falla:
+      perror("No pude ponerme en modo escucha\n");
+      return -3;
+    }
+    /**
+     * Para recibir y dar servicio a las peticiones de clientes,
+     * Definiremos el tamaño del socket
+     * Intentaremos recibir a nuestro primer cliente: aceptando una conexión
+     * en nuestro server e indicando el puntero a la dirección del cliente
+     */
+    printf("Esperando clientes...\n");
+    longitud_cliente = sizeof(struct sockaddr_in);
+    if((client_socket = accept(server_socket, (struct sockaddr *) &client, &longitud_cliente)) == -1) {
+      printf("No pudimos aceptar una conexión\n");
+      return -4;
+    }
+    // Si todo funcionó correctamente iniciamos la comunicación, verificamos la dirección
+    char str[INET_ADDRSTRLEN];
+    /**
+     * Transformamos la estrucutra de la dirección a un string:
+     * Indicamos el protocolo, la dirección que queremos transformar, indicamos
+     * en qué buffer la vamos a colocar y su tamaño máximo
+     */
+    inet_ntop(AF_INET, &(client.sin_addr), str, INET_ADDRSTRLEN);
+    // Damos información de quién se conectó
+    printf("Se conectó un cliente desde %s:%d. Lo saludo\n", str, puerto);
+    /**
+     * Enviamos un mensaje, su tamaño, y podemos enviar banderas que
+     * proporcionarían información bit a bit
+     */
+    send(client_socket, "Bienvenido a mi servidor.\n", 26, 0);
+    printf("Saludo enviado\n");
+    // Cerramos sockets para cancelar la entrada/salida
+    shutdown(client_socket, 2);
+    shutdown(server_socket, 2);
+  } else {
+    printf("Por favor indique el puerto\n");
+    return -5;
+  }
+  return 0;
+}
+```
+
+Y ésta es la del cliente:
+```c
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char * argv[]) {
+  // pasaremos como argumento la dirección ip del servidor y el puerto al que nos queremos conectar
+  if(argc > 2) {
+    // Un puntero a caractér que será la direción IP
+    const char * ip;
+    // Un socket para el cliente, número de bytes para enviar y recibir y el puerto al que nos conectaremos
+    int client_socket, numbytes, puerto;
+    // Un buffer para el mensaje
+    char buff[100];
+    // tomamos el puerto indicado en command line y la dirección IP
+    puerto = atoi(argv[2]);
+    ip = argv[1];
+    // la estrcutura que almacena la información del servidor al que nos queremos conectar
+    struct sockaddr_in server;
+    /**
+     * Intentamos convertir el argumento en una direccion IP, pasando
+     * protocolos de internet, la ip del servidor
+     */
+    if(inet_pton(AF_INET, argv[1], &server.sin_addr) <= 0) {
+      printf("La IP %s no es válida\n", ip);
+      return -1;
+    }
+    /**
+     * Si todo sale bien, abrimos el socket del cliente, validando
+     * la dirección del cliente haciendo un llamado a socket con los
+     * protocolos de internet y creamos un socket de tipo TCP/IP
+     */
+    if((client_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+      perror("No pude abrir el socket\n");
+      return -2;
+    }
+    /**
+     * Si pudimos abrir el socket, indicaremos a qué server nos
+     * queremos conectar: utilizaremos la familia de protocolos:
+     */
+    server.sin_family = AF_INET;
+    // utilizaremos el puerto resultante de convertir el argumento en una estructura
+    server.sin_port = htons(puerto);
+    // llenamos con ceros el string sin_zero
+    bzero(&(server.sin_zero), 8);
+    // Intentamos la conexión
+    printf("Conectando a %s:%s\n", argv[1], argv[2]);
+    /**
+     * Con la función connect intentamos la conexión, apuntando el socket
+     * del cliente hacia la dirección del servidor, indicando el tamaño
+     * de la estructra
+     */
+    if((connect(client_socket, (struct sockaddr *)&server, sizeof(struct sockaddr))) == -1) {
+      perror("No pude conectarme al servidor\n");
+      return -3;
+    }
+    /**
+     * Si todo salió bien, podemos empezar a recibir información
+     * desde el servidor, entonces verificamos si hay información a recibir
+     * con la función recv, pasando el socket del cliente, el buffer,
+     * su tamaño y las flags
+     */
+    if((numbytes = recv(client_socket, buff, 100, 0)) == -1) {
+      printf("Error en la lectura\n");
+      return -4;
+    }
+    // si pudimos leer, ponemos un /0 al final del buffer
+    buff[numbytes] = '\0';
+    printf("El servidor envió el mensaje '%s'\n", buff);
+    // cerramos el client socket
+    shutdown(client_socket, 2);
+  } else {
+    printf("Por favor indique ip del servidor y puerto\n");
+  }
+  return 0;
+}
+```
+
+Para probarlo, ejecutaremos:
+
+```bash
+./server [port]
+```
+
+Con lo cuál veremos que el server lanza el mensaje de que está esperando conexiones, posteriormente para que el cliente establezca conexión, ejecutaremos en otra terminal (suponiendo que el servidor está escuchando en nuestra máquina):
+
+```bash
+./client 127.0.0.1 [port]
+```
