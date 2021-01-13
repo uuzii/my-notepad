@@ -113,3 +113,117 @@ console.log('The count is ' + makeCounter.getCount()) // 7
 ```
 
 Nótese que desde el ámbito externo no se puede afectar a la variable interna llamada `count`, para hacer esto, se tendría que operar por medio de las funciones que sí están expuestas.
+
+# this
+En la mayoría de los lengajes de programación, `this`, hace referencia a la instancia de la clase que se está utilizando, en el caso de JavaScript, sabemos que no existen las clases, generalmente nos referiremos a instancias pero de protoypes, realmente puede tener muchas variantes, veamos algunas de ellas:
+
+## this en el contexto global
+En el contexto global, `this` hace referencia directamente al `window`
+```javascript
+console.log(this) // window
+```
+
+## this en el contexto de una función
+En el contexto de una función, cuando `this` está siendo llamada directamente desde el `window`, será `window`, sí y solo sí no estamos utilizando `strict mode`
+```javascript
+function whoIsThis() {
+  return this
+}
+console.log(this) // window
+```
+
+En strict mode, `this` será undefined, podemos usarlo para solventar algunos errores que nos puede ocasionar el ejemplo anterior.
+```javascript
+'use strict'
+function whoIsThis() {
+  return this
+}
+console.log(this) // undefined
+```
+
+## this en el contexto de un objeto
+En un objeto, `this` hace referencia a la instancia del propio objeto
+```javascript
+const person = {
+  name: 'uzi',
+  greeting: function() {
+    console.log(`Hola soy ${this.name}`) // Hola soy uzi
+  }
+}
+person.greeting()
+```
+
+## this en el contexto de una clase
+Funciona de manera similar que en las clases, pero tomemos en cuenta que en ambos casos, this hace referencia a la instancia, no al objeto prototipal:
+```javascript
+function Person(name) {
+  this.name = name
+}
+Person.protoype.greeting = function() {
+  console.log(`Hola me llamo ${this.name}`)
+}
+
+const uzi = new Person('Uzi')
+uzi.greeting() // Hola me llamo Uzi
+```
+
+# Establecer el this del llamado a una función
+No es posible asignar directamente el `this` en ningún contexto, para esto existen las funciones `bind`, `call` y `apply`, que nos permitirán pasarle un this diferente al contexto de ejecución de una función. En este caso, usaremos `call` y como primer parámetro el `this` (contexto que queremos pasar) para hacer el llamado inmediato de una función (greeting) que originalmente no debería tener el contexto de un objeto ajeno (person):
+```javascript
+function greeting() {
+  console.log(`Hola, soy ${this.name} ${this.lastName}`)
+}
+
+const person = {
+  name: 'Uzi',
+  lastName: 'Rodriguez'
+}
+greeting.call(person) // Hola, soy Uzi Rodriguez
+```
+
+Esta función, también pueden aceptar más parámetros aparte de `this`:
+```javascript
+function walk(metros, direccion) {
+  console.log(`${this.name} camina ${metros} hacia el ${direccion}`)
+}
+walk.call(this, 400, 'norte') // Uzi camina 400 metros hacia el norte
+```
+
+La función `apply`cumple la misma función, pero recibe los argumentos de la función de una manera distinta, los recibe en forma de array:
+```javascript
+function walk(metros, direccion) {
+  console.log(`${this.name} camina ${metros} hacia el ${direccion}`)
+}
+const arguments = [400, 'norte']
+walk.apply(this, arguments) // Uzi camina 400 metros hacia el norte
+```
+
+La función `bind`, por su lado, nos permite crear una función nueva con otro contexto, pero no la llama:
+```javascript
+const anotherPerson = {
+  name: 'Jonadab',
+  lastName: 'Alcantara'
+}
+const bindedGreeting = greeting.bind(anotherPerson)
+bindedGreeting() // Hola, soy Jonadab Alcantara
+```
+
+Tomando como referencia el ejemplo anterior, si queremos pasar argumentos al llamado de una función que ya fue creada y atada a otro contexto, mandamos los argumentos:
+```javascript
+const bindedWalk = walk.bind(anotherPerson)
+bindedWalk(400, 'norte') // Jonadab camina 400 metros hacia el norte
+```
+
+O se pueden almacenar al momento de generar la función:
+```javascript
+const bindedWalk = walk.bind(anotherPerson, 400, 'norte')
+bindedWalk() // Jonadab camina 400 metros hacia el norte
+```
+
+O también se puede mezclar los últimos dos ejemplos, estableciendo algunos valores y pasando otros en la ejecución:
+```javascript
+const bindedWalk = walk.bind(anotherPerson, 400)
+bindedWalk('norte') // Jonadab camina 400 metros hacia el norte
+```
+
+
