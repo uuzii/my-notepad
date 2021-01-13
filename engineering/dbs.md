@@ -617,3 +617,47 @@ Para la intersección, existe el *INNER JOIN*, que trerá los datos que comparta
     RIGHT JOIN uziblog.posts ON users.id = posts.user_id
   WHERE posts.user_id IS NULL;
   ```
+
+## WHERE
+`WHERE` nos ayuda a filtrar tuplas de acuerdo a criterios específicos como fechas, cantidades, etc. Ejemplo, la siguiente consulta nos permitirá consultar todos los posts que tengan un id menor a 50:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE id < 50;
+```
+En estos casos, nos será muy útil tener bien definidos los tipos de dato de nuestros campos.
+
+Si queremos ingresar criterios de los que no tenemos el valor preciso, podemos usar la sentencia `LIKE`:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE titulo LIKE '%[someWordBetweenFieldValue]%';
+```
+
+Para especificar que el valor buscado esté al inicio o al final, removemos el signo de `%` del inicio o del final para cada opción respectivamente:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE titulo LIKE '[someWordBetweenFieldValue]%'; -- para buscar la palabra al inicio
+```
+
+Podemos validar también con fechas:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE post_date > '2025-01-01';
+```
+
+O elementos en intervalos con las sentencias `BETWEEN` y `AND` (estas sentencias se pueden usar para establecer intervalos a otros tipos de dato):
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE post_date BETWEEN '2023-01-01' AND '2025-01-01';
+```
+
+Podemos usar la función `YEAR`, por mencionar un ejemplo, para no escribir toda la fecha sino solo el año y filtrar los elementos de acuerdo a alguno de sus campos que maneje un timestamp:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE YEAR(post_date) BETWEEN '2023' AND '2025';
+```
