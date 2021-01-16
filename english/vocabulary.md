@@ -195,3 +195,31 @@ This file contains some words I've learned trough my english career :)
 |**stepmothers**|madrastra|
 |**unwind**|desenrollar, relajarse|
 |**widely**|mucho, ampliamente|
+|**ain't**|no soy, no estoy, no somos, no eres|
+|**amid**|entre|
+|**ammonia**|amoníaco|
+|**appealing**|atractivo|
+|**avid**|ávido|
+|**blunty**|desafilado, sin punta|
+|**cramp**|calambre|
+|**damp**|húmedo, humedad, humedecer|
+|**delight**|deleites, placer|
+|**facility**|instalación, servicio|
+|**farewell**|despedida|
+|**floss**|hilo dental|
+|**fussy**|quisquilloso, exigente||
+|**grim**|sombrío, desalentador, duro|
+|**lure**|atraer, señuelo|
+|**madness**|locura, demencia|
+|**mob**|muchedumbre, turba|
+|**nurture**|criar, nutrir, educar|
+|**ought**|deber|
+|**poignant**|conmovedor, patético|
+|**softback**|tapa rústica|
+|**spine**|columna, espina|
+|**squeegee**|escoba de goma, limpiavidrios, limpiar con escobilla|
+|**therefore**|por lo tanto|
+|**tightly**|bien, con fuerza, firmemente|
+|**treacherous**|traicionero, peligroso|
+|**unbearable**|insoportable|
+|**uproar**|alboroto, estruendo, jaleo|
