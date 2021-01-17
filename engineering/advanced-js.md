@@ -226,4 +226,134 @@ const bindedWalk = walk.bind(anotherPerson, 400)
 bindedWalk('norte') // Jonadab camina 400 metros hacia el norte
 ```
 
+# Prototypes
+Es un concepto casi único de JavaScript. En otros lengiajes orientados a Objetos, se crean solo instancias de clases, en JS no existen las clases, todo son objetos, sin embargo podemos generar herencia a través de lo que se denomina un *prototipo*.
+
+Podemos enfrentarnos a la siguiente situación mientras estamos instanciando objetos:
+```javascript
+function Hero(name) {
+  const hero = {
+    name: name
+  }
+  hero.saludar = function() {
+    console.log(`hola soy ${this.name}`)
+  }
+  return hero
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+Nótese que cada que queremos instanciar, estamos generando una función dentro del scope de cada objeto para eficientar esto, podríamos usar un método genérico y hacer referencia a él:
+```javascript
+const heroMethods = {
+  saludar: function() {
+    console.log(`Hola soy ${this.name}`)
+  }
+}
+function Hero(name) {
+  const hero = {
+    name: name
+  }
+  hero.saludar = heroMethods.saludar
+  return hero
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+Hay una forma más reducida de hacer esto, y es usando la función `Object.create()`:
+```javascript
+const heroMethods = {
+  saludar: function() {
+    console.log(`Soy superhéroe ${this.name}`)
+  }
+}
+function Hero(name) {
+  const hero = Object.create(heroMethods)
+  hero.name = name
+  return hero
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+En éste ejemplo, no estamos haciendo solamente una *copia* de los métodos que existen en `heroMethods`, sino que estamos haciéndole la  **herencia prototipal** ¿qué quiere decir esto? quiere decir que no le estamos agregando funciones a las instancias, sino que se las estamos agregando a su objeto `__proto__` y aunque en la consola no sea visible a primera vista, sí le pertenecerá a cada instancia. Una forma más reducida aún para hacer esto sería la siguiente:
+```javascript
+function Hero(name) {
+  const hero = Object.create(Hero.prototype)
+  hero.name = name
+  return hero
+}
+Hero.prototype.saludar = function() {
+  console.log()
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+De esta forma entendemos cómo es que JavaScript genera instancias de los objetos, es decir, hace la *herencia prototipal*, con lo cúal será fácil entender lo que hace la palabra reservada `new`, que realmente es instancias un nuevo objeto, dada una función *consttuctora*, asociando todo a un contexto propio del prototipo que guarda en una variable llamada obligadamente `this`, con lo cuál ya no tiene que haber un return, pues va implícito con el uso de una función constructura y el uso de `new`:
+```javascript
+function Hero(name) {
+  //const hero = Object.create(Hero.prototype)
+  this.name = name // se usa this
+  // return hero
+}
+Hero.prototype.saludar = function() {
+  console.log(`New ${this.name}`)
+}
+const zelda = new Hero('Zelda')
+const link = new Hero('Link')
+```
+
+La herencia prototipal es una forma muy completa para generar herencia en JavaScript, puer nos permitirá crear instancias con todos los métodos que tenga el prototipo a partir del cuál fue creado, al final, todo en JS es un objeto y podremos acceder a todos los métodos de `Object`. Inspeccionemos el prototype de alguna de nuestras instancias:
+```javascript
+const prototypeOfZelda = Object.getPrototypeOf(zelda)
+console.log(prototypeOfZelda === Hero.prototype) // true
+```
+
+Si nosotros le agregamos algún método o propiedad a un prototype, éste existirá automáticamente en todas sus instancias (pero en el prototype):
+```javascript
+Hero.prototype.fight = function() {
+  console.log('Fight!')
+}
+const protoypeOfPrototypeOfZelda = Object.getPrototypeOf(Hero.prototype)
+protoypeOfPrototypeOfZelda.hasOwnProperty('fight') // true
+```
+
+La búsqueda de funciones o properties dentro de un prototype se escala desde el elemento que estamos usando hasta el objeto `Object`, que es el punto mas alto en esta cadena de herencia prototipal.
+
+# Parsers y Abstract Syntax Tree
+La Web no siempre ha sido como ahora, JavaScript fue ntroducido por primera vez con Netscape. JS en sí mismo servía para hacer tareas muy simples, se interepretaba línea por línea, hasta la fecha esto sigue siendo así pero de una manera más moderna que introdujo Google rediseñando el motor de JS. Lo que hace el navegador es aproximadamente lo siguiente:
+* Recibe código fuente
+* Parsea el código y produce el Abstract Syntax Tree (AST)
+* Se compila a bytecode y se ejecuta
+* Se optimiza a machinecode y se reemplaza el código base
+
+![funcionamiento javascript](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/how-js-works.jpg?raw=true)
+
+Analicemos primeramente la parte del **parser**
+
+## Parser
+Toma nuestro código fuente y lo lee, pues la computadora tiene que descomponerlo para procesarlo, lo que hace primeramente es descomponerlo en **tokens**, ej: la declaración de variables y funciones, si algo no hace sentido es cuando ocurre un *SyntaxError*. Este proceso ocupa una 15-20% del tiempo de procesamiento, por lo cuál se dice que la mayoría del código de JS nunca se ejecuta. De ello la importancia de hacer **bundling** y **code splitting** o prácticas como las **Single Page Applications**.
+
+Hay dos modos de hacer parsing en V8 (usado por Chrome y Node):
+|Eager Parsing:|Lazy parsing:|
+|-|-|
+|Encuentra errores de sináxis|Doble de velocidad que eager|
+|Crea el AST|No crear el AST|
+|Construye scopes|Construye los scopes parcialmente|
+
+En este [enlace](https://esprima.org/) podemos ver ejemplos de los tokens generados por el parser.
+
+## AST
+Es un grafo (estructura de datos) que representa un programa. Se usa en:
+* JavaScript
+* Bundlers: Webpack, Rollup, Parcel
+* Transpilers: Babel
+* Linters: ESLint, Prettify
+* Type Checkers: TypeScript, Flow
+* Syntax Highlighters
+
+En este [enlace](https://astexplorer.net/) podemos ver gráficamente el AST.
 
