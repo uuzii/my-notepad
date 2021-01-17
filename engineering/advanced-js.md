@@ -1,6 +1,6 @@
-# Some concepts
+# Algunos conceptos
 
-Para inicializar un poryecto con todas las banderas en `y` usamos `npm init -y``
+Para inicializar un poryecto con todas las banderas en `y` usamos `npm init -y`
 Una herramienta que nos puede ayudar para servir nuetros proyectos vanilla es **live-server**
 
 # ¿Cómo llega un script al navegador?
