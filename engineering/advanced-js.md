@@ -337,7 +337,7 @@ Analicemos primeramente la parte del **parser**
 ## Parser
 Toma nuestro código fuente y lo lee, pues la computadora tiene que descomponerlo para procesarlo, lo que hace primeramente es descomponerlo en **tokens**, ej: la declaración de variables y funciones, si algo no hace sentido es cuando ocurre un *SyntaxError*. Este proceso ocupa una 15-20% del tiempo de procesamiento, por lo cuál se dice que la mayoría del código de JS nunca se ejecuta. De ello la importancia de hacer **bundling** y **code splitting** o prácticas como las **Single Page Applications**.
 
-Hay dos modos de hacer parsing en V8 (usado por Chrome y Node):
+Hay dos modos de hacer parsing en **V8** (usado por Chrome y Node):
 |Eager Parsing:|Lazy parsing:|
 |-|-|
 |Encuentra errores de sináxis|Doble de velocidad que eager|
@@ -357,3 +357,25 @@ Es un grafo (estructura de datos) que representa un programa. Se usa en:
 
 En este [enlace](https://astexplorer.net/) podemos ver gráficamente el AST.
 
+Un ejemplo del uso de AST para verificar el lineto de una línea de código es el de la siguiente imagen, donde verificamos que una declaración de variable sea de tipo `const`, que almacene un número y que su nombre esté en mayúsuclas, todo esto lo logramos validando nodo por nodo de AST en esta página que nos permite inspeccionarlo, luego podríamos llevar esta función hacia un linter local e incluso agregar funciones que sean *fixers* de nuestro código:
+
+![ejemplo de AST](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/ast-example-eslint.jpeg?raw=true)
+
+## Profiling Data
+Cuando el intérprete genera el bytecode, el *Optimizer compiler* puede llevar a cabo la optimización de código que sea muy reutilizado, si éste no se utiliza, se deoptimizará, por ello es importante mandar llamar las funciones con los mismo tipos de input.
+
+## Otros motores de JS
+Existen otros motores de JavaScript que siguen una estrucutra parecida, agregan más capas de optimizacioón como:
+* **SpiderMonkey** (Firefox) - 2 capas de optimización
+* **Chakra** (Edge) - 2 capas de optimización
+* **JavaScriptCore** (Safari) - 3 capas de optimización
+
+# Event Loop
+JavaScript corre sobre un solo hilo, para esto utiliza el *event loop*. Consideremos que JS se organiza usando dos tipos de estructuras de datos:
+* **Stack**: lleva rastro de dónde está el programa en cada momento (call stack)
+  * Comienza vacío y se le puede hacer push de múltiples elementos (pero para sacar hay que hacer pop)
+  * En el stack está también almacenada la información sobre el scope de las funciones
+  * Ejemplo:
+  ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop.gif?raw=true)
+
+* **Memory heap**: almacena información sobre las variables de manera aleatoria
