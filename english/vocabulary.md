@@ -223,3 +223,44 @@ This file contains some words I've learned trough my english career :)
 |**treacherous**|traicionero, peligroso|
 |**unbearable**|insoportable|
 |**uproar**|alboroto, estruendo, jaleo|
+## List 8
+|**English word**|Spanish approximations|
+|-|-|
+|**astonishing**|sorprendente|
+|**bait**|carnada|
+|**bask**|estar recostado|
+|**beam**|viga, travesaño|
+|**beleaguered**|sitiado|
+|**bluegrass**|hierba norteamericana|
+|**brads**|clavito, puntilla|
+|**bump**|bulto, bache, chichón|
+|**cherised**|preciado|
+|**chickadee**|carbonero|
+|**cranky**|malhumorado|
+|**disrespectful**|irrespetuoso|
+|**dread**|pavor|
+|**endure**|aguantar|
+|**foster**|fomentar, adoptivo(adj)|
+|**futile**|inútil|
+|**geese**|ganso|
+|**goofy**|bobo, relativo a dientes salidos|
+|**grace**||gracia, elegancia
+|**heal**|curar, cicatrizar|
+|**jar**|frasco, bote|
+|**lid**|tapa, párpado|
+|**mason**|albañil, labrar en piedra|
+|**moisturize**|hidratar, humectar|
+|**punk**|vándalo|
+|**realm**|reino, campo, ámbito|
+|**screw**|tornillo, hélice, cogida|
+|**slither**|deslizarse|
+|**sleeve**|manga, funda|
+|**sober**|sobrio|
+|**summon**|llamar, pedir, convocar|
+|**swirl**|remolino, espiral|
+|**throes**|agonía|
+|**tinfoil**|papel aluminio|
+|**tug**|tirar de, jalar|
+|**unfathomably**|insondable|
+|**woobly**|tambaleante|
+|**yikes**|caramba|
