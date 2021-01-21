@@ -718,8 +718,8 @@ FROM schemaname.posts
 GROUP BY status, post_month;
 ```
 
-## ORDER BY
-`ORDER BY` nos permite establecer criterios para ordenar los datos consultados. Implementemos esto en el ejemplo del blog ordenando los elementos por fecha de publicación de manera ascendente:
+## ORDER BY
+La sentencia `ORDER BY` nos permite establecer criterios para ordenar los datos consultados. Implementemos esto en el ejemplo del blog ordenando los elementos por fecha de publicación de manera ascendente:
 ```sql
 SELECT *
 FROM schemaname.posts
@@ -743,7 +743,7 @@ LIMIT 5;
 ```
 
 ## HAVING
-`HAVING` tiene una similitud con `WHERE`, pero su diferencia radica en que los elementos que se agrupan, no se pueden filtrar mediante la sentencia `WHERE`, para eso se utiliza `HAVING`, ejemplo:
+La sentencia `HAVING` tiene una similitud con `WHERE`, pero su diferencia radica en que los elementos que se agrupan, no se pueden filtrar mediante la sentencia `WHERE`, para eso se utiliza `HAVING`, ejemplo:
 ```sql
 SELECT MONTHNAME(post_date) AS post_month, status, COUNT(*) AS post_quantity
 FROM schemaname.posts
