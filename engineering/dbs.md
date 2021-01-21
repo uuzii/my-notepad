@@ -314,13 +314,13 @@ CREATE TABLE people (
 En la consola, desplegamos nuestra schema, y damos click derecho en Tablas luego en la opción Create Table. Colocamos un nombre a nuestra tabla y veremos que por default nos crea un campo id, lo modificamos a nuestro gusto, generalmente para un id, seleccionaremos el campo AI (automatic increment) que lo incrementará automáticamente cuando se agregue más registros, agregamos los campos mencionados arriba con sus tipos y al darle apply, veremos algo así:
 
 ```sql
-CREATE TABLE `platziblog`.`people` (
-  `person_id` INT NOT NULL AUTO_INCREMENT,
-  `last_name` VARCHAR(255) NULL,
-  `first_name` VARCHAR(255) NULL,
-  `address` VARCHAR(255) NULL,
-  `city` VARCHAR(255) NULL,
-  PRIMARY KEY (`person_id`));
+CREATE TABLE schemaname.people (
+  person_id INT NOT NULL AUTO_INCREMENT,
+  last_name VARCHAR(255) NULL,
+  first_name VARCHAR(255) NULL,
+  address VARCHAR(255) NULL,
+  city VARCHAR(255) NULL,
+  PRIMARY KEY (person_id));
 ```
 
 Posteriormente, dentro de Tables, veremos que ya existe la tabla people. Para hacer una consulta, podemos dar click derecho y hacer click en Select Rows - Limit 1000 para ver los primeros 1000 registros.
@@ -482,13 +482,13 @@ Para crear la DD del diagrama físico que tenemos arriba, necesitamos seguir los
   * **NOT ACTION** Para no hacer nada.
   Éste es un ejemplo de la forma SQL de crear una FK:
   ```sql
-  ALTER TABLE `uziblog`.`posts` -- Modificando la tabla
-  ADD INDEX `posts_users_idx` (`user_id` ASC); -- Añadiendo un index al campo user_id
+  ALTER TABLE schemaname.posts -- Modificando la tabla
+  ADD INDEX posts_users_idx (user_id ASC); -- Añadiendo un index al campo user_id
   ;
-  ALTER TABLE `uziblog`.`posts` -- Altera la tabla añadiendo un constrain
-  ADD CONSTRAINT `posts_users`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `uziblog`.`users` (`id`)
+  ALTER TABLE schemaname.posts -- Altera la tabla añadiendo un constrain
+  ADD CONSTRAINT posts_users
+    FOREIGN KEY (user_id)
+    REFERENCES schemaname.users (id)
     ON DELETE NO ACTION
     ON UPDATE CASCADE;
   ```
@@ -608,13 +608,13 @@ Para la intersección, existe el *INNER JOIN*, que trerá los datos que comparta
 * El `OUTER JOIN` en el caso diferencia simétrica, traería todos los usuarios que no tengan posts asociados y todos los posts que no tengan usuario asociado. En SQL:
   ```sql
   SELECT *
-  FROM uziblog.users
-    LEFT JOIN uziblog.posts ON users.id = posts.user_id
+  FROM schemaname.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id
   WHERE posts.user_id IS NULL
   UNION
   SELECT *
-  FROM uziblog.users
-    RIGHT JOIN uziblog.posts ON users.id = posts.user_id
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id
   WHERE posts.user_id IS NULL;
   ```
 
@@ -688,3 +688,104 @@ WHERE category_id IS NOT NULL
   AND category_id = 2
   AND YEAR(post_date) = '2025';
 ```
+
+## GROUP BY
+Le indicará a la base de datos ciertos criterios para agrupar información de nuestras consultas de manera funcional. La siguiente consulta, nos muestra el número de posts activos, seleccionando una columna, filtrando los datos y contándolos en una columna llamada `post_quantity`:
+```sql
+SELECT status, COUNT(*)post_quantity
+FROM shcemaname.posts
+GROUP BY status;
+```
+
+Esta sentencia se utiliza mucho para presentar informes de acuerdo a determinados criterios requeridos por el negocio. Veamos otro ejemplo, generando un alias a la columna en cuestión, en este caso la lógica es: selecciona todas las fechas de publicación, agrúpalas y cuenta la cantidad de elementos que hay de cada año:
+```sql
+SELECT YEAR(post_date) AS post_year, COUNT(*) AS post_quantity
+FROM shcemaname.posts
+GROUP BY post_year;
+```
+
+Éste sería el mismo ejemplo pero agrupando los datos mediante su mes de publicación:
+```sql
+SELECT MONTHNAME(post_date) AS post_month, COUNT(*) AS post_quantity
+FROM schemaname.posts
+GROUP BY post_month;
+```
+
+De la siguiente manera, conjugaríamos los datos de dos columnas para agruparlos por dos criterios:
+```sql
+SELECT status, MONTHNAME(post_date) AS post_month, COUNT(*) AS post_quantity
+FROM schemaname.posts
+GROUP BY status, post_month;
+```
+
+## ORDER BY
+La sentencia `ORDER BY` nos permite establecer criterios para ordenar los datos consultados. Implementemos esto en el ejemplo del blog ordenando los elementos por fecha de publicación de manera ascendente:
+```sql
+SELECT *
+FROM schemaname.posts
+ORDER BY post_date ASC;
+```
+> Para ordenar de manera descendente, usaríamos la palabra `DESC`
+
+Si queremos ordenar mediante criterios aplicados a cadenas de texto, podemos emplear la siguiente forma, que por default ordenará alfabéticamente (o numéricamente si es el caso):
+```sql
+SELECT *
+FROM schemaname.posts
+ORDER BY title ASC;
+```
+
+Podemos agregar un límite a nuestro ordenamiento mediante la sentencia `LIMIT`:
+```sql
+SELECT *
+FROM schemaname.posts
+ORDER BY post_date ASC
+LIMIT 5;
+```
+
+## HAVING
+La sentencia `HAVING` tiene una similitud con `WHERE`, pero su diferencia radica en que los elementos que se agrupan, no se pueden filtrar mediante la sentencia `WHERE`, para eso se utiliza `HAVING`, ejemplo:
+```sql
+SELECT MONTHNAME(post_date) AS post_month, status, COUNT(*) AS post_quantity
+FROM schemaname.posts
+GROUP BY status, post_month
+HAVING post_quantity > 1
+ORDER BY post_month;
+```
+
+# Nested queries
+Los nested queries o interminable agujero de conejo, son consultas anidadas que nos permiten por ejemplo, si queremos generar queries con una tabla *virtual* hecha por un `JOIN`, o una que resulte de un `WHERE`. De esta forma se pueden anidar n queries. Éstos se usan solo cuando no hay forma de responder una pregunta haciendo una consulta, luego entonces hacemos un query y después eso lo metemos en la entrada (`FROM`) de un segundo query.
+
+Hay que tener cuidado con esta práctica, ya que en bases de datos muy grandes se pueden generar *productos cartesianos*, es decir, la multiplicación de todos los datos de una tabla con todos los de otra y otra, de manera que los procesos se vuelvan muy difíciles de procesar. Es decir, no es escalable.
+
+En el siguiente ejemplo, creamos una tabla virtual denominada `new_table_projection` y sobre ella ejecutamos un query que agrupa los datos y los ordena:
+```sql
+SELECT new_table_projection.date, COUNT(*) AS post_count
+FROM (
+	SELECT DATE(MIN(post_date)) AS date, YEAR(post_date) AS post_year
+    FROM schemaname.posts
+    GROUP BY post_year
+) as new_table_projection
+GROUP BY new_table_projection.date
+ORDER BY new_table_projection.date;
+```
+
+Este tipo de prácticas se usa comúnmente para consultas de máximos, mínimos o agrupaciones más customizadas. Otro ejemplo, es utilizarlo en el contexto del `WHERE`.
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE post_date = (
+	SELECT MAX(post_date)
+    FROM schemaname.posts
+);
+```
+
+# Convertir una pregunta de negocio en un query
+La conversión de preguntas a queries es una habilidad que se va desarrollando con el ejercicio continuo. Pero estas soon algunas equivalencias aproximadas de nuestro lenguaje con las sentencias de SQL:
+|Sentencia|Aproximación|
+|-|-|
+|`SELECT`|Lo que queremos mostrar ¿qué datos? columnas, campos dinámicos|
+|`FROM`|De dónde voy a tomar los datos, ¿de una tabla?, ¿de más tablas unidas?|
+|`WHERE`|Los filtros de los datos que quiero mostrar|
+|`GROUP BY`|Los rubros por los que me interesa agrupar la información.|
+|`ORDER BY`|Orden en el que quiero presentar la información que ya filtré, hacer tops|
+|`HAVING`|Los filtros que quiero que mis datos **agrupados** tengan|
