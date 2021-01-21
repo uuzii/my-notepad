@@ -1,6 +1,6 @@
-# Some concepts
+# Algunos conceptos
 
-Para inicializar un poryecto con todas las banderas en `y` usamos `npm init -y``
+Para inicializar un poryecto con todas las banderas en `y` usamos `npm init -y`
 Una herramienta que nos puede ayudar para servir nuetros proyectos vanilla es **live-server**
 
 # ¿Cómo llega un script al navegador?
@@ -226,4 +226,302 @@ const bindedWalk = walk.bind(anotherPerson, 400)
 bindedWalk('norte') // Jonadab camina 400 metros hacia el norte
 ```
 
+# Prototypes
+Es un concepto casi único de JavaScript. En otros lengiajes orientados a Objetos, se crean solo instancias de clases, en JS no existen las clases, todo son objetos, sin embargo podemos generar herencia a través de lo que se denomina un *prototipo*.
 
+Podemos enfrentarnos a la siguiente situación mientras estamos instanciando objetos:
+```javascript
+function Hero(name) {
+  const hero = {
+    name: name
+  }
+  hero.saludar = function() {
+    console.log(`hola soy ${this.name}`)
+  }
+  return hero
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+Nótese que cada que queremos instanciar, estamos generando una función dentro del scope de cada objeto para eficientar esto, podríamos usar un método genérico y hacer referencia a él:
+```javascript
+const heroMethods = {
+  saludar: function() {
+    console.log(`Hola soy ${this.name}`)
+  }
+}
+function Hero(name) {
+  const hero = {
+    name: name
+  }
+  hero.saludar = heroMethods.saludar
+  return hero
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+Hay una forma más reducida de hacer esto, y es usando la función `Object.create()`:
+```javascript
+const heroMethods = {
+  saludar: function() {
+    console.log(`Soy superhéroe ${this.name}`)
+  }
+}
+function Hero(name) {
+  const hero = Object.create(heroMethods)
+  hero.name = name
+  return hero
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+En éste ejemplo, no estamos haciendo solamente una *copia* de los métodos que existen en `heroMethods`, sino que estamos haciéndole la  **herencia prototipal** ¿qué quiere decir esto? quiere decir que no le estamos agregando funciones a las instancias, sino que se las estamos agregando a su objeto `__proto__` y aunque en la consola no sea visible a primera vista, sí le pertenecerá a cada instancia. Una forma más reducida aún para hacer esto sería la siguiente:
+```javascript
+function Hero(name) {
+  const hero = Object.create(Hero.prototype)
+  hero.name = name
+  return hero
+}
+Hero.prototype.saludar = function() {
+  console.log()
+}
+const zelda = Hero('Zelda')
+const link = Hero('Link')
+```
+
+De esta forma entendemos cómo es que JavaScript genera instancias de los objetos, es decir, hace la *herencia prototipal*, con lo cúal será fácil entender lo que hace la palabra reservada `new`, que realmente es instancias un nuevo objeto, dada una función *consttuctora*, asociando todo a un contexto propio del prototipo que guarda en una variable llamada obligadamente `this`, con lo cuál ya no tiene que haber un return, pues va implícito con el uso de una función constructura y el uso de `new`:
+```javascript
+function Hero(name) {
+  //const hero = Object.create(Hero.prototype)
+  this.name = name // se usa this
+  // return hero
+}
+Hero.prototype.saludar = function() {
+  console.log(`New ${this.name}`)
+}
+const zelda = new Hero('Zelda')
+const link = new Hero('Link')
+```
+
+La herencia prototipal es una forma muy completa para generar herencia en JavaScript, puer nos permitirá crear instancias con todos los métodos que tenga el prototipo a partir del cuál fue creado, al final, todo en JS es un objeto y podremos acceder a todos los métodos de `Object`. Inspeccionemos el prototype de alguna de nuestras instancias:
+```javascript
+const prototypeOfZelda = Object.getPrototypeOf(zelda)
+console.log(prototypeOfZelda === Hero.prototype) // true
+```
+
+Si nosotros le agregamos algún método o propiedad a un prototype, éste existirá automáticamente en todas sus instancias (pero en el prototype):
+```javascript
+Hero.prototype.fight = function() {
+  console.log('Fight!')
+}
+const protoypeOfPrototypeOfZelda = Object.getPrototypeOf(Hero.prototype)
+protoypeOfPrototypeOfZelda.hasOwnProperty('fight') // true
+```
+
+La búsqueda de funciones o properties dentro de un prototype se escala desde el elemento que estamos usando hasta el objeto `Object`, que es el punto mas alto en esta cadena de herencia prototipal.
+
+# Parsers y Abstract Syntax Tree
+La Web no siempre ha sido como ahora, JavaScript fue ntroducido por primera vez con Netscape. JS en sí mismo servía para hacer tareas muy simples, se interepretaba línea por línea, hasta la fecha esto sigue siendo así pero de una manera más moderna que introdujo Google rediseñando el motor de JS. Lo que hace el navegador es aproximadamente lo siguiente:
+* Recibe código fuente
+* Parsea el código y produce el Abstract Syntax Tree (AST)
+* Se compila a bytecode y se ejecuta
+* Se optimiza a machinecode y se reemplaza el código base
+
+![funcionamiento javascript](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/how-js-works.jpg?raw=true)
+
+Analicemos primeramente la parte del **parser**
+
+## Parser
+Toma nuestro código fuente y lo lee, pues la computadora tiene que descomponerlo para procesarlo, lo que hace primeramente es descomponerlo en **tokens**, ej: la declaración de variables y funciones, si algo no hace sentido es cuando ocurre un *SyntaxError*. Este proceso ocupa una 15-20% del tiempo de procesamiento, por lo cuál se dice que la mayoría del código de JS nunca se ejecuta. De ello la importancia de hacer **bundling** y **code splitting** o prácticas como las **Single Page Applications**.
+
+Hay dos modos de hacer parsing en **V8** (usado por Chrome y Node):
+|Eager Parsing:|Lazy parsing:|
+|-|-|
+|Encuentra errores de sináxis|Doble de velocidad que eager|
+|Crea el AST|No crear el AST|
+|Construye scopes|Construye los scopes parcialmente|
+
+En este [enlace](https://esprima.org/) podemos ver ejemplos de los tokens generados por el parser.
+
+## AST
+Es un grafo (estructura de datos) que representa un programa. Se usa en:
+* JavaScript
+* Bundlers: Webpack, Rollup, Parcel
+* Transpilers: Babel
+* Linters: ESLint, Prettify
+* Type Checkers: TypeScript, Flow
+* Syntax Highlighters
+
+En este [enlace](https://astexplorer.net/) podemos ver gráficamente el AST.
+
+Un ejemplo del uso de AST para verificar el lineto de una línea de código es el de la siguiente imagen, donde verificamos que una declaración de variable sea de tipo `const`, que almacene un número y que su nombre esté en mayúsuclas, todo esto lo logramos validando nodo por nodo de AST en esta página que nos permite inspeccionarlo, luego podríamos llevar esta función hacia un linter local e incluso agregar funciones que sean *fixers* de nuestro código:
+
+![ejemplo de AST](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/ast-example-eslint.jpeg?raw=true)
+
+## Profiling Data
+Cuando el intérprete genera el bytecode, el *Optimizer compiler* puede llevar a cabo la optimización de código que sea muy reutilizado, si éste no se utiliza, se deoptimizará, por ello es importante mandar llamar las funciones con los mismo tipos de input.
+
+## Otros motores de JS
+Existen otros motores de JavaScript que siguen una estrucutra parecida, agregan más capas de optimizacioón como:
+* **SpiderMonkey** (Firefox) - 2 capas de optimización
+* **Chakra** (Edge) - 2 capas de optimización
+* **JavaScriptCore** (Safari) - 3 capas de optimización
+
+# Funcionamiento de JavaScript en un solo hilo
+JavaScript corre sobre un solo hilo, para esto utiliza el *event loop*. Consideremos que JS se organiza usando dos tipos de estructuras de datos:
+* **Stack**: lleva rastro de dónde está el programa en cada momento (call stack), es una estructura **LIFO**:
+  * Comienza vacío y se le puede hacer push de múltiples elementos (pero para sacar hay que hacer pop)
+  * En el stack está también almacenada la información sobre el scope de las funciones. Illustración del callstack:
+    ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/callstack-animation.gif?raw=true)
+  * En el caso de las funciones asíncronas, éstas se *mandarán* a procesar, pero solo se ejcutarán en nuestro programa una vez que se haya vaciado el callstack. De aquí surge el siguiente con concepto que es el *queue*:
+* **Task queue**: es una estrucutra de datos tipo **FIFO**, a la que obedecen las tareas asíncronas una vez que pueden ser ejecutadas, dicho de otro modo, es una cola de tareas que está esperando entrar al callstack.
+* **Event loop**: es el ente encargado de verificar constantemente el estado del stack para saber si puede cargarle la cola de tareas resueltas y éstas puedan ejecutarse. Esta es una illustración:
+  ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop-animation.gif?raw=true)
+  > tomemos en cuenta que las promesas se forman en otra cola de tareas dedicada a las promesas.
+* **Memory heap**: almacena información sobre las variables de manera aleatoria
+
+# Getters y Setters
+Son funciones que se emplean dentro de los objetos que nos permiten tener propiedades virtuales para computar otras propiedades. Consideremos el siguiente ejemplo, en el que computaremos el resultado de elevar una base a un exponente pero sin guardar dicha base como propiedad de nuestra clase:
+```javascript
+class ExponentCalculator {
+  constructor(exp) {
+    this.exponent = exp
+  }
+  set base(value) {
+    this.result = Math.pow(value, this.exponent)
+  }
+  get result() {
+    return `The result of this instance is: ${this.result}`
+  }
+}
+let squaredCalculator = new ExponentCalculator(2)
+squaredCalculator.base = 2
+console.log(squaredCalculator.result) // 4
+```
+
+Nótese que `base` no es una propiedad per se de nuestra clase, sino que solamente es un `setter` que nos sirve para recibir un valor y hacerle algún *tratamiento*, luego el `getter` nos ayudará para poder *sacar* información almacenada en nuestra clase, misma que también puede estar modificada a la salida.
+
+# Proxy
+Nos permitirán interceptar y definir un comportamiento customizado sobre operaciones que se hagan con un objeto. Básicamente es el mismo concepto de getters y setters pero con muchas más opciones ya que no operan sobre una propiedad sino sobre un objeto, ver la [referencia](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Proxy).
+
+Creemos un ejemplo donde interceptamos llamadas para leer una propieda, si la propiedad existe, la regresamos, si no existe, entonces sugerimos una que pueda funcionar:
+```html
+<html>
+  <head>
+    <title>Proxy</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/fast-levenshtein@2.0.6/levenshtein.js"></script>
+    <script>
+      const target = {
+        red: 'Rojo',
+        green: 'Verde',
+        blue: 'Azul',
+      };
+      const handler = {
+        get(obj, prop) {
+          if(prop in obj) {
+            return obj[prop];
+          }
+          const suggestion = Object.keys(obj).find(key => {
+            return Levenshtein.get(key, prop) <= 3;
+          });
+          if(suggestion) {
+            console.log(
+              `${prop} no se encontró. Quisiste decir ${suggestion}?`
+            );
+          }
+          return obj[prop];
+        },
+      };
+      const p = new Proxy(target, handler);
+    </script>
+  </body>
+</html>
+```
+> Nótese que en este ejemplo, solo se está utilizando una *trampa* propia de los Proxy, hay muchas más opciones para implementar este feature de JavaScript.
+
+# Generators
+Los generators son funciones especiales que podemos iniciar, detener en un punto, irnos a otra función y eventualmente regresar a su ejecución donde la dejamos y la función recordará su contexto. Veamos un ejemplo:
+```javascript
+function* simpleGenerator() {
+  console.log('Generator start')
+  console.log('Generator end')
+}
+const gen = simpleGenerator()
+gen.next()
+// start
+// end
+// {value: undefined, done: true}
+```
+> Nota. La función generator se crea usando un asterisco (*) después de la palabra function, pero esta no es una función ejecutable, al emplearle el método next veremos a la salida los valores que se muestran en los comentarios.
+
+¿Qué significa el objeto que vemos a la salida?, `value` puede ser un valor que se está retornando en ese momento por parte del generator y `done` es una bandera que nos indica si ya terminó la ejecución, en este caso, en un solo llamado a `next` terminamos la ejecución pero nunca interrumpimos para retornar nada. Veamos cómo retornar valores:
+```javascript
+function* simpleGenerator() {
+  console.log('Generator start')
+  yield 1
+  yield 2
+  console.log('Generator end')
+}
+const gen = simpleGenerator()
+gen.next()
+// start
+// {value: 1, done: false}
+gen.next()
+// start
+// {value: 2, done: false}
+gen.next()
+
+// end
+// {value: undefined, done: true}
+```
+En este ejemplo, vemos cómo cada llamada al método next, significa un paso más en la ejecución de la función, misma que puede retornar tantos valores por medio de la palabra reservada `yield` como queramos.
+
+## Generators infinitos
+Podemos construir un generator que esté devolviendo valores de manera indeterminada. Veamos el siguiente ejemplo:
+```javascript
+function* idMaker() {
+  let id = 1
+  while(true) {
+    yield id
+    id = id + 1
+  }
+}
+```
+
+Esta función, no tiene un final determinado, pues siempre retornará un valor incrementado a modo de id. Podríamos resetear el valor incrementado del id de la siguiente manera: 
+```javascript
+function* idMaker() {
+  let id = 1
+  let reset
+  while(true) {
+    reset = yield id
+    if(reset) {
+      id = 1
+    } else {
+      id = id + 1
+    }
+  }
+}
+idMaker.next(true)
+// {value: 1, done: false}
+```
+
+Ésta sería un uso más complejo de generators infinitos: la creación de determinado número de elementos de la serie fibonacci:
+```javascript
+function* fibonacci() {
+  let a = 1;
+  let b = 1;
+  while(true) {
+    const nextNumber = a + b
+    a = b
+    b = nextNumber
+    yield nextNumber
+  }
+}
+```
+> cada ejecución nos dará un nuevo elemento de la serie

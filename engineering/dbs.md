@@ -661,3 +661,30 @@ SELECT *
 FROM schemaname.posts
 WHERE YEAR(post_date) BETWEEN '2023' AND '2025';
 ```
+
+## Valores nulos y no nulos
+Los *valores nulos* son los valores que se guardan cuando un campo no se ha definido. El constrain `NOT NULL` impide que los campos se rellenen de este modo. a través de `WHERE` podemos hacer consultas de los valores nulos, no se hacen de la misma manera que los demás datos, pues no hay nada qué comparar. Usaremos una sentencia especial, que es:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE user_id IS NULL;
+```
+
+Muchas veces consultamos más bien el complemento, es decir, lo que no es nulo:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE user_id IS NOT NULL;
+```
+
+## Sentencia AND
+En `WHERE`podemos usar la sentencia `AND` para agrecar condicionales sobre los campos que queremos consultar:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE category_id IS NOT NULL
+	AND status = 'activo'
+  AND id < 50
+  AND category_id = 2
+  AND YEAR(post_date) = '2025';
+```
