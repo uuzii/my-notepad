@@ -370,12 +370,158 @@ Existen otros motores de JavaScript que siguen una estrucutra parecida, agregan 
 * **Chakra** (Edge) - 2 capas de optimización
 * **JavaScriptCore** (Safari) - 3 capas de optimización
 
-# Event Loop
+# Funcionamiento de JavaScript en un solo hilo
 JavaScript corre sobre un solo hilo, para esto utiliza el *event loop*. Consideremos que JS se organiza usando dos tipos de estructuras de datos:
-* **Stack**: lleva rastro de dónde está el programa en cada momento (call stack)
+* **Stack**: lleva rastro de dónde está el programa en cada momento (call stack), es una estructura **LIFO**:
   * Comienza vacío y se le puede hacer push de múltiples elementos (pero para sacar hay que hacer pop)
-  * En el stack está también almacenada la información sobre el scope de las funciones
-  * Ejemplo:
-  ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop.gif?raw=true)
-
+  * En el stack está también almacenada la información sobre el scope de las funciones. Illustración del callstack:
+    ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/callstack-animation.gif?raw=true)
+  * En el caso de las funciones asíncronas, éstas se *mandarán* a procesar, pero solo se ejcutarán en nuestro programa una vez que se haya vaciado el callstack. De aquí surge el siguiente con concepto que es el *queue*:
+* **Task queue**: es una estrucutra de datos tipo **FIFO**, a la que obedecen las tareas asíncronas una vez que pueden ser ejecutadas, dicho de otro modo, es una cola de tareas que está esperando entrar al callstack.
+* **Event loop**: es el ente encargado de verificar constantemente el estado del stack para saber si puede cargarle la cola de tareas resueltas y éstas puedan ejecutarse. Esta es una illustración:
+  ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop-animation.gif?raw=true)
+  > tomemos en cuenta que las promesas se forman en otra cola de tareas dedicada a las promesas.
 * **Memory heap**: almacena información sobre las variables de manera aleatoria
+
+# Getters y Setters
+Son funciones que se emplean dentro de los objetos que nos permiten tener propiedades virtuales para computar otras propiedades. Consideremos el siguiente ejemplo, en el que computaremos el resultado de elevar una base a un exponente pero sin guardar dicha base como propiedad de nuestra clase:
+```javascript
+class ExponentCalculator {
+  constructor(exp) {
+    this.exponent = exp
+  }
+  set base(value) {
+    this.result = Math.pow(value, this.exponent)
+  }
+  get result() {
+    return `The result of this instance is: ${this.result}`
+  }
+}
+let squaredCalculator = new ExponentCalculator(2)
+squaredCalculator.base = 2
+console.log(squaredCalculator.result) // 4
+```
+
+Nótese que `base` no es una propiedad per se de nuestra clase, sino que solamente es un `setter` que nos sirve para recibir un valor y hacerle algún *tratamiento*, luego el `getter` nos ayudará para poder *sacar* información almacenada en nuestra clase, misma que también puede estar modificada a la salida.
+
+# Proxy
+Nos permitirán interceptar y definir un comportamiento customizado sobre operaciones que se hagan con un objeto. Básicamente es el mismo concepto de getters y setters pero con muchas más opciones ya que no operan sobre una propiedad sino sobre un objeto, ver la [referencia](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Proxy).
+
+Creemos un ejemplo donde interceptamos llamadas para leer una propieda, si la propiedad existe, la regresamos, si no existe, entonces sugerimos una que pueda funcionar:
+```html
+<html>
+  <head>
+    <title>Proxy</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/fast-levenshtein@2.0.6/levenshtein.js"></script>
+    <script>
+      const target = {
+        red: 'Rojo',
+        green: 'Verde',
+        blue: 'Azul',
+      };
+      const handler = {
+        get(obj, prop) {
+          if(prop in obj) {
+            return obj[prop];
+          }
+          const suggestion = Object.keys(obj).find(key => {
+            return Levenshtein.get(key, prop) <= 3;
+          });
+          if(suggestion) {
+            console.log(
+              `${prop} no se encontró. Quisiste decir ${suggestion}?`
+            );
+          }
+          return obj[prop];
+        },
+      };
+      const p = new Proxy(target, handler);
+    </script>
+  </body>
+</html>
+```
+> Nótese que en este ejemplo, solo se está utilizando una *trampa* propia de los Proxy, hay muchas más opciones para implementar este feature de JavaScript.
+
+# Generators
+Los generators son funciones especiales que podemos iniciar, detener en un punto, irnos a otra función y eventualmente regresar a su ejecución donde la dejamos y la función recordará su contexto. Veamos un ejemplo:
+```javascript
+function* simpleGenerator() {
+  console.log('Generator start')
+  console.log('Generator end')
+}
+const gen = simpleGenerator()
+gen.next()
+// start
+// end
+// {value: undefined, done: true}
+```
+> Nota. La función generator se crea usando un asterisco (*) después de la palabra function, pero esta no es una función ejecutable, al emplearle el método next veremos a la salida los valores que se muestran en los comentarios.
+
+¿Qué significa el objeto que vemos a la salida?, `value` puede ser un valor que se está retornando en ese momento por parte del generator y `done` es una bandera que nos indica si ya terminó la ejecución, en este caso, en un solo llamado a `next` terminamos la ejecución pero nunca interrumpimos para retornar nada. Veamos cómo retornar valores:
+```javascript
+function* simpleGenerator() {
+  console.log('Generator start')
+  yield 1
+  yield 2
+  console.log('Generator end')
+}
+const gen = simpleGenerator()
+gen.next()
+// start
+// {value: 1, done: false}
+gen.next()
+// start
+// {value: 2, done: false}
+gen.next()
+
+// end
+// {value: undefined, done: true}
+```
+En este ejemplo, vemos cómo cada llamada al método next, significa un paso más en la ejecución de la función, misma que puede retornar tantos valores por medio de la palabra reservada `yield` como queramos.
+
+## Generators infinitos
+Podemos construir un generator que esté devolviendo valores de manera indeterminada. Veamos el siguiente ejemplo:
+```javascript
+function* idMaker() {
+  let id = 1
+  while(true) {
+    yield id
+    id = id + 1
+  }
+}
+```
+
+Esta función, no tiene un final determinado, pues siempre retornará un valor incrementado a modo de id. Podríamos resetear el valor incrementado del id de la siguiente manera: 
+```javascript
+function* idMaker() {
+  let id = 1
+  let reset
+  while(true) {
+    reset = yield id
+    if(reset) {
+      id = 1
+    } else {
+      id = id + 1
+    }
+  }
+}
+idMaker.next(true)
+// {value: 1, done: false}
+```
+
+Ésta sería un uso más complejo de generators infinitos: la creación de determinado número de elementos de la serie fibonacci:
+```javascript
+function* fibonacci() {
+  let a = 1;
+  let b = 1;
+  while(true) {
+    const nextNumber = a + b
+    a = b
+    b = nextNumber
+    yield nextNumber
+  }
+}
+```
+> cada ejecución nos dará un nuevo elemento de la serie
