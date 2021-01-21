@@ -742,7 +742,7 @@ ORDER BY post_date ASC
 LIMIT 5;
 ```
 
-## HAVING
+## HAVING
 La sentencia `HAVING` tiene una similitud con `WHERE`, pero su diferencia radica en que los elementos que se agrupan, no se pueden filtrar mediante la sentencia `WHERE`, para eso se utiliza `HAVING`, ejemplo:
 ```sql
 SELECT MONTHNAME(post_date) AS post_month, status, COUNT(*) AS post_quantity
