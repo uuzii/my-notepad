@@ -314,13 +314,13 @@ CREATE TABLE people (
 En la consola, desplegamos nuestra schema, y damos click derecho en Tablas luego en la opción Create Table. Colocamos un nombre a nuestra tabla y veremos que por default nos crea un campo id, lo modificamos a nuestro gusto, generalmente para un id, seleccionaremos el campo AI (automatic increment) que lo incrementará automáticamente cuando se agregue más registros, agregamos los campos mencionados arriba con sus tipos y al darle apply, veremos algo así:
 
 ```sql
-CREATE TABLE `platziblog`.`people` (
-  `person_id` INT NOT NULL AUTO_INCREMENT,
-  `last_name` VARCHAR(255) NULL,
-  `first_name` VARCHAR(255) NULL,
-  `address` VARCHAR(255) NULL,
-  `city` VARCHAR(255) NULL,
-  PRIMARY KEY (`person_id`));
+CREATE TABLE schemaname.people (
+  person_id INT NOT NULL AUTO_INCREMENT,
+  last_name VARCHAR(255) NULL,
+  first_name VARCHAR(255) NULL,
+  address VARCHAR(255) NULL,
+  city VARCHAR(255) NULL,
+  PRIMARY KEY (person_id));
 ```
 
 Posteriormente, dentro de Tables, veremos que ya existe la tabla people. Para hacer una consulta, podemos dar click derecho y hacer click en Select Rows - Limit 1000 para ver los primeros 1000 registros.
