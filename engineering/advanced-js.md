@@ -375,10 +375,12 @@ JavaScript corre sobre un solo hilo, para esto utiliza el *event loop*. Consider
 * **Stack**: lleva rastro de dónde está el programa en cada momento (call stack), es una estructura **LIFO**:
   * Comienza vacío y se le puede hacer push de múltiples elementos (pero para sacar hay que hacer pop)
   * En el stack está también almacenada la información sobre el scope de las funciones. Illustración del callstack:
+
     ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/callstack-animation.gif?raw=true)
   * En el caso de las funciones asíncronas, éstas se *mandarán* a procesar, pero solo se ejcutarán en nuestro programa una vez que se haya vaciado el callstack. De aquí surge el siguiente con concepto que es el *queue*:
 * **Task queue**: es una estrucutra de datos tipo **FIFO**, a la que obedecen las tareas asíncronas una vez que pueden ser ejecutadas, dicho de otro modo, es una cola de tareas que está esperando entrar al callstack.
 * **Event loop**: es el ente encargado de verificar constantemente el estado del stack para saber si puede cargarle la cola de tareas resueltas y éstas puedan ejecutarse. Esta es una illustración:
+
   ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop-animation.gif?raw=true)
   > tomemos en cuenta que las promesas se forman en otra cola de tareas dedicada a las promesas.
 * **Memory heap**: almacena información sobre las variables de manera aleatoria
@@ -525,3 +527,298 @@ function* fibonacci() {
 }
 ```
 > cada ejecución nos dará un nuevo elemento de la serie
+
+# APIs del Navegador
+
+## Fetch
+Las peticionas AJAX, fueron todo un hito en la web, puer nos permitieron cargar infromación sin tener que recargar toda la página. Para esto, se utiliza el método `XMLHttpRequest`, pero su implementación llega a ser un poco compleja en ciertos casos. Es por esto que llega la función `fetch` para simplificar nuestros requests, con la ventaja de que aprovecha las promesas. La única desventaja era que no había modo de cancelar una petición, lo cuál es muy importante en Single Page Applications, en donde puede que una respuesta asíncrona rompa flujos o sobrecargue datos innecesarios. Para ello llegó `abortController`. Consideremos este ejemplo, en el que queremos cargar una imagen muy pesada.
+
+Consideremos las siguientes funciones asíncronas, que están preparadas para hacer el request de una imagen y asignarla a un elemento img de nuestro HTML, con la opción de abortar dicha petición:
+```javascript
+startButton.onclick = async function() {
+  startLoading()
+  // intanciamos AbortController
+  controller = new AbortController()
+    try {
+      // pasamos la señal del controller
+    const response = await fetch(url, {signal: controller.signal})
+    // extraemos el archivo binario de la respuesta
+    const blob = await response.blob()
+    // generamos una url para colocar al elemento img
+    const imgUrl = URL.createObjectURL(blob)
+    img.src = imgUrl
+  } catch(error) {
+    console.error(error.message)
+  }
+  stopLoading()
+}
+stopButton.onclick = async function() {
+  // abortamos el fetch
+  controller.abort()
+  stopLoading()
+}
+```
+
+## IntersectionObserver
+Esa funcionalidad, nos permite observar un elemento en nuestro navegador, para definir un mínimo umbral del mismo que tiene que estar visible para luego llecar a cabo otras acciones. Esta funcionalidad, la podemos utilizar, por ejemplo, para detener la reproducción de un video cuando el usuario hace scroll de manera que éste ya no es visible en la ventana.
+
+Consideremos la siguiente clase, encargada de implementar ÌntersectionObserver`, que recibe un reproductor de un video (media) y tiene las funciones de `play` y `pause` para pausarlo o reproducirlo según el scroll del usuario:
+```javascript
+class AutoPause {
+  constructor() {
+    this.threshold = 0.25
+    this.handleIntersection = this.handleIntersection.bind(this)
+  }
+  run(player) {
+    this.player = player
+    // el handler recibe la información de la salida/entrada del umbral
+    const observer = new IntersectionObserver(this.handleIntersection, {
+      threshold: this.threshold
+    })
+    observer.observe(this.player.media)
+  }
+  // lógica del handler
+  handleIntersection(entries) {
+    const entry = entries[0]
+    const isVisible = entry.intersectionRatio >= this.threshold
+    isVisible ? this.player.play() : this.player.pause()
+  }
+}
+export default AutoPause
+```
+
+## VisibilityChange
+Es otra API del navegador, que se coloca como listener en una page para que escuche cuando cambiamos de tab y ejecute luego una acción.
+
+```javascript
+document.addEventListener('visibilitychange', () => {
+  console.log(document.visivilityState) // hidden / visible
+})
+```
+
+## Service Workers
+Una tendencia en el desarrollo, son las PWAs, una de las ventajas que ofrecen, es la capacidad de funcionar offline. Para esto se utilizan los **Service Workers**. Que son una capa enmedio del navegador y del internet, tienen similitud con los proxies, ya que interceptan peticiones: las toman, buscan la respuesta y antes de devolverla al browser la guardan en caché, entonces la proxy en lugar de ir al servidor, podrá tomar los datos de caché si por algún motivo el usuario perdió la conexión y le permitirá seguir usando la aplicación.
+
+Para agregar un serviceworker, primero tenemos que identificar si el navegador en cuestión tiene ServiceWorkers:
+```javascript
+// index.js
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(err => {
+    console.error(err.message)
+  })
+}
+```
+
+> Nótese que estamos añadiendo un archivo per se, llamado `sw.js`, que es donde estará la lógica de nuestro ServiceWorker, por otro lado, también tenemos un catch por si el navegador no cuenta con la feature.
+
+En el nivel más alto de nuestro proyecto, agregaremos el archvio `sw.js`. Para empezar con nuestro código, es importante considerar que los SWs se tienen que *instalar* en nuestro navegador, veamos su implementación:
+```javascript
+// sw.js
+const VERSION = 'v1'
+/**
+ * self hace referencia al propio sw
+ * El evento install, se mandará llamar cuando se halla instalado correctamente el sw
+ */
+self.addEventListener('install', event => {
+  // creamos un precaché, que es una lista de cosas que queremos nuestro sw mantenga en cache, indicamos que espere hasta que el cache se complete
+  event.waitUntil(precache()) // -> si se resuelve con éxito, ya podemos ver nuestro SW instalado exitosamente en el browser con los recursos que le indicamos
+})
+async function precache() {
+  // abrimos un cache puntual (promesa)
+  const cache = await caches.open(VERSION)
+  // una vez que hayamos abierto la instancia de la cache, agregamos todos los recursos que queremos agregarle (promesa que esperará waitUntil)
+  return cache.addAll([
+    '/',
+    ... all files
+  ])
+}
+// El evento fetch, ocurrirá cada que hagamos un request al servidor
+self.addEventListener('fetch', event => {
+  // extraemos las petición
+  const request = event.request
+  // filtramos solamente las peticiones de tipo GET
+  if(request.method !== 'GET') {
+    return
+  }
+  // buscamos los datos de esta petición en caché para ver si no es necesario pedirlos al servidor
+  event.respondWith(chacheReponse(request)) // -> si esto funciona, podremos trabajar con archivos que estén cacheados previamente aunque no tengamos conexión
+  /** Estrategia catch & network: nos permitirá actualizar los archivos
+   * para que el usuario no se quede por siempre con lo que tiene en caché
+   * y vaya a perderse de actualizaciones
+   */
+  event.waitUntil(updateCache(request))
+})
+async function chacheReponse(request) {
+  // instanciamos cache
+  const cache = await caches.open(VERSION)
+  // buscamos si hay una copia del request en cache
+  const response = await cache.match(request)
+  // contestamos con lo que tengamos en cache o en su defecto, hacemos el fetch normalmente
+  return response || fetch(request)
+}
+async function updateCache(request) {
+  // instanciamos cache
+  const cache = await caches.open(VERSION)
+  // hacemos la petición al servidor
+  const response = await fetch(request)
+  // escribimos en cache las actualizaciones
+  return cache.put(request, response)
+}
+```
+
+# TypeScript
+TypeScript es un superset de JS, nos permitirá añadir tipado a nuestras variables y funciones (cosa que normalmente no se hace) pero nos ayudará a identificar errores, nos mejorará el autocompletado de código y hará en general nuestro código más seguro.
+
+Comenzaremos instalando `pacel`:
+```bash
+npm install -D parcel-bundler
+```
+
+Configuramos el script para que sirva nuestro index o cualquier arvhivo que esté en la carpeta indicada:
+```json
+{
+  "scripts": {
+    "start": "parcel index.html [folder]/**/*.html"
+  }
+}
+```
+
+Agregamos la siguiente configuración para indicar qué browsers soportaremos:
+```json
+{
+  "browserlist": [
+    "last 1 Chrome version"
+  ]
+}
+```
+
+Para iniciar a escribir nuestro código de typescript, podemos usar las siguientes funciones:
+```typescript
+function add(a: number, b: number) {
+  return a + b;
+}
+const sum = add(2, 3);
+```
+> En este pequeño ejemplo, vemos cómo al posicionar nuestro cursos sobre la constante `sum`, el editor mismo hace un análisis de código y sabe que es un número.
+
+Al usar  typescript, es importante tener en nuestro archivo `.gitignore` los siguientes archivos:
+```bash
+.cache
+dist
+```
+
+## Tipos básicos
+Los tipos más básicos que existen en TypeScript:
+```typescript
+// boolean
+let muted: Boolean = true;
+muted = false;
+muted = 'hola';
+```
+> si queremos asignar una variable con un valor que no corresponde, el mismo editor nos lo indica
+
+```typescript
+// numeros
+let numerador: number = 42;
+let denominador = 6;
+let resultado = numerador / denominador;
+```
+> TS asume que la variable que creamos con un valor por default es del tipo que le asingamos, y no nos permitirá asignarle un valor que no sea del tipo especificado al inicio.
+
+```typescript
+// strings
+let nombre: string = 'Uzi';
+let saludo = `Me llamo ${nombre}`
+```
+
+Los arreglos en TS, pueden determinarse para que contengan cierto tipo de elementos:
+```typescript
+let people: string[] = []
+people = ['name1', 'name2']
+```
+> al escribir el nombre de nuestro arreglo seguido de un punto, nos indicará todos los métodos correspondientes al portotype array y también nos evitará agregar elementos erróneos al array
+
+En TS también existen los **enums**, que son conjuntos de valores definidos.
+```typescript
+// enums
+enum Color {
+  Rojo = "Rojo", Verde = "Verde", Azul = "Azul"
+}
+let colorFavorito: Color = Color.Verde;
+console.log(`Mi color favorito es ${colorFavorito}`):
+```
+
+También podemos dejar indefinido el tipo de una variable con el keyword `any`:
+```typescript
+// any
+let comodin: any = 'Joker';
+comodin = { type: 'Wildcard' }
+```
+
+Para definir un objeto explícitamente usamos:
+```typescript
+// objects
+let someObject: object = { type: 'Wildcard' }
+```
+
+En TS, podemos ser explícitos acerca de los argumentos de una función y del tipo de retorno de la misma:
+```typescript
+// functions
+function add(a: number, b: number) {
+  return a + b;
+}
+```
+> en este ejemplo, si no especificamos el tipo de retorno, a TS le basta para saber que es tipo número
+
+## Interfaces
+Nos permiten declarar la forma que tiene un objeto con la finalidad de evitar errores:
+
+```typescript
+enum Color {
+  Rojo = "Rojo", Verde = "Verde", Azul = "Azul"
+}
+// definimos la interface con dos parámetros obligatorios y uno opcional
+interface Rectangulo {
+  ancho: number,
+  alto: number,
+  color?: Color
+}
+// generamos una instancia
+let rect: Rectangulo = {
+  ancho: 4,
+  alto: 6,
+  color: Color.Rojo
+}
+function area(r: Rectangulo) {
+  return r.alto * r.ancho;
+}
+const areaRect = area(rect);
+rect.toString() = function() {
+  return `Un rectangulo ${this.color ? this.color : ''}`
+}
+```
+
+# Design patterns
+Los patrones de diseño son "recetas" que nos ayudarán a solucionar problemas que se presentan comunmente durante el desarrollo. Específicamente, son soluciones para problemas que ocurren dentro de un contexto:
+* El contexto es la situación donde el patrón aplica.
+* Esta situación debe ser recurrente. Ejemplo: *Muchos objetos están interesados en el estado de otro objeto.*
+* La solución debe ser genérica dentro de un contexto. Ejemplo: *Crear una clase donde cualquier objeto se puede sucribir y desuscribir a cambios en el estado*
+
+Algunos ejemplos de estos patrones (aunque no sean de programación per se) se presentan en las siguientes webs:
+* [every-layout.dev](https://every-layout.dev/)
+* [mediaqueri.es](https://mediaqueri.es/)
+
+Los patrones de diseño no se originaron en el desarrollo de software, sino en la arquitectura. Todo comienza con los libros de *Christopher Alexander*, quien tenía la visión de generar un lenguaje (a modo de glosario) para encajar ciertas soluciones de problemas muy comunes en la arquitectura y así no *reinventar la rueda*.
+
+Para la parte del software, nos remontamos al libro *Design Patterns: Elements of reusable Object-Oriented Software* de 1995, a partir de ahí se desarrollan los patrones que se usan hasta la actualidad.
+
+## Beneficios de los design patterns
+* Son una caja de herramientas bien probada para la solución de problemas.
+* Nos provee de un lenguaje para eficientar la comunicación técnica.
+
+## Consideraciones sobre el uso de los design patterns
+* Introducen un nivel de complejidad, no debemos tratar de usarlos siempre, por lo general buscaremos soluciones más orgánicas.
+* Realmente son soluciones a las limitaciones de un lenguaje. Ejemplo: Java o C# no tienen funciones de alto nivel.
+
+
+> Patterns, like all forms of complexity, should be avoided untl they are absolutely neccesary - [Jeff Atwood](https://blog.codinghorror.com/head-first-design-patterns/)
