@@ -375,10 +375,12 @@ JavaScript corre sobre un solo hilo, para esto utiliza el *event loop*. Consider
 * **Stack**: lleva rastro de dónde está el programa en cada momento (call stack), es una estructura **LIFO**:
   * Comienza vacío y se le puede hacer push de múltiples elementos (pero para sacar hay que hacer pop)
   * En el stack está también almacenada la información sobre el scope de las funciones. Illustración del callstack:
+
     ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/callstack-animation.gif?raw=true)
   * En el caso de las funciones asíncronas, éstas se *mandarán* a procesar, pero solo se ejcutarán en nuestro programa una vez que se haya vaciado el callstack. De aquí surge el siguiente con concepto que es el *queue*:
 * **Task queue**: es una estrucutra de datos tipo **FIFO**, a la que obedecen las tareas asíncronas una vez que pueden ser ejecutadas, dicho de otro modo, es una cola de tareas que está esperando entrar al callstack.
 * **Event loop**: es el ente encargado de verificar constantemente el estado del stack para saber si puede cargarle la cola de tareas resueltas y éstas puedan ejecutarse. Esta es una illustración:
+
   ![call stack](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop-animation.gif?raw=true)
   > tomemos en cuenta que las promesas se forman en otra cola de tareas dedicada a las promesas.
 * **Memory heap**: almacena información sobre las variables de manera aleatoria
@@ -627,13 +629,7 @@ async function precache() {
   // una vez que hayamos abierto la instancia de la cache, agregamos todos los recursos que queremos agregarle (promesa que esperará waitUntil)
   return cache.addAll([
     '/',
-    '/index.html',
-    '/assets/index.js',
-    '/assets/MediaPlayer.js',
-    '/assets/plugins/AutoPlay.js',
-    '/assets/plugins/AutoPause.js',
-    '/assets/index.css',
-    'assets/BigBuckBunny.mp4'
+    ... all files
   ])
 }
 // El evento fetch, ocurrirá cada que hagamos un request al servidor
@@ -669,3 +665,160 @@ async function updateCache(request) {
   return cache.put(request, response)
 }
 ```
+
+# TypeScript
+TypeScript es un superset de JS, nos permitirá añadir tipado a nuestras variables y funciones (cosa que normalmente no se hace) pero nos ayudará a identificar errores, nos mejorará el autocompletado de código y hará en general nuestro código más seguro.
+
+Comenzaremos instalando `pacel`:
+```bash
+npm install -D parcel-bundler
+```
+
+Configuramos el script para que sirva nuestro index o cualquier arvhivo que esté en la carpeta indicada:
+```json
+{
+  "scripts": {
+    "start": "parcel index.html [folder]/**/*.html"
+  }
+}
+```
+
+Agregamos la siguiente configuración para indicar qué browsers soportaremos:
+```json
+{
+  "browserlist": [
+    "last 1 Chrome version"
+  ]
+}
+```
+
+Para iniciar a escribir nuestro código de typescript, podemos usar las siguientes funciones:
+```typescript
+function add(a: number, b: number) {
+  return a + b;
+}
+const sum = add(2, 3);
+```
+> En este pequeño ejemplo, vemos cómo al posicionar nuestro cursos sobre la constante `sum`, el editor mismo hace un análisis de código y sabe que es un número.
+
+Al usar  typescript, es importante tener en nuestro archivo `.gitignore` los siguientes archivos:
+```bash
+.cache
+dist
+```
+
+## Tipos básicos
+Los tipos más básicos que existen en TypeScript:
+```typescript
+// boolean
+let muted: Boolean = true;
+muted = false;
+muted = 'hola';
+```
+> si queremos asignar una variable con un valor que no corresponde, el mismo editor nos lo indica
+
+```typescript
+// numeros
+let numerador: number = 42;
+let denominador = 6;
+let resultado = numerador / denominador;
+```
+> TS asume que la variable que creamos con un valor por default es del tipo que le asingamos, y no nos permitirá asignarle un valor que no sea del tipo especificado al inicio.
+
+```typescript
+// strings
+let nombre: string = 'Uzi';
+let saludo = `Me llamo ${nombre}`
+```
+
+Los arreglos en TS, pueden determinarse para que contengan cierto tipo de elementos:
+```typescript
+let people: string[] = []
+people = ['name1', 'name2']
+```
+> al escribir el nombre de nuestro arreglo seguido de un punto, nos indicará todos los métodos correspondientes al portotype array y también nos evitará agregar elementos erróneos al array
+
+En TS también existen los **enums**, que son conjuntos de valores definidos.
+```typescript
+// enums
+enum Color {
+  Rojo = "Rojo", Verde = "Verde", Azul = "Azul"
+}
+let colorFavorito: Color = Color.Verde;
+console.log(`Mi color favorito es ${colorFavorito}`):
+```
+
+También podemos dejar indefinido el tipo de una variable con el keyword `any`:
+```typescript
+// any
+let comodin: any = 'Joker';
+comodin = { type: 'Wildcard' }
+```
+
+Para definir un objeto explícitamente usamos:
+```typescript
+// objects
+let someObject: object = { type: 'Wildcard' }
+```
+
+En TS, podemos ser explícitos acerca de los argumentos de una función y del tipo de retorno de la misma:
+```typescript
+// functions
+function add(a: number, b: number) {
+  return a + b;
+}
+```
+> en este ejemplo, si no especificamos el tipo de retorno, a TS le basta para saber que es tipo número
+
+## Interfaces
+Nos permiten declarar la forma que tiene un objeto con la finalidad de evitar errores:
+
+```typescript
+enum Color {
+  Rojo = "Rojo", Verde = "Verde", Azul = "Azul"
+}
+// definimos la interface con dos parámetros obligatorios y uno opcional
+interface Rectangulo {
+  ancho: number,
+  alto: number,
+  color?: Color
+}
+// generamos una instancia
+let rect: Rectangulo = {
+  ancho: 4,
+  alto: 6,
+  color: Color.Rojo
+}
+function area(r: Rectangulo) {
+  return r.alto * r.ancho;
+}
+const areaRect = area(rect);
+rect.toString() = function() {
+  return `Un rectangulo ${this.color ? this.color : ''}`
+}
+```
+
+# Design patterns
+Los patrones de diseño son "recetas" que nos ayudarán a solucionar problemas que se presentan comunmente durante el desarrollo. Específicamente, son soluciones para problemas que ocurren dentro de un contexto:
+* El contexto es la situación donde el patrón aplica.
+* Esta situación debe ser recurrente. Ejemplo: *Muchos objetos están interesados en el estado de otro objeto.*
+* La solución debe ser genérica dentro de un contexto. Ejemplo: *Crear una clase donde cualquier objeto se puede sucribir y desuscribir a cambios en el estado*
+
+Algunos ejemplos de estos patrones (aunque no sean de programación per se) se presentan en las siguientes webs:
+* [every-layout.dev](https://every-layout.dev/)
+* [mediaqueri.es](https://mediaqueri.es/)
+
+Los patrones de diseño no se originaron en el desarrollo de software, sino en la arquitectura. Todo comienza con los libros de *Christopher Alexander*, quien tenía la visión de generar un lenguaje (a modo de glosario) para encajar ciertas soluciones de problemas muy comunes en la arquitectura y así no *reinventar la rueda*.
+
+Para la parte del software, nos remontamos al libro *Design Patterns: Elements of reusable Object-Oriented Software* de 1995, a partir de ahí se desarrollan los patrones que se usan hasta la actualidad.
+
+## Beneficios de los design patterns
+* Son una caja de herramientas bien probada para la solución de problemas.
+* Nos provee de un lenguaje para eficientar la comunicación técnica.
+
+## Consideraciones sobre el uso de los design patterns
+* Introducen un nivel de complejidad, no debemos tratar de usarlos siempre, por lo general buscaremos soluciones más orgánicas.
+* Realmente son soluciones a las limitaciones de un lenguaje. Ejemplo: Java o C# no tienen funciones de alto nivel.
+
+
+> Patterns, like all forms of complexity, should be avoided untl they are absolutely neccesary - [Jeff Atwood](https://blog.codinghorror.com/head-first-design-patterns/)

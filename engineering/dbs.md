@@ -789,3 +789,18 @@ La conversión de preguntas a queries es una habilidad que se va desarrollando c
 |`GROUP BY`|Los rubros por los que me interesa agrupar la información.|
 |`ORDER BY`|Orden en el que quiero presentar la información que ya filtré, hacer tops|
 |`HAVING`|Los filtros que quiero que mis datos **agrupados** tengan|
+
+Ejemplos:
+
+1. Consultar el número de tags que tiene cada post y ordenarlos de manera descendente:
+  ```sql
+  SELECT posts.title, COUNT(*) num_etiquetas
+  FROM schemaname.posts
+    INNER JOIN schemaname.posts_tags ON posts.id = schemaname.posts_tags.post_id
+    INNER JOIN schemaname.tags ON tags.id = schemaname.posts_tags.tag_id
+  GROUP BY posts.id
+  ORDER BY num_etiquetas DESC;
+  ```
+
+2. Consultar cuáles son las tags que tiene cada post:
+
