@@ -822,3 +822,208 @@ Para la parte del software, nos remontamos al libro *Design Patterns: Elements o
 
 
 > Patterns, like all forms of complexity, should be avoided untl they are absolutely neccesary - [Jeff Atwood](https://blog.codinghorror.com/head-first-design-patterns/)
+
+## Categorías de Design Patterns:
+Inicialente, los Design Patterns se clasificaron como:
+* **Creacionales**. Proveen diferentes formas de crear objetos:
+  * Abstract factory
+  * Builder. Permite crear varios objetos partiendo de un objeto base. Ejemplo: jQuery nos permite crear muchos elementos a partir de su función básica ($).
+  * Factory method
+  * Prototype
+  * Singleton. Asegura que una clase solo tiene una instancia y esta única instancia solo puede ser consumida por cualquier otro objeto. Generalmente lo veremos en POO, como un constructor de tipo privado. Analogía: *Un país puede tener muchos partidos pero solo un gobierno*.
+    1. Ejemplo: Mogoose nos permite interactuar con una base de datos, no tiene sentido tener muchas instancias de Mongoose, en su código fuente vemos algo así:
+    ```javascript
+      'use strict';
+      function Mongoose() {...}
+      Mongoose.prototype.connect = function() {...}
+      Mongoose.prototype.disconnect = function() {...}
+      Mongoose.prototype.Model = function() {...}
+      Mongoose.prototype.Schema = function() {...}
+      module.exports = new Mongoose();
+    ```
+    2. Ejemplo: Con TypeScript podemos crear una clase de la que solo exista una sola instancia de la siguiente forma, donde por más que llamáramos la función `getInstance` siempre obtendríamos la misma instancia:
+    ```typescript
+      class Singleton {
+        private static instance: Singleton;
+        private constructor() {
+          // init
+        }
+
+        static getInstance() {
+          if(!Singleton.instance) {
+            Singleton.instance;
+          }
+        }
+
+        return Singleton.instance;
+      }
+      export default Singleton;
+    ```
+* **Estructurales**. Describen formas de componer objetos para formar nuevas estructuras flexibles y eficientes:
+  * Adapter. Expone una interfaz que esconde interfaces poco óptimas. Ejemplo: jQuery exponía una interfaz que nos evitaba problemas entre navegadores.
+  * Bridge
+  * Composite
+  * Decorator. Añade nuevas responsabilidades a un objeto de forma dinámica y nos permite extender un objeto sin necesidad de subclases. Analogía: *si queremos comprar una mac en el sitio de apple podríamos encontrar múltiples variantes de la computadora por memoria, disco duro, etc, si creáramos una clase para cada producto, tendríamos una lista interminable, por ello si creamos una clase para la mac, debería ser posible extender para todos los productos sin necesidad de modificar la clase base*.
+    1. Ejemplo: Monkey patching, es una técnica que nos permite reemplazar la funcionalidad de la instancia de una clase:
+    ```javascript
+      class MacbookPro {
+        constructor() { this.memory = 8; }
+        cost() { return 2399 }
+      }
+      function withMemory(amount, computer) {
+        let cost = computer.cost();
+        computer.cost = function() {
+          let memoryCost = Math.max((amount - 8) * 25, 0);
+          return cost + memoryCost
+        }
+      }
+      // implementación
+      let macbook = new MacbookPro()
+      withMemory(32, macbook)
+      console.log(mackbook.cost()) // 2999
+    ```
+    2. En JavaScript existen adicionalmente prácticas como los *Closures*, la *herencia prototipal*, *Middleware*, la *memoización* y futuramente los *ECMAScript Decorators*.
+    3. Ejemplo: Tenemos un input que espera recibir un correo, para validar que el input no esté vació y sea un correo, implementamos el siguiente código de TS:
+    ```html
+    <html>
+      <head>
+        <title>Decorator</title>
+      </head>
+      <body>
+        <div style="margin-top: 3rem;">
+          <label for="email">Email</label>
+          <input id="email" />
+        </div>
+        <script>
+          class Field {
+            errors: string[];
+            input: HTMLInputElement;
+            constructor(input: HTMLInputElement) {
+              this.input = input;
+              this.errors = [];
+              let errorMessage = document.createElement('p');
+              errorMessage.className = 'text-danger';
+              this.input.parentNode.insertBefore(errorMessage, this.input.nextSibling);
+              this.input.addEventListener('input', () => {
+                this.errors = [];
+                this.validate();
+                errorMessage.innerText = this.errors[0] || '';
+              });
+            }
+            // método que será decorado
+            validate() {}
+          }
+          // decorador de validate para validar campo requerido
+          function RequiredFieldDecorator(field: Field): Field {
+            let validate = field.validate;
+            field.validate = function() {
+              validate();
+              let value = field.input.value;
+              if (!value) {
+                field.errors.push('Requerido');
+              }
+            };
+            return field;
+          }
+          // decorador de validate para validar el email
+          function EmailFieldDecorator(field: Field): Field {
+            let validate = field.validate;
+            field.validate = function() {
+              validate();
+              let value = field.input.value;
+              if (value.indexOf('@') === -1) {
+                field.errors.push('Debe ser un email');
+              }
+            };
+            return field;
+          }
+          // implementación
+          let field = new Field(document.querySelector('#email'));
+          field = RequiredFieldDecorator(field);
+          field = EmailFieldDecorator(field);
+        </script>
+      </body>
+    </html>
+    ```
+    > Consideremos que los decorators implementan el Open/close principle: Una entidad de software (clase, módulo, función) debe quedar abierta para su extensión pero cerrada para su modificación.
+  * Fracade
+  * Flyweight
+  * Proxy
+* **De comportamiento**. Gestionan algoritmos y responsabilidades entre objetos.
+  * Composite. Independientemente si tenemos un elemento o muchos elementos, nos permite tratarlos a todos. Ejemplo: jQuery nos permitía seleccionar uno o múltiples elementos y agregarles clases con una sola función.
+  * Chain of responsability.
+  * Command
+  * Interpreter
+  * Iterator
+  * Mediator
+  * Memento
+  * Observer. Un objeto le pasa el comportamiento de un elemento a otros objetos. Analogía: *nos suscribimos a un newsletter para recibir una notificación cuando se publique un nuevo post*.
+    1. Ejemplo: Un elemento span que se suscribe a los evento change de un input:
+    ```typescript
+    // Observador
+    interface Observer {
+      update: (data: any) => void;
+    }
+    // Sujeto que se suscribirá o desuscribirá
+    interface Subject {
+      subscribe: (observer: Observer) => void
+      unsuscribe: (observer: Observer) => void
+    }
+
+    class BitcoinPrice implements Subject {
+      observers: Observer[] = [];
+      constructor() {
+        const el: HTMLInputElement = document.querySelector('#value')
+        el.addEventListener('input', () => {
+          this.notify(el.value);
+        })
+      }
+      subscribe (observer: Observer) {
+        this.observers.push(observer)
+      }
+      unsubscribe(observer: Observer) {
+        const index = this.observers.findIndex(obs => {
+          return obs === observer
+        })
+
+        this.observers.splice(index, 1);
+      }
+      notyfy(data: any) {
+        this.observers.forEach(observer => observer.update(data))
+      }
+    }
+
+    class PriceDisplay implements Observer {
+      private el: HTMLElement;
+      constructor() {
+        this.el = document.querySelector('#price')
+      }
+      update(data: any) {
+        this.el.innerText = data;
+      }
+    }
+    // Instanciamos
+    const value = new BitcoinPrice();
+    const display = new PriceDisplay();
+    // Nos suscribimos
+    value.subscribe(display);
+    // Programamos una des suscripción
+    setTimeout(() => {
+      value.unsubscribe(display);
+    });
+    ```
+
+    2. Ejemplo: Redux es una librería de manejo de estado que nos permite inicializar un *store* con un estado y un reducer, luego despachas acciones que modifican el estado y el *store* notifica que el estado cambió:
+    ```javascript
+    // API
+    import { createStore } from 'redux';
+    const store = createStore(...);
+    store.subscribe(function() {...});
+    store.dispatch({type: 'INCREMENT'});
+    store.getState();
+    ```
+  * State
+  * Strategy
+  * Template method
+  * Visitor
+

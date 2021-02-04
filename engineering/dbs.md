@@ -803,4 +803,41 @@ Ejemplos:
   ```
 
 2. Consultar cuáles son las tags que tiene cada post:
+  ```sql
+  SELECT posts.title, group_concat(tag_name)
+  FROM schemaname.posts
+	  INNER JOIN schemaname.posts_tags ON posts.id = schemaname.posts_tags.post_id
+    INNER JOIN schemaname.tags ON tags.id = schemaname.posts_tags.tag_id
+  GROUP BY posts.id
+  ```
+
+3. Consultar las tags que no tienen ningún post asociado
+  ```sql
+  SELECT *
+  FROM schemaname.tags
+	  LEFT JOIN schemaname.posts_tags ON tags.id = schemaname.posts_tags.tag_id
+  WHERE posts_tags.tag_id IS NULL;
+  ```
+
+4. Consultar un ranking de las categorías que tienen más posts a las que tienen menos:
+  ```sql
+  SELECT c.category_name, COUNT(*) AS cant_posts
+  FROM uziblog.categories AS c
+	  INNER JOIN uziblog.posts AS p ON c.id = p.category_id
+  GROUP BY c.id
+  ORDER BY cant_posts DESC;
+  ```
+
+5. Consultar el usuario que ha creado mas posts:
+  ```sql
+  SELECT u.nickname, COUNT(*) AS cant_posts
+    FROM uziblog.users AS u
+	  INNER JOIN uziblog.posts AS p ON u.id = p.user_id
+  GROUP BY u.id
+  ORDER BY cant_posts DESC
+  LIMIT 1;
+  ```
+
+6. Consultar los temas sobre los que está escribiendo cada usuario:
+
 
