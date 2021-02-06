@@ -869,7 +869,7 @@ Una colección no puede existir si no creamos un documento, por lo cuál tenemos
 
 ![Add Document](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-document-firebase.jpg?raw=true)
 
-## Tipos de datos en Firestore
+## Tipos de datos en Firestore
 Al crear documentos, nos encontraremos con que tenemos los siguientes tipos de dato:
 * string
 * number
