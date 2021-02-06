@@ -838,6 +838,81 @@ Ejemplos:
   LIMIT 1;
   ```
 
-6. Consultar los temas sobre los que está escribiendo cada usuario:
+# Bases de datos no relacionales
+En general, se distinguen de las bases de datos SQL y se les denomina No SQL. Éstos son los tipos de bases de datos no relacionales:
+* **Clave-valor**. Están hechas para almacenar y extraer datos con una clave única, debido a ello no podremos hacer consultas muy complejas. Manejan los diccionarios de manera excepcional. Ejemplos: *DynamoDB*, *Cassandra*.
+* **Basadas en documentos**. Son una implementación de clave-valor de una forma semi-estructurada, manejarán generalmente JSON y XML. Probablemente fuera de SQL son las más usadas. Nos servirá muy bien para mantener estados en tiempo real, no mucho para queries. Ejemplos: *MongoDB*, *Firestore*.
+* **Basadas en grafos**. Basadas en teoría de grafos, se utilizan con entidades que se encuentran fuertemente interconectadas, ideales para almacenar relaciones complejas, las veremos en inteligencia artificial y redes neuronales. Ejemplos: *neo4j*, *TITAN*.
+* **En memoria**. Son aquellas que viven en memoria, se caracterizan por ser muy rápidas pero se ven limitadas por los reinicios o indexaciones de las máquinas. Ejemplos: *Memcached*, *Redis*.
+* **ptimizadas para búsquedas**. Pueden tener diversas estructuras, su ventaja es que se pueden hacer queries y búsquedas complejas de manera óptima. Sirven como grandes repositorios de datos históricos que nos ayudan generalmente en business intelligence o machine learning. Ejemplos: *Elasticsearch*, *BigQuery*.
+> Las bases de datos relacionales se pueden utilizar para responder a todo tipo de problemas pero conforme escalan puede que se enfrenten a problemas, por ello es que las no-relacionales se enfocan a resolver ciertos problemas.
 
+## Servicios administrados y jerarquía de datos
+Los servicios administrados son aquellos que nos permiten delegar las funciones de mantenimiento de los equipos a proveedores de Cloud como Google o Amazon. En este caso usaremos *Firestore* de Google, que nos permite interactuar con una base de datos con lenguajes de programación, pero también nos ofrece una interfaz gráfica para administrarla.
 
+En SQL, dada una base de datos, teníamos dentro de ella schemas, dentro de los schemas tablas, dentro de las tablas rows o tuplas, por cada row un solo dato consistente. Muchas de estas reglas no se siguen en las bases de datos no relacionales (aunque sigue existiendo una estructura jerárquica). Así pues, la estructura fundamental es:
+
+> Base de datos > Colecciones > Documentos
+
+Esta estructura, obedece a los archivos estándar que son muy conocidos en el mundo del desarrollo como los son los archivos json.
+
+## Top level collection con Firebase
+Las bases de datos no relacionales son un poco más acordes al lenguaje natural y muchas veces no serán tan intrincadas como las relacionales. Las *top level collections* son las colecciones que tenemos de manera más inmediata en nuestro proyecto. En el caso de Firestore, administraremos nuestra base de datos mediante *Firebase*, que nos brinda una consola con varias herramientas como son autenticación, hosting, pero nos enfocaremos en base de datos. Para empezar a configurarla, creamos una base de datos (en modo producción) ésta se denomina *top level collection*:
+
+[add]
+
+Luego damos click a iniciar una colección. Las colecciones en este caso son un simil de las entidades en SQL. 
+
+[coleccion]
+
+Una colección no puede existir si no creamos un documento, por lo cuál tenemos que generar al menos uno:
+
+[documento]
+
+## Tipos de datos en Firestore
+Al crear documentos, nos encontraremos con que tenemos los siguientes tipos de dato:
+* string
+* number
+* boolean
+* map (nos permite anidar otro documento)
+* array
+* null
+* timestamp
+* geopoint
+* reference (hace referencia a otro documento)
+
+## Subcolecciones
+Consideremos que las bases de datos no relacionales son más flexibles, pues pueden haber documentos al mismo nivel que no tengan la misma estructura.
+
+Cuando creamos un documento con sus respectivos campos, vemos que como campo podemos agregar otro documento (que es un simil de la tabla etiquetas en el blog) y así podemos ir añadiendo colecciones. 
+
+[subcoleccion]
+
+Esta práctica queda a consideración del desarrollador, ¿cuándo es bueno utilizar subcolecciones? si vamos a necesitar listar los elementos de la colección de manera independiente, hacer queries separados, hacer listados o varios documentos tendrán referencia a los de nuestra colección, conviene que sea una top level collection, pero si la información solo nos interesa visualizarla en el contexto de un documento, bien puede ser una subcolección.
+
+## Recreando el blog
+Para recrear el modelo de datos de un blog, no hay una forma exacta de hacerlo, sino que depende del caso de uso que nos ocupe, por ejemplo: podríamos poner como top level la colección de posts y dentro de cada post el usuario que lo creó, pero si nuestra aplicación constantemente consultará la lista de todos los usuarios, este modelo no será muy funcional, pues tendríamos que hacer varias consultas.
+
+> Lo ideal es tener en las top level collections los datos que se verán en una primera vista. Si requerimos relacionar otra información por fuera, podemos crear otras colecciones a la par.
+
+La siguiente imagen muestra una captura de cómo podríamos estructurar nuestro blog de manera general:
+
+[database]
+
+Nótese que las etiquetas vienen como una subcolección y cuando necesitamos algún dato de una colección top level hacemos referencia a ella.
+
+# Bases de datos en la vida real
+Ahora qeu hemos analizado el funcionamiento de las diferentes bases de datos, consideremos que, en el mundo real no existe una base de datos que funcione para todo, si bien en algún momento solo se utilizó SQL, hoy en día han surgido nuevas necesidades a las que buscan atacar algunas de las bases de datos no relacionales. De este modo, puede que para una sola aplicación se utilicen distintas bases de datos según las necesidades de la misma. Existen múltiples disciplinas en las cuáles podemos incursionar dentro del mundo de la data:
+
+## Big data
+Es uno de los temas que está de moda actualmente. Esta disciplina tiene dos grandes acepciones, pues se ha deformado el significado:
+1. Originalmente el concepto nace de lo que dice su nombre: *grandes datos*, YouTube, por ejemplo, fue una de las aplicaciones que iniciaron este campo. Las bases de datos relacionales ya no respondían exactamente a las necesidades, por ello surge Big Data, para **optimizar el resguardo de una cantidad masiva de datos por segundo**.
+2. Es una acepción del término no muy exacta, pues se utiliza mucho para referirse a analíticas, estadísticas de datos, lo cuál hace mayor referencia a *Business Intelligence*.
+
+Big data en sí, es un movimiento de diferentes bases de datos para guardar y rescatar datos de manera muy rápida, una de sus implementaciones es mediante *Cassandra* por Facebook. Para ciertos casos, como hacer queries complejos, estas bases de datos no nos responderán de la mejor manera.
+
+## Data warehouse
+Hace referencia a grandes repositorios de información (análogo a la bodega de una empresa). Su objetivo no es guardar muchos datos por segundo, sino **guardar la máxima cantidad de datos no recurrentes**: aquellas cosas que se van archivando y deben hacerlo de manera ordenada, se deben resguardar en estos grandes almacenes. Una implmentación de estas bases, es *Big table*, se caracteriza por ser **una sola tabla** de millones de datos como las búsquedas. Este tipo de bases de datos, aparte de especializarse en cantidades de datos, nos deben servir para responder a necesidades del negocio, ejemplo de su implementación es *Big query*.
+
+## Data mining
+Es una disciplina que se dedica a extraer datos de los diferentes lugares donde se tengan almacenados, podrían ser in-house, warehouses, tablas, DBs en producción, datos no normalizados, sin coerción, etc, nos tocaría exprimirlos de la mejor manera para poder consultarlos, concentrarlos, normalizarlos de la mejor manera, en eso consiste Data Mining. La intención es que los datos se hagan más útiles para el negocio.
