@@ -859,15 +859,15 @@ Esta estructura, obedece a los archivos estándar que son muy conocidos en el mu
 ## Top level collection con Firebase
 Las bases de datos no relacionales son un poco más acordes al lenguaje natural y muchas veces no serán tan intrincadas como las relacionales. Las *top level collections* son las colecciones que tenemos de manera más inmediata en nuestro proyecto. En el caso de Firestore, administraremos nuestra base de datos mediante *Firebase*, que nos brinda una consola con varias herramientas como son autenticación, hosting, pero nos enfocaremos en base de datos. Para empezar a configurarla, creamos una base de datos (en modo producción) ésta se denomina *top level collection*:
 
-![Add DB](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-db-firebase.jpeg?raw=true)
+![Add DB](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-db-firebase.jpg?raw=true)
 
 Luego damos click a iniciar una colección. Las colecciones en este caso son un simil de las entidades en SQL. 
 
-![Add Collection](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-collection-firebase.jpeg?raw=true)
+![Add Collection](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-collection-firebase.jpg?raw=true)
 
 Una colección no puede existir si no creamos un documento, por lo cuál tenemos que generar al menos uno:
 
-![Add Document](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-document-firebase.jpeg?raw=true)
+![Add Document](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-document-firebase.jpg?raw=true)
 
 ## Tipos de datos en Firestore
 Al crear documentos, nos encontraremos con que tenemos los siguientes tipos de dato:
@@ -895,7 +895,7 @@ Para recrear el modelo de datos de un blog, no hay una forma exacta de hacerlo, 
 
 La siguiente imagen muestra una captura de cómo podríamos estructurar nuestro blog de manera general:
 
-![Firebase blog](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/firebase-blog.jpeg?raw=true)
+![Firebase blog](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/firebase-blog.jpg?raw=true)
 
 Nótese que las etiquetas vienen como una subcolección y cuando necesitamos algún dato de una colección top level hacemos referencia a ella.
 
