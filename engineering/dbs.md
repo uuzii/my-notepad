@@ -859,15 +859,15 @@ Esta estructura, obedece a los archivos estándar que son muy conocidos en el mu
 ## Top level collection con Firebase
 Las bases de datos no relacionales son un poco más acordes al lenguaje natural y muchas veces no serán tan intrincadas como las relacionales. Las *top level collections* son las colecciones que tenemos de manera más inmediata en nuestro proyecto. En el caso de Firestore, administraremos nuestra base de datos mediante *Firebase*, que nos brinda una consola con varias herramientas como son autenticación, hosting, pero nos enfocaremos en base de datos. Para empezar a configurarla, creamos una base de datos (en modo producción) ésta se denomina *top level collection*:
 
-[add]
+![Add DB](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-db-firebase.jpeg?raw=true)
 
 Luego damos click a iniciar una colección. Las colecciones en este caso son un simil de las entidades en SQL. 
 
-[coleccion]
+![Add Collection](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-collection-firebase.jpeg?raw=true)
 
 Una colección no puede existir si no creamos un documento, por lo cuál tenemos que generar al menos uno:
 
-[documento]
+![Add Document](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-document-firebase.jpeg?raw=true)
 
 ## Tipos de datos en Firestore
 Al crear documentos, nos encontraremos con que tenemos los siguientes tipos de dato:
@@ -884,9 +884,7 @@ Al crear documentos, nos encontraremos con que tenemos los siguientes tipos de d
 ## Subcolecciones
 Consideremos que las bases de datos no relacionales son más flexibles, pues pueden haber documentos al mismo nivel que no tengan la misma estructura.
 
-Cuando creamos un documento con sus respectivos campos, vemos que como campo podemos agregar otro documento (que es un simil de la tabla etiquetas en el blog) y así podemos ir añadiendo colecciones. 
-
-[subcoleccion]
+Cuando creamos un documento con sus respectivos campos, vemos que como campo podemos agregar otro documento (que es un simil de la tabla etiquetas en el blog) y así podemos ir añadiendo colecciones.
 
 Esta práctica queda a consideración del desarrollador, ¿cuándo es bueno utilizar subcolecciones? si vamos a necesitar listar los elementos de la colección de manera independiente, hacer queries separados, hacer listados o varios documentos tendrán referencia a los de nuestra colección, conviene que sea una top level collection, pero si la información solo nos interesa visualizarla en el contexto de un documento, bien puede ser una subcolección.
 
@@ -897,7 +895,7 @@ Para recrear el modelo de datos de un blog, no hay una forma exacta de hacerlo, 
 
 La siguiente imagen muestra una captura de cómo podríamos estructurar nuestro blog de manera general:
 
-[database]
+![Firebase blog](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/firebase-blog.jpeg?raw=true)
 
 Nótese que las etiquetas vienen como una subcolección y cuando necesitamos algún dato de una colección top level hacemos referencia a ella.
 
