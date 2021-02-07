@@ -63,6 +63,86 @@ Una variable, la identificamos como una localidad en memoria que servirá para a
   }
   ```
 * **Abstract data types.** Un tipo de dato abstracto, representa un set particular de comportamientos, es decir, almacena datos, pero también el comportamiento de ellos. 
-  * Ejemplo: un stack que implementa el comportamiento *LIFO*. Otros ejemplos de este tipo: Queue, Priority Queue, Diccionarios, Graphs.
-  * Ejemplo: una estructura de datos linkeada como un *Array*. Otros ejemplos de este tipo: Linked lists, hash tables, trees.
+* Ejemplo: un stack que implementa el comportamiento *LIFO*. Otros ejemplos de este tipo: Queue, Priority Queue, Diccionarios, Graphs.
+* Ejemplo: una estructura de datos linkeada como un *Array*. Otros ejemplos de este tipo: Linked lists, hash tables, trees.
+
+Una descripción más detallada de los ADT más importantes...
+* List. Utilizado para representar un número **definido** de valores ordenados, el mismo valor puede existir más de una vez, sería una implementación computacional del concepto matemático *secuencia finita*. Tiene índices seriados y posee acciones como get, insert, remove, remove at, replace, size, is empty, is full.
+* Stack. Tiene tamaño definido y sirve como colección de elementos con dos operaciones principales: push y pop. Generalmente los conocemos como arrays linked lists. Posee la lógica **LIFO**, es decir que el primero en salir es el último que entró, tiene aotras acciones como peek, size, is empty, is full.
+* Queue. Poseen la lógica **FIFO**, es decir que el primero en salir es el primero que entró. Tienen un tamaño definido. Sus acciones son: enqueue, dequeue, peek, size, is empy, is full.
+* Linked list. A diferencia del array, que tiene tamaño definido, se maneja a través de nodos, mismos que a su vez se componen del valor y de un apuntador a la dirección del siguiente elemento.
+* Dictionaries o Maps. Almacenan el valor y el índice, su ventaja es que nos permiten hacer consultas de manera más óptima.
+
+### Creando una queue: arrays
+Planteemos el siguiente problema: tenemos un restaurante con capacidad máxima para cinco comensales en el que necesitamos llevar el orden en el que se debe atenderles: primero a la primera persona que llega y luego a la segunda y así sucesivamente.
+
+![queue](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/queue.jpg?raw=true)
+
+Para implementarlo, usaremos el siguiente algoritmo:
+1. Crear el pointer de nuestro *front* y nuestro *rear* (tomando en cuenta que hay un número máximo de elementos).
+2. Colocar los valores de *front* y *rear* en `-1` pues no se ha agragado nada al queue (sería erróneo colocarle 0 pues siempre 0 representa la primera posición).
+3. Agregar el valor de 0 al front al hacer el primer enqueue.
+4. Incrementar en 1 el valor del *rear* cuando agreguemos un elemento.
+5. Retornar el valor de *front* al quitar un elemento e incrementar en 1 el valor del *front* al usar un dequeue.
+6. Antes de agregar un elemento, revisar si hay espacio.
+7. Antes de remover un elemento, revisamos que existan elementos.
+8. Asegurarnos de que al remover todos los elementos resetear nuestro *front* y nuestro *rear*.
+
+La siguiente sería su implementación en C:
+```c
+#include <stdio.h>
+#define SIZE 5
+int values[SIZE], front = -1, rear = -1;
+
+void printQueue() {
+  for(int i=0; i<= rear; i++) {
+    printf("[%d] ", values[i]);
+  }
+  printf("\n");
+}
+// la función enqueue recibe como argumento el valor que se agregará
+void enQueue(int value) {
+  // validamos que el queue no esté lleno
+  if((rear - front) == SIZE)
+    printf("Nuestro queue está lleno\n");
+  else {
+    // caso de uso del primer enqueue
+    if(front == -1)
+      front = 0;
+    rear++;
+    // inserción del valor
+    values[rear] = value;
+    printf("Se inseró el valor %d correctamente\n", value);
+    printQueue();
+  }
+}
+// no recibe ningún argumento pues solo sigue FIFO
+void deQueue(){
+  // caso de uso del queue vacío
+  if(front == -1) {
+    printf("El queue está vacío\n");
+    printQueue();
+  }
+  else {
+    printf("Se eliminó el valor %d\n", values[front]);
+    printQueue();
+    front++;
+    // caso de uso de que ya eliminamos todos los elementos
+    if(front > rear) {
+      front = rear = -1;
+      printQueue();
+    }
+  }
+}
+int main() {
+  enQueue(1);
+  enQueue(2);
+  enQueue(3);
+  enQueue(4);
+  enQueue(5);
+  deQueue();
+  enQueue(10);
+  return 0;
+}
+```
 
