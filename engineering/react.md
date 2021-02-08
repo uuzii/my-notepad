@@ -152,7 +152,7 @@ Ahora instalamos las dependencias react y react-dom con el siguiente comando:
 npm install react react-dom
 ```
 
-## Agregando componentes al proyecto
+## Agregando componentes al proyecto
 Dentro de la carpeta `components, creamos un archivo llamado `HelloWorld.jsx` con la siguiente estructura:
 ```jsx
 import React from 'react'
@@ -217,9 +217,44 @@ npm install webpack webpack-cli html-webpack-plugin html-loader --save-dev
 ```
 
 Ahora generamos en la raíz de nuestro proyecto el archivo `webpack.config.js` con la siguiente estructura:
-´´´javascript
+```javascript
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-´´´
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      },
+      {
+        test: /\.html$/,
+        use: {
+          loader: "html-loader"
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: './index.html'
+    })
+  ]
+}
+```
 
 Donde:
 * ´entry´ contiene información sobre el punto de acceso
@@ -236,13 +271,13 @@ Posteriormente agregaremos un nuevo script a nuestro ´package´:
 ```
 
 Ahora corremos la compilación con
-´´´bash
+```bash
 npm run build
-´´´
+```
 > Nótese que esta configuración es útil para generar un bundle de nuestro proyecto para producción.
 
 
-Ahora veremos como resultado nuestra carpeta dist con todo nuestro proyecto preparado para producción en la carpeta de ´dist´.
+Ahora veremos como resultado nuestra carpeta dist con todo nuestro proyecto preparado para producción en la carpeta de `dist`.
 
 ### Webpack dev server
 Para poder probar lo que estamos construyendo también nos apoyaremos de WebPack para generar un server local en donde podamos ejecutar nuestro proyecto para develop.
