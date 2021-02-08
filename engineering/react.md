@@ -129,3 +129,243 @@ Los componentes pasan por una serie de fases de ciclo de vida. Algunos serán to
 
 En la siguiente [liga](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/), encontramos un diagrama ilustrativo de las primeras tres:
 
+# Instlación y configuración de un proyecto
+Para empezar a configurar un proyecto desde cero, creamos nuestra carpeta, inicializamos nuestro repo local e inicializamos npm:
+```bash
+mkdir [project]
+git init
+npm init
+```
+
+Con lo cuál tendremos solamente nuestro `package`, vamos a crear la estrucutra básica nuestro proyecto:
+```bash
+project/
+--- public/
+--- --- index.html
+--- src/
+--- --- components/
+--- --- index.js
+```
+
+Ahora instalamos las dependencias react y react-dom con el siguiente comando:
+```bash
+npm install react react-dom
+```
+
+## Agregando componentes al proyecto
+Dentro de la carpeta `components, creamos un archivo llamado `HelloWorld.jsx` con la siguiente estructura:
+```jsx
+import React from 'react'
+
+const HelloWorld = () => (
+  <h1>hola mundo!</h1>
+)
+
+export default HelloWorld
+```
+
+## Agregando el entrypoint de nuestro proyecto
+El entrypoint es el primer archivo que será leído en nuestro proyecto, como su njombre lo dice: punto de entrada, en él haremos uso de React DOM, que nos permitirá implementar nuestro código jsx en el proyecto. Todo esto lo haremos en el archivo `index.js`:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Helloworld from './components/HelloWorld'
+// La función render, recib el componente a mostrar y el nodo en el cuál se va indexar
+ReactDOM.render(<Helloworld />, document.getElementById('app'))
+```
+
+## Agregando el html de nuestro proyecto
+Este será el markup principal de nuestro proyecto, donde generaremos el elemento donde será renderizada uestra aplicación:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project</title>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+```
+
+## Agregando compatibilidad con Babel
+Babel es una herramienta que utilizaremos para trnaspilar nuestro código moderno de javascript a código que todos los navegadores puesan soportar.
+
+Primeramente instalamos las dependencias que necesitamos para babel como dependencias de desarrollo:
+```bash
+npm install @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+```
+
+Creamos el archivo `.babelrc` en la raíz de nuestro proyecto con la siguiente configuración:
+```json
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ]
+}
+```
+
+## Configurando webpack
+Webpack nos ayudará a preparar nuestro proyecto para el entorno de desarrollo local y eventualmente para su despliegue a producción: reunirá nuestros archivos y los optimizará.
+
+Primeramente instalamos las siguientes dependencias de desarrollo:
+```bash
+npm install webpack webpack-cli html-webpack-plugin html-loader --save-dev
+```
+
+Ahora generamos en la raíz de nuestro proyecto el archivo `webpack.config.js` con la siguiente estructura:
+```javascript
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      },
+      {
+        test: /\.html$/,
+        use: {
+          loader: "html-loader"
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: './index.html'
+    })
+  ]
+}
+```
+
+Donde:
+* ´entry´ contiene información sobre el punto de acceso
+* ´output´ de donde ubicará y cómo nombrará los archivos resultado del proceso de compilación
+* ´resolve´ para indicar las extensiones que se resolverán
+* ´module´ contiene las reglas que seguirá nuestro proyecto
+
+Posteriormente agregaremos un nuevo script a nuestro ´package´:
+```json
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+```
+
+Ahora corremos la compilación con
+```bash
+npm run build
+```
+> Nótese que esta configuración es útil para generar un bundle de nuestro proyecto para producción.
+
+
+Ahora veremos como resultado nuestra carpeta dist con todo nuestro proyecto preparado para producción en la carpeta de `dist`.
+
+### Webpack dev server
+Para poder probar lo que estamos construyendo también nos apoyaremos de WebPack para generar un server local en donde podamos ejecutar nuestro proyecto para develop.
+
+Primeramente instalamos la dependencia:
+```bash
+npm install webpack-dev-server --save-dev
+```
+
+Generaremos otro script en nuestro `package`:
+```json
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "start": "webpack serve --mode development --env development"
+  },
+```
+
+Corremos el comando con:
+```bash
+npm run start
+```
+
+Con esto ya podremos ver nuestro proyecto en un entorno de desarrollo local que se actualizará cada que hagamos un cambio.
+
+## Configurando sass
+Para configurar sass en nuestro proyecto tenemos que llevar a cabo la siguiente configuración:
+
+Instalamos las siguientes dependencias de desarollo:
+```bash
+npm install mini-css-extract-plugin css-loader node-sass sass-loader --save-dev
+```
+
+Agregamos una nueva dependencia `MiniCssExtractPlugin`, así como una nueva regla y un nuevo plugin en nuestro archivo `webpack.config.js`:
+```javascript
+...
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  module: {
+    rules: [
+      ...
+      {
+        test: /\.(s*)css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          'css-loader',
+          'sass-loader'
+        ]
+      }
+    ],
+    plugins: [
+      ...
+      new MiniCssExtractPlugin({
+        filename: 'assets/[name].css'
+      })
+    ]
+  }
+}
+```
+
+Adicionalmente agregaremos a nuestro proyecto una llamada `assets` dentro de la carpeta `src`, que será donde vivirán nuestros archivos `sass` así como cualquier recurso que se use en nuestro proyecto.
+```bash
+--- src/
+--- assets/
+--- --- App.scss
+```
+
+Inicialmente vamos a crear también un archivo llamado `App.scss` para generar nuestros primero estilos:
+```scss
+body {
+  margin: 0;
+  background: red;
+}
+```
+
+Para implementarlo en nuestro componente tendríamos que importarlo
+```jsx
+// HelloWorld.jsx
+import '../assets/styles/App.scss'
+```
+
+Con sto ya podríamos generar nuestros estilos en archivos sass para que luego sean agregados en la compilación de webpack.
+
+
+
+
+
+
