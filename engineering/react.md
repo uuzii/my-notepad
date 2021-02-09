@@ -379,7 +379,7 @@ Este archivo nos ayudará para que no se agreguen a nuestro repositorio todas la
 
 # Construyendo nuestra aplicación estilo Netflix:
 
-## Descomponetización
+## Descomponetización
 Vamos a obedecer la siguiente estructura de componentes para nuestra aplicación:
 ![componentes](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/componentes.jpeg?raw=true)
 
