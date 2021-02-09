@@ -364,8 +364,199 @@ import '../assets/styles/App.scss'
 
 Con sto ya podríamos generar nuestros estilos en archivos sass para que luego sean agregados en la compilación de webpack.
 
+## Configurando ESLint
+ESLint es una herramienta que nos permitirá asegurarnos de que nuestro código está escrito con la sintaxis correcta en este caso de jsx.
+
+Para empezar a configurarlo en nuestro proyecto instalamos las siguientes dependencias de desarrollo:
+```bash
+npm install eslint babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react eslint-plugin-jsx-a11y
+```
+
+Una vez instaladas las dependencias, agregaremos el contenido del siguiente [gist](https://gist.github.com/gndx/60ae8b1807263e3a55f790ed17c4c57a) a un archivo llamado `.eslintrc`.
+
+## Generando un gitignore
+Este archivo nos ayudará para que no se agreguen a nuestro repositorio todas las dependencias: crearemos un archivo llamado `.gitignore` con el contenido de este [gist](https://gist.github.com/gndx/747a8913d12e96ff8374e2125efde544).
+
+# Construyendo nuestra aplicación estilo Netflix:
+
+## Descomponetización
+Vamos a obedecer la siguiente estructura de componentes para nuestra aplicación:
+![componentes]()
+
+## Añadiendo componentes
+Generemos un componente presentacional llamado header en `src/components` con el markup adecuado para éste. Para estructurar mejor nuestra aplicación, generaremos un archivo llamado `App.jsx` en `src/containers/`, mismo que funcionará como el *wrapper* principal de toda nuestra aplicación, en él iremos importando nuestro componente `Header`:
+```jsx
+// App.jsx
+import React from 'react'
+import Header from '../components/Header'
+
+const App = () => (
+  <div className="App">
+    <Header />
+  </div>
+)
+
+export default App
+```
+
+> Nótese que los componentes presentacionales solo pueden recibir un elemento
+> Nótese que siempre usaremos el atributo `className` en jsx en lugar de `class`
+
+Luego en el `index.js`, importaremos este único elemento:
+```javascript
+// index,js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './containers/App'
+// La función render, recib el componente a mostrar y el nodo en el cuál se va indexar
+ReactDOM.render(<App />, document.getElementById('app'))
+```
+
+Para agregarle estilos a este componente, generamos un archivo `App.scss` dentro de `src/assets/styles/`, mismo que llenaremos con los estilos adecuados e importaremos en nuestro componente de la siguiente manera:
+```jsx
+// App.jsx
+import '../assets/styles/App.scss'
+```
+
+Para agregarle estilos a nuestro componente ´Header´, nos conviene generar una jerarquía también dentro de assets, la cuál sería `src/assets/styles/components/` y le colocaríamos el mismo nombre del componente que estamos estilizando solo que con la extensión scss, en este caso sería `Header.scss`. La manera de importarlo en su respectivo componente es la misma que con el contenedor `App`.
+
+Hasta este momento, nuestra carpeta `src` tendría la siguiente estructura:
+```bash
+src/
+--- assets/
+--- --- styles/
+--- --- --- App.scss
+--- --- --- components/
+--- --- --- --- Header.scss
+--- components/
+--- --- Header.jsx
+--- containers/
+--- --- App.jsx
+```
+
+Esta misma estructura seguiremos para agregar los demás componentes de nuestro diseño como son el `Search` y el `Footer`. Para el `Carousel` haremos una implementación más detallada, ya que observamos que en el visual tenemos dos categorías de videos, pero realmente son dos elementos del mismo componente, por ello crearemos un componente llamado `Categories` que tendrá una estructura interna como la siguiente:
+```jsx
+// Categories.jsx
+import React from 'react'
+
+const Categories = ({ children }) => (
+  <div className="categories">
+    <h3 className="categories__title">Mi lista</h3>
+    {children}
+  </div>
+)
+
+export default Categories
+```
+
+Donde children, será un *slot* que será capaz de recibir otros componentes agregándoles un título. Consecuentemente, nuestro componente `Carousel` será también un wraper de lo que será un `Item`:
+```jsx
+// Carousel.jsx
+import React from 'react'
+
+const Carousel = ({ children }) => (
+  <section className="carousel">
+    <div className="carousel__container">
+      {children}
+    </div>
+  </section>
+)
+
+export default Carousel
+```
+
+Dados estos componentes que tienen los slots llamados `children`, podemos generar la siguiente anidación en nuestra app (después de importarlos):
+```jsx
+import React from 'react'
+import Header from '../components/Header'
+import Search from '../components/Search'
+import Categories from '../components/Categories'
+import Carousel from '../components/Carousel'
+import CarouselItem from '../components/CarouselItem'
+import Footer from '../components/Footer'
+import '../assets/styles/App.scss'
 
 
+const App = () => (
+  <div className="App">
+    <Header />
+    <Search />
+    <Categories>
+      <Carousel>
+        <CarouselItem />
+      </Carousel>
+    </Categories>
+    <Footer/>
+  </div>
+)
 
+export default App
+```
+
+## Añadiendo imágenes con Webpack
+Para agregar nuestras imágenes en nuestro proyecto y sean tomadas en cuenta a la hora de la compilación de webpack, tenemos que hacer la siguiente configuración:
+
+Instalaremos las siguientes dependencias de desarrollo:
+```bash
+npm install file-loader --save-dev
+```
+
+Agregamos la siguiente regla a nuestro archivo de configuración de webpack:
+```javascript
+...
+{
+  test: /\.(png|gif|jpg)$/,
+  use: [
+    {
+      loader: 'file-loader',
+      options: {
+        name: 'assets/[hash].[ext]'
+      }
+    }
+  ]
+}
+...
+```
+> Nótese que la sentencia [hash] sirve para nombrar los archivos en el compilado con un hash seguro en lugar de un nombre que pudiera generar conflictos, por su parte [ext] hace referencia a que se respete su extensión.
+
+Posteriormente agregaremos nuestros archivos binarios dentro de una carpeta en `src/assets/static/`. La forma de hacer referencia a ellos sería, por ejemplo en el header:
+```jsx
+...
+import logo from '../assets/static/image1.png'
+import userIcon from '../assets/static/image2.png'
+
+const Header = () => (
+  <header className="header">
+    <img className="header__img" src={logo} alt="My Netflix" />
+    <div className="header__menu">
+      <div className="header__menu--profile">
+        <img src={userIcon} alt="" />
+...
+```
+
+## Recibiendo propiedades en u componente
+Para recibier propiedades deesde el exterior a un componente, usaremos el caso de customizar el título de cada una de nuestras categorías, tendríamos que agregar un elemento más en la destructuración del componente de la siguiente manera:
+```jsx
+...
+const Categories = ({ children, title }) => (
+  <div className="categories">
+    <h3 className="categories__title">{title}</h3>
+    {children}
+  </div>
+)
+...
+```
+
+Luego cuando implementemos este componente, podemos agregarle este valor como si fuera un atributo:
+```jsx
+/// App.jsx
+...
+  <Categories title="Peliculas">
+    <Carousel>
+      <CarouselItem />
+    </Carousel>
+  </Categories>
+...
+```
 
 
