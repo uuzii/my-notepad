@@ -381,7 +381,7 @@ Este archivo nos ayudará para que no se agreguen a nuestro repositorio todas la
 
 ## Descomponetización
 Vamos a obedecer la siguiente estructura de componentes para nuestra aplicación:
-![componentes]()
+![componentes](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/componentes.jpeg?raw=true)
 
 ## Añadiendo componentes
 Generemos un componente presentacional llamado header en `src/components` con el markup adecuado para éste. Para estructurar mejor nuestra aplicación, generaremos un archivo llamado `App.jsx` en `src/containers/`, mismo que funcionará como el *wrapper* principal de toda nuestra aplicación, en él iremos importando nuestro componente `Header`:
