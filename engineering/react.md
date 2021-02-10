@@ -534,7 +534,7 @@ const Header = () => (
 ...
 ```
 
-## Recibiendo propiedades en u componente
+## Recibiendo propiedades en un componente
 Para recibier propiedades deesde el exterior a un componente, usaremos el caso de customizar el título de cada una de nuestras categorías, tendríamos que agregar un elemento más en la destructuración del componente de la siguiente manera:
 ```jsx
 ...
@@ -559,4 +559,170 @@ Luego cuando implementemos este componente, podemos agregarle este valor como si
 ...
 ```
 
+## Añadiendo fonts a nuestro proyecto
+Con la finalidad de agregar una fuente, vamos a generar un archivo de *variables* en sass. Primeramente añadimos un archivo llamado `Vars.scss` dentro de `assets/styles`, mismo en el que poremos crear variables que podemos luego importar en cualquier otro archivo de estilos:
+```scss
+// Vars.scss
+@import url(https://fonts.googleapis.com/css?family=Muli&display=swap);
+$theme-font: 'Muli', sans-serif;
+$main-color: #8f57fd;
+```
 
+Para hacer uso de estas variables en otro archivo usamos por ejemplo:
+```scss
+// App.scss
+@import './Vars.scss';
+
+body {
+  margin: 0;
+  font-family: $theme-font;
+  background: $main-color;
+}
+```
+
+## Añadiendo media queries
+Para añadir media queries a nuestro proyecto, podemos generar un archivo en `assets/styles` llamado `Media` y luego importándolo en `App`, sería para propósitos generales.
+
+## Agregando mocks a nuestro proyecto
+Para añadir datos de prueba a nuestro sitio, podemos generar un archivo llamado `mocks.json`. Para servirlo a modo de API, instalamos el siguiente paquete:
+```bash
+npm install -g json-server
+```
+
+Una vez instalado, abrimos otra terminal para servir nuestor json con el comando:
+```bash
+json server mocks.json
+```
+
+Veremos que este comando va a servir nuestro json en la url http://localhost:3000/[mainKeyOfYourJson]
+
+# React Hooks
+Los react hooks, son una implementación que les da estado y ciclo de vida a los componentes stateless. La intención de estos componentes es ahorrar la sintaxis de clase de los componentes stateful así como facilitar la transmisión de información entre componentes que no necesariamente están anidados.
+
+Esta funcionalidad está disponible a partir de la versión 16.8 de React. Esto significa que si se quisiera implementar en proyectos *legacy* podríamos generar muchas incompatibilidades, por lo cuál se recomienda mayormenta para proyectos nuevos.
+
+Para empezar a crear hooks, modifiquemos nuestra `App`, utilizaremos dos funciones nuevas:
+* **useState** para manejar el estado del cmponente
+* **useEffect** para manejar transmisiones de datos (patrón observer)
+```jsx
+// App.jsx
+import React, { useState, useEffect } from 'react'
+...
+```
+
+Luego nos aseguramos de que nuestro componente esté configurado con un return explícito, esto es para poder agregar más lógica al componente en lugar de un solo valor de retorno. En el caso de nuestro componente App tendría que tener esta estructura:
+```jsx
+// App.jsx
+import React, { useState, useEffect } from 'react'
+...
+
+const App = () => {
+  return(
+    <div className="App">
+      ...
+    </div>
+  )
+}
+
+export default App
+```
+
+## Implementando useState
+Para implementar `useState`, generamos dos constantes, en este ejemplo:
+```jsx
+const [ state, setState ] = useState(initialState);
+```
+Donde:
+* `state`: es el nombre que le daremos a la variable que almacena nuestro estado
+* `setState`: la que usaremos para actualizar nuestro estado
+* `initialState`: datos iniciales en el estado
+
+En el caso de nuestra `App`, haremos la siguiente implementación, con la cuál, ya tendríamos completamente listo nuestro estado para ser usado en el componente:
+```jsx
+import React, { useState, useEffect } from 'react'
+...
+
+const App = () => {
+  const [ videos, setVideos ] = useState({ mylist: [], trends: [], originals: [] });
+
+  useEffect(() => {
+    fetch('http://localhost:3000/initialState')
+      .then(response => response.json())
+      .then(data => setVideos(data))
+  }, []);
+
+  return(...)
+}
+
+export default App
+```
+Notemos que la función `useEffect` se encargará de implementar la lógica para recuperar la data que queremos atraer hacia nuestro estado. `useEffect`recibe dos parámetros:
+1. La función que se ejecutará cuando se monte el componente, adicional puede devolver otra función que se ejecutará cuando el componente se desmonte,
+3. Un array donde podemos especificar qué propiedades deben cambiar para que React vuelva a llamar nuestro código. Si el componente actualiza pero estas props no cambian, la función no se ejecutará.
+
+# Custom hooks
+React nos permite separar la lógica de un hook en un archivo aparte, para ello crearemos la carpeta `src/hooks/`. Los componentes que usemos para este efecto, deben llevar el prefijo *use* por definición. Trasladamos la lógica de nuestro hook del componente `App` en un archivo que llamaremos `useMocks.js`:
+```javascript
+import { useState, useEffect } from 'react'
+
+const useMocks = (API) => {
+  const [ videos, setVideos ] = useState({ mylist: [], trends: [], originals: [] });
+
+  useEffect(() => {
+    fetch(API)
+      .then(response => response.json())
+      .then(data => setVideos(data))
+  }, []);
+
+  return videos
+}
+
+export default useMocks
+}
+```
+
+Nótese que estamos generando un hook agnóstico para recuperar datos de un JSON, con lo cúal podríamos hacer su implementación en cualquier componente de la siguiente forma:
+```jsx
+// App.jsx
+...
+import useMocks from '../hooks/useMocks'
+
+const App = () => {
+  const mockState = useMocks('http://localhost:3000/initialState');
+  return mockState.length === 0 ? <h1>Loading...</h1> : (
+    <div className="App">
+      uso de mockState
+    </div>
+  )
+}
+...
+```
+
+# Proptypes
+Proptypes es un feature de React, que nos permite verificar de manera dinámica el tipo de dato de las propiedades que les pasamos a nuestros componentes, asimismo podemos definir si son requeridos o no. Para comenzar, instalamos la siguiente dependencia a nuestro proyecto:
+```
+npm install prop-types
+```
+
+Para implementarlo en cuanquiera de nuestros componentes, lo importamos y lo agregamos justo antes de nuestro export de la siguiente forma:
+```jsx
+import PropTypes from 'prop-types'
+...
+
+const MyComponent = ({ paramNumber, paramString, paramBoolean }) => (
+  <div className="carousel-item">
+    markup that use params...
+  </div>
+)
+
+MyComponent.propTypes = {
+  paramNumber: PropTypes.number,
+  paramString: PropTypes.string,
+  paramBoolean: PropTypes.boolean
+}
+
+export default MyComponent
+```
+
+# Complete project
+Check my full project [here](https://github.com/uuzii/my-react-netflix)
