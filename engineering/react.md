@@ -724,4 +724,5 @@ MyComponent.propTypes = {
 export default MyComponent
 ```
 
-
+# Complete project
+Check my full project [here](https://github.com/uuzii/my-react-netflix)
