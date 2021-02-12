@@ -35,3 +35,19 @@ Un libro que nos puede ayudar a entender el mundo del networking [Super connecto
 * Thinkers. Personas que siempre sueñan, que quieren conversaciones más profundas.
 * Enablers. Personas que quieren que las cosas pasen.
 * Connection executors. Personas que saben trabajar en equipo y conectar las diferentes piezas en una operación.
+
+# ¿Por qué hacer networking?
+Si no tenemos un objetivo claro, no sirve para nada tener conocimientos sobre networking, pues no lograremos nada concreto, algunas guías que podemos seguir son: 
+* ¿Cuál es mi pasión? Si no lo sabemos, lo podemos entender mirando hacia adentro y hacia afuera. Una referencia para entender el netwoking es el libro [Never eat alone](https://www.amazon.com.mx/Never-Eat-Alone-Expanded-Updated/dp/0553418769/ref=sr_1_1?adgrpid=55912986937&dchild=1&gclid=Cj0KCQiAyJOBBhDCARIsAJG2h5fvcFREMR4QmTV3uKq7f78OBuyHHIxndd9ynb2Ej9OC332Ewi12xjQaAmgCEALw_wcB&hvadid=286729580564&hvdev=c&hvlocphy=1010167&hvnetw=g&hvqmt=e&hvrand=7689967723576610360&hvtargid=kwd-297704707861&hydadcr=26978_9990371&keywords=never+eat+alone&qid=1613111533&sr=8-1&tag=googhydr0mx-20)
+* Pon tus metas en pasión. Una vez que hayamos identificado nuestra pasión, es importante redactar nuestro objetivos, los cuáles deben ser específicos, pues podríamos tener muchos amigos pero no aportarles o que nos aporten gran valor. Nuestros objetivos deben ser realistas.
+* Crea un grupo de asesores personales, esto es ¿quiénes me darán opinión de lo que voy logrando? se les debe dar la autoridad para que vean y juzguen nuestro avance. No tienen que ser amigos necesariamente.
+
+# Herramientas para networking
+Así como existen aplicaciones que nos permiten generar relaciones sentimentales, existen aplicaciones que nos permiten conocer personas en ciertos círculos profesionales. Algunas de ellas son:
+* Bumble. Nació para hacer todo tipo de relaciones, pero últimamente ha generado este tipo de círculos profesionales.
+* Lunch club. Mayormente funcional en USA, nos permite tomar información de LinkedIn para conocer personas en redes similares a la nuestra pero que no conocemos.
+* Club house. Es una app de audio en la que solo nos conectamos a salas donde hay un tema y podemos llegar para conversar, se tiene que llegar mediante una invitación.
+* Discord. Nos permite generar canales de audio en los que podemos contectarnos y conversar con otras personas.
+
+> Tomemos en cuenta que generar buenas relaciones consisitrá mucho en abrirnos a ellas, no tanto en esperar a que nos lleguen.
+
