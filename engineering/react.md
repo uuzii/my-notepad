@@ -913,7 +913,131 @@ import { Link } from 'react-router-dom'
 
 > Si generamos una ruta mediante la etiqueta `<a href="/route"></>` también se hará el ruteo, pero veremos un refresh, el uso del componente `Link` nos evita dicho refresh.
 
+# Redux
+Es una librería escrita en JavaScript basada en la arquitectura Flux, propuesta por Facebook e inspirada en Elm, un lenguaje funcional. Redux se bas en tres principios fundamentales:
+1. Solo hay una fuente de la verdad. Nuestra aplicación solo debe de tener un único Store y es la única fuente de información.
+2. El estado es de solo lectura. La única forma de modificar el estado es emitiendo un acción, este objeto describe lo que va a ocurrir.
+3. Podemos usar solo funciones puras. Para realizar cambios al estado es necesario utilizar Reducers los cuales son funciones puras que toman el estado anterior, una acción y devuelve un nuevo estado con las modificaciones necesarias.
+
+Redux nos ayudará a manejar el flujo de información de nuestra aplicación. Asimismo, propone una forma de manejar el estado donde podamos controlar cómo vamos a interactuar con otros elementos (llamadas a un API) o interacciones dentro de nuestra aplicación, teniendo en cuenta esto, Redux intenta de predecir las mutaciones que pueda sufrir el estado, creando restricciones de cuando y como pueden ser ejecutadas las actualizaciones en nuestras aplicaciones.
+
+Para empezar a utilizarlo, instalamos la siguiente dependencia de desarrollo:
+```bash
+npm install redux react-redux --save
+```
+
+Dentro de `src/` generamos dos carpetas nuevas: `actions/` y `reducers/`, luego configuramos de esta manera nuestro `index.js`:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import App from './routes/App'
+
+// La función render, recibe el componente a mostrar y el nodo en el cuál se va indexar
+ReactDOM.render(
+  <Provider>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
+```
+
+Donde:
+* `Provider`: nos permitirá encapsular todos nuestros componentes para suministrarles el *store* a cada uno de ellos.
+* `createStore`: contendrá la lógica que nos ayudará para almacenar el store y distribuirlo en nuestra aplicación.
+
+En el siguiente ejemplo, pondremos un mock como initalState de nuestra aplicación. Para esto, generamos una constante dentro de nuestro archivo `index.js` con toda la data que queremos agregar a este initialState con una configuración parecida a esta:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import App from './routes/App'
+
+const initialState = {
+  "user": {},
+  "playing":  {},
+  "mylist": [],
+  "trends": [ ... ]
+}
+
+ReactDOM.render(
+  <Provider>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
+```
+
+Donde:
+* `user` nos permitirá almacenar la información del usuario.
+* `playing` el estado de la reproducción
+* `mylist` nuestra lista de reproducción
+* `trends`: las data acerca de las tendencias
+
+Ahora generamos otra constante para tener una referencia de nuestro store apoyándonos de `createStore` y posteriormente la agregaremos a nuestro `Provider` de la siguiente forma:
+```javascript
+...
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import  reducer from './reducers'
+import App from './routes/App'
+
+const initialState = {
+  "user": {},
+  "playing":  {},
+  "mylist": [],
+  "trends": [ ... ]
+}
+
+const store = createStore(reducer, initialState);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
+```
+
+Generamos nuestro reducer dentro de la carpeta `src/reducers/` en un archivo llamado `index.js`con la siguiente configuración:
+```javascript
+const reducer = (state, action) => {
+  return state;
+}
+
+export default reducer
+```
+
+Ahora, identificamos cuál es el elemento que se renderiza en primera instancia de nuestra aplicación, en este caso es el container `Header`. De momento, suistituiremos nuestro custom hook por el store que acabamos de generar, esto será posible mediante le uso del método `connect`:
+```jsx
+...
+// importando connect
+import { connect } from 'react-redux'
+...
+// destructurando los elementos que nos arroja el connect para recibirlos como parámetros
+const Home = ({ trends, originals }) => {
+  return (
+    <>
+      ... markup que hace uso de la data ...
+    </>
+  )
+}
+// mapeando los elementos del store hacia props que se usarán en este componente
+const mapStatetoProps = state => {
+  return {
+    trends: state.trends,
+    originals: state.originals
+  }
+}
+
+export default connect(mapStatetoProps, null)(Home)
+```
+
+Tomemos en cuenta lo siguiente:
+* No necesitamos extraer toda la data sino solo la que usaremos en esta vista
+* `connect` recibe como parámetros las `props` y las `actions`.
 
 
-
-
+Configurando de este modo nuestro proyecto, podremos manejar el flujo de nuestro mock hacia el container `Home`.
