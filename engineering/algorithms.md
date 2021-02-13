@@ -146,3 +146,18 @@ int main() {
 }
 ```
 
+# Algoritmos de ordenamiento
+Existen muchos algoritmos de ordenamiento, pero los principales conocidos son:
+* Insertion sort
+* Binary sort
+* Bubble sort
+* Quick sort
+* Merge sort
+
+Los cuáles entre más complejos son, generalmente son más eficientes.
+
+> Un algoritmo de ordenamiento es un algoritmo que colocará objetos (números o letras) en orden
+
+Ejemplo: ´[a,b,c,d,e,f]´ es un array ordenado alfabéticamente.
+* Merge sort. Utiliza un principio conocido como *divide y vencerás*, en el cuál se separan los datos, los comparamos y posteriormente vamos mergeando en una lista principal el 
+

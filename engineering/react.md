@@ -726,3 +726,318 @@ export default MyComponent
 
 # Complete project
 Check my full project [here](https://github.com/uuzii/my-react-netflix)
+
+# React router
+Para empezar a utilizar react router, instalamos la siguiente dependencia:
+```bash
+npm install react-router-dom --save
+```
+
+Generamos la siguiente carpeta en nuestro proyecto `src/routes` y dentro de ella un archivo llaamdo `App.js`, que es donde trabajremos las rutas de nuestro proyecto con la siguiente configuración:
+```javascript
+import React from 'react'
+import { BrowserRouter, Route } from 'react-router-dom'
+import Home from '../containers/Home'
+
+const App = () => (
+  <BrowserRouter>
+    <Route exact path="/" component={Home} />
+  </BrowserRouter>
+)
+
+export default App
+```
+
+Donde:
+* `BrowserRoute` será el encargado de empujar al viewport nuestras diferentes vistas
+* `Route` será cualquier ruta de nuestra página, en este caso Home (Antes container/App)
+
+Configuramos también nuestro `index.js` de la siguiente manera:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Home from './routes/App'
+
+ReactDOM.render(<App />, document.getElementById('app'))
+```
+
+## Agregando más rutas (containers)
+Para generar más rutas, creamos otro archivo en la carpeta `containers/`, en este caso `Login.jsx`, generamos su su markup y lo agregamos a la par de nuestra primera ruta en `App.js`:
+```javascript
+import React from 'react'
+import { BrowserRouter, Route } from 'react-router-dom'
+import Home from '../containers/Home'
+import Login from '../containers/Login'
+
+const App = () => (
+  <BrowserRouter>
+    <Route exact path="/" component={Home} />
+    <Route exact path="/login" component={Login} />
+  </BrowserRouter>
+)
+
+export default App
+```
+
+Posteriormente agregamos la siguiente configuración a nuestro archivo de webpack:
+```javascript
+{
+  ...
+    devServer: {
+      historyApiFallback: true
+    }, 
+  ...
+}
+```
+
+Si recompilamos nuestro proyecto, ya podríamos ver la otra vista en la ruta `/login`
+
+## Agregando Switch
+`Switch` nos permitirá hacer cambios entre rutas, para agregarlo, generamos otra vista, en este caso su markup estará definido en el container `Register.jsx`. Para agregarlo configurándolo con `Switch`, modificamos nuestro archivo `App.js`:
+```javascript
+import React from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import Home from '../containers/Home'
+import Login from '../containers/Login'
+import Register from '../containers/Register'
+
+
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/register" component={Register} />
+    </Switch>
+  </BrowserRouter>
+)
+
+export default App
+```
+
+Esta configuración nos ayuda a que solo se presente en el viewport la vista que hemos definido en el path del navegador y no se empujen otras rutas.
+
+### Container 404
+Si ingresamos erróneamente la URL del navegador, es decir, una ruta que no existe en la aplicación, es de gran utilidad mostrar una vista por default, en esta caso podemos crear un container llamado `NotFound.jsx`:
+```jsx
+import React from 'react'
+
+const NotFound = () => (
+  <React.Fragment>
+    <h1>No encontrado</h1>
+    <h2>Volver al home</h2>
+  </React.Fragment>
+)
+
+export default NotFound
+```
+
+Nótese que estamos wrappeando nuestro markuo dentro de un componente llamado `React.Fragment` con la finalidad de tener todo dentro de un solo elemento, ya que jsx solo nos permite tener un elemento en nuestro return, una alternativa de esto es usar `<> Content </>`.
+
+> Tomar en cuenta que mandar más de un elemento en el return, rompe la aplicación.
+
+osteriormente añadiremos a nuestro `Switch`de la siguiente forma:
+```javascript
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/register" component={Register} />
+      <Route component={NotFound} />
+    </Switch>
+  </BrowserRouter>
+)
+```
+
+> Nótese que no estamos agregando ningún atributo a la ruta NotFound para que esta se muestre por defecto si no se resuelve la ruta.
+
+## Generando un Layout
+Un Layout, nos ayudará a persistir elementos como el header y el footer a lo largo de toda nuestra aplicación, para ello generamos nuestros componentes que contengan su markup y también un componente llamado `Layout.jsx` y lo configuramos de la siguiente manera:
+```jsx
+import React from 'react'
+import Footer from './Footer'
+import Header from './Header'
+
+const Layout = ({ children }) => (
+  <div className="App">
+    <Header />
+    {children}
+    <Footer />
+  </div>
+)
+
+export default Layout
+```
+
+Posteriormente en nuestro archivo `App.js` configuramos de la siguiente forma:
+```javascript
+import React from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import Layout from '../components/Layout'
+import Home from '../containers/Home'
+import Login from '../containers/Login'
+import NotFound from '../containers/NotFound'
+import Register from '../containers/Register'
+
+
+const App = () => (
+  <BrowserRouter>
+    <Layout>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
+        <Route component={NotFound} />
+      </Switch>
+    </Layout>
+  </BrowserRouter>
+)
+
+export default App
+```
+
+## Agregando links de navegación
+Una vez que tenemos varias vistas configuradas en nuestro proyecto, solo resta configurar links para acceder a ellas. En los componentes que identifiquemos que poseen estos links, agregaremos el componente `Link` y wrapeamos el elemento que hará el link dentro de este:
+```jsx
+...
+import { Link } from 'react-router-dom'
+...
+
+  <Link to="/">
+    <img className="header__img" src={logo} alt="My Netflix Video" />
+  </Link>
+ 
+...
+```
+
+> Si generamos una ruta mediante la etiqueta `<a href="/route"></>` también se hará el ruteo, pero veremos un refresh, el uso del componente `Link` nos evita dicho refresh.
+
+# Redux
+Es una librería escrita en JavaScript basada en la arquitectura Flux, propuesta por Facebook e inspirada en Elm, un lenguaje funcional. Redux se bas en tres principios fundamentales:
+1. Solo hay una fuente de la verdad. Nuestra aplicación solo debe de tener un único Store y es la única fuente de información.
+2. El estado es de solo lectura. La única forma de modificar el estado es emitiendo un acción, este objeto describe lo que va a ocurrir.
+3. Podemos usar solo funciones puras. Para realizar cambios al estado es necesario utilizar Reducers los cuales son funciones puras que toman el estado anterior, una acción y devuelve un nuevo estado con las modificaciones necesarias.
+
+Redux nos ayudará a manejar el flujo de información de nuestra aplicación. Asimismo, propone una forma de manejar el estado donde podamos controlar cómo vamos a interactuar con otros elementos (llamadas a un API) o interacciones dentro de nuestra aplicación, teniendo en cuenta esto, Redux intenta de predecir las mutaciones que pueda sufrir el estado, creando restricciones de cuando y como pueden ser ejecutadas las actualizaciones en nuestras aplicaciones.
+
+Para empezar a utilizarlo, instalamos la siguiente dependencia de desarrollo:
+```bash
+npm install redux react-redux --save
+```
+
+Dentro de `src/` generamos dos carpetas nuevas: `actions/` y `reducers/`, luego configuramos de esta manera nuestro `index.js`:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import App from './routes/App'
+
+// La función render, recibe el componente a mostrar y el nodo en el cuál se va indexar
+ReactDOM.render(
+  <Provider>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
+```
+
+Donde:
+* `Provider`: nos permitirá encapsular todos nuestros componentes para suministrarles el *store* a cada uno de ellos.
+* `createStore`: contendrá la lógica que nos ayudará para almacenar el store y distribuirlo en nuestra aplicación.
+
+En el siguiente ejemplo, pondremos un mock como initalState de nuestra aplicación. Para esto, generamos una constante dentro de nuestro archivo `index.js` con toda la data que queremos agregar a este initialState con una configuración parecida a esta:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import App from './routes/App'
+
+const initialState = {
+  "user": {},
+  "playing":  {},
+  "mylist": [],
+  "trends": [ ... ]
+}
+
+ReactDOM.render(
+  <Provider>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
+```
+
+Donde:
+* `user` nos permitirá almacenar la información del usuario.
+* `playing` el estado de la reproducción
+* `mylist` nuestra lista de reproducción
+* `trends`: la data acerca de las tendencias
+
+Ahora generamos otra constante para tener una referencia de nuestro store apoyándonos de `createStore` y posteriormente la agregaremos a nuestro `Provider` de la siguiente forma:
+```javascript
+...
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import  reducer from './reducers'
+import App from './routes/App'
+
+const initialState = {
+  "user": {},
+  "playing":  {},
+  "mylist": [],
+  "trends": [ ... ]
+}
+
+const store = createStore(reducer, initialState);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
+```
+
+Generamos nuestro reducer dentro de la carpeta `src/reducers/` en un archivo llamado `index.js`con la siguiente configuración:
+```javascript
+const reducer = (state, action) => {
+  return state;
+}
+
+export default reducer
+```
+
+Ahora, identificamos cuál es el elemento que se renderiza en primera instancia de nuestra aplicación, en este caso es el container `Home`. De momento, suistituiremos nuestro custom hook por el store que acabamos de generar, esto será posible mediante le uso del método `connect`:
+```jsx
+...
+// importando connect
+import { connect } from 'react-redux'
+...
+// destructurando los elementos que nos arroja el connect para recibirlos como parámetros
+const Home = ({ trends, originals }) => {
+  return (
+    <>
+      ... markup que hace uso de la data ...
+    </>
+  )
+}
+// mapeando los elementos del store hacia props que se usarán en este componente
+const mapStatetoProps = state => {
+  return {
+    trends: state.trends,
+    originals: state.originals
+  }
+}
+
+export default connect(mapStatetoProps, null)(Home)
+```
+
+Tomemos en cuenta lo siguiente:
+* No necesitamos extraer toda la data sino solo la que usaremos en esta vista
+* `connect` recibe como parámetros las `props` y las `actions`.
+
+
+Configurando de este modo nuestro proyecto, podremos manejar el flujo de nuestro mock hacia el container `Home`.
