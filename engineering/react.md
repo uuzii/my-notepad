@@ -974,7 +974,7 @@ Donde:
 * `user` nos permitirá almacenar la información del usuario.
 * `playing` el estado de la reproducción
 * `mylist` nuestra lista de reproducción
-* `trends`: las data acerca de las tendencias
+* `trends`: la data acerca de las tendencias
 
 Ahora generamos otra constante para tener una referencia de nuestro store apoyándonos de `createStore` y posteriormente la agregaremos a nuestro `Provider` de la siguiente forma:
 ```javascript
@@ -1010,7 +1010,7 @@ const reducer = (state, action) => {
 export default reducer
 ```
 
-Ahora, identificamos cuál es el elemento que se renderiza en primera instancia de nuestra aplicación, en este caso es el container `Header`. De momento, suistituiremos nuestro custom hook por el store que acabamos de generar, esto será posible mediante le uso del método `connect`:
+Ahora, identificamos cuál es el elemento que se renderiza en primera instancia de nuestra aplicación, en este caso es el container `Home`. De momento, suistituiremos nuestro custom hook por el store que acabamos de generar, esto será posible mediante le uso del método `connect`:
 ```jsx
 ...
 // importando connect
