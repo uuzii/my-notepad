@@ -77,3 +77,48 @@ Esto significa que si recibimos un mensaje que contiene los símbolos de los nú
 Como podemos ver, la mayoría de los números usados en ASCII se pueden formar con 8 bits, por lo cuál se emplearon por muchos años unidades de 8 bits para enviar estos paquetes de información (letras). El conjunto de 8 bits, se denomina *byte*.
 
 Pero ASCII es un sistema americano, que además está limitado a las permutaciones de un byte, es decir: 256 posibles símbolos, en los cuáles sería imposible representar caractéres con acentos, símbolos asiáticoso arábicos, figuras, etc. Es por ello que eventualmente se empezaron a usar 16 o hasta 32 bits. Hoy en día se utiliza un estándar universal llamado Unicode, que no solo soporta el Inglés, sino trata de representar todos los caractérese de todos los idiomas e incluso un alfabeto muy famoso que se usa hoy en día, los emojis, en el cuál, la carita riendo 😂  es algo así como 1001100010000010.
+
+Ahora nos preguntamos ¿cómo representan colores las computadoras? en este caso, partimos de que una gran cantidad de colores pueden ser representados como combinaciones de tres colores elementales: Rojo, Verde y Azul, entonces, cada pixel de nuestra pantalla, es una mezcla de esos colores en diferentes niveles de intensidad, en este caso la intensidad puede ir desde 0 hasta 255:
+
+|R|G|B|
+|-||-|
+|255|255|255|
+
+Entonces los colores en un pixel no son más que una interpretación de la intensidad de las cobinaciones de estos tres colores. Consideremos que nuestras pantallas, están conformadas por miles y miles de pixeles y las imágenes, no son otra cosa que matrices de estos pixeles interpretados cada uno por niveles de RGB.
+
+Ahora bien ¿cómo se representan los videos? cambiando la información de cada uno de los pixeles de manera rápida.
+
+Podemos decir en general, que todos los archivos, están clasificados de acuerdo a su extensión, que no es otra cosa que un patrón para ordenar unos y ceros.
+
+# Algoritmos
+Son instrucciones paso a paso, a modo de una receta, que programamos en las computadoras para que sean ejecutados. A diferencia de nosotros, las computadoras requieren recibir instrucciones muy precisas de todo lo que tienen que hacer, pues dichas instrucciones serán traducidas al lenguaje que conoce la máquina, esto es: unos y ceros.
+
+Tomemos el ejemplo de un libro de teléfonos (sección amarilla). Si quisiéramos buscar un nombre en ese enorme libro, una opción sería pasar hoja por hoja buscando el teléfono que queremos, lo cuál quizá nos tomaría mucho tiempo, otra opción sería pasar de dos hojas en dos hojas, lo cuál tomaría la mitad de tiempo pero reduciría nuestras probabilidades de encontrar el teléfono un 50%. En cambio, podemos usar otra estrategia: pararnos a la mitad de todo el libro y mirar si nuestro contacto buscado puede estar a la derecha o a la izquierda, si nos decidimos por un lado, hemos encontrado una manera de reducir mucho nuestra búsqueda, si con esa mitad repetimos la operación, hemos vuelto a reducir y si lo hacemos indefinidamente hasta estar en la hoja donde se ubica el contacto buscado habremos eficientado exponencialmente la velocidad de nuestra búsqueda: esto es un algoritmo conocido como *divide y vencerás*.
+
+¿Cómo traducimos esto a código? Sin importar qué lenguaje vayamos a utilizar para traducir esto a código, es importante primero expresarlo en *pseudo código*, que es una aproximación de las instrucciones o pasos que luego programaremos en nuestro idioma natural, el algoritmo anterior podría representarse cómo:
+1. **Tomar** el libro
+2. **Abrir** el libro a la mitad
+3. **Ver** la página
+4. *Si* "la persona está en la página"
+  * **Llamarle**
+5. *Si* "la persona no está en la página" y está a la izquierda
+  * **Abrir** la mitad izquierda a la mitad
+  * -Ir al paso 3-
+6. *Si* "la persona no está en la página" y está a la derecha
+  * **Abrir** la mitad derecha a la mitad
+  * -Ir al paso 3-
+7. *Si* no está en ninguna página
+  * **Salir**
+
+Notemos que, las palabras en **negritas** son verbos o acciones, mismas que en el código se llamarán *funciones*, asimismo; las palabras en *cursiva* que representan decisiones, las conoceremos como *condicionales*; las expresiones "entre comillas" son las sentencias que dirigirán nuestras condiciones, las conoceremos como *expresiones booleanas*; las expresiones -entre giones- son saltos en nuestro algoritmo, que conoceremos como *loops*.
+
+Para empezar a indicarle esto a la computadora, podemos utilizar un lenguaje llamado C, en el que inicialmente podemos usar la siguiente notación:
+```c
+#include <stdio.h>
+int main()
+{
+  printf("Hello, world\n");
+}
+```
+
+Pero dado que hay mucha sintáxis que veremos más adelante, representaremos nuestros algoortimos en una interfaz más amigable llamada **Scratch** para enfocarnos en la lógica sin preocuparnos por la sintáxis de un lenguaje. Ésta es una herramienta creada en el MIT justo para este fin, en ella podemos generar rutinas que sean obedecidas por objetos mediante *grag & drop* de bloques que ejecutan ciertas acciones.
