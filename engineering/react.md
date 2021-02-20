@@ -921,6 +921,8 @@ Es una librería escrita en JavaScript basada en la arquitectura Flux, propuesta
 
 Redux nos ayudará a manejar el flujo de información de nuestra aplicación. Asimismo, propone una forma de manejar el estado donde podamos controlar cómo vamos a interactuar con otros elementos (llamadas a un API) o interacciones dentro de nuestra aplicación, teniendo en cuenta esto, Redux intenta de predecir las mutaciones que pueda sufrir el estado, creando restricciones de cuando y como pueden ser ejecutadas las actualizaciones en nuestras aplicaciones.
 
+## Configurando Redux
+
 Para empezar a utilizarlo, instalamos la siguiente dependencia de desarrollo:
 ```bash
 npm install redux react-redux --save
@@ -1010,6 +1012,8 @@ const reducer = (state, action) => {
 export default reducer
 ```
 
+## Conectando con el state
+
 Ahora, identificamos cuál es el elemento que se renderiza en primera instancia de nuestra aplicación, en este caso es el container `Home`. De momento, suistituiremos nuestro custom hook por el store que acabamos de generar, esto será posible mediante le uso del método `connect`:
 ```jsx
 ...
@@ -1039,5 +1043,68 @@ Tomemos en cuenta lo siguiente:
 * No necesitamos extraer toda la data sino solo la que usaremos en esta vista
 * `connect` recibe como parámetros las `props` y las `actions`.
 
+## Agregando actions
 
-Configurando de este modo nuestro proyecto, podremos manejar el flujo de nuestro mock hacia el container `Home`.
+Configurando de este modo nuestro proyecto, podremos manejar el flujo de nuestro mock hacia el container `Home`. Ahora trabajemos con los actions, primeramente, crearemos el archivo `index.js` dentro de `src/actions/`, el primero que haremos se encargará de describir la información y pasaremos un objeto de configuración para determinar cómo se guardará en el estado:
+```javascript
+// actions/index.js
+export const setFavorite = payload => ({
+  type: 'SET_FAVORITE',
+  payload,
+})
+```
+
+Donde `payload` será la información que se va transmitir, y `type` será una descripción de este action.
+
+Ahora modificaremos nuestro reducer para que entienda lo que está pasando y actualice nuestro estado:
+```javascript
+const reducer = (state, action) => {
+  switch(action.type) {
+    case 'SET_FAVORITE':
+      return {
+        ...state,
+        myList: [...state.myList, action.payload]
+      }
+    default:
+      return state
+  }
+}
+
+export default reducer
+```
+
+Donde el caso default solo pasaría el state, y el caso 'SET_FAVORITE' previamente definido, recibirá como parámetros:
+* el `state` que se va modificar
+* el elemento que vamos a actualizar dentro del estado y su lógica
+
+Ahora agregaremos el action en el lugar que se utilzará, en este caso el componente `CarouselItem` ya que lo qe haremos será conectar el botón de '+' a este action:
+```jsx
+import React from 'react'
+import { connect } from 'react-redux'
+import { setFavorite } from '../actions'
+...
+
+const CarouselItem = (props) => {
+  const { cover, title, year, contentRating, duration } = props;
+  const handleSetFavorite = () => {
+    props.setFavorite({
+      cover, title, year, contentRating, duration
+    })
+  }
+
+  return (
+    ...
+      <img
+        className="carousel-item__details--img"
+        src={plusIcon} alt="Plus Icon"
+        onClick={handleSetFavorite} />
+    ...
+}
+...
+
+const mapDispatchToProps = {
+  setFavorite,
+}
+
+export default connect(null, mapDispatchToProps)(CarouselItem)
+```
