@@ -15,14 +15,14 @@ Hay varias formas de llamar a este tema, pero de entrada, no debemos creer que e
 > Las finanzas personales son más personales que financieras
 
 Se relaciona con conceptos los siguientes, si bien, todos parecen sinónimos, no todos se usan de la misma forma:
-* Finanzas personales. Es la forma más general, que engloba todos los tipos de decisiones que mencionamos anteriormente.
-* Planeación financiera. Se refiere a lo que hace un profesional de las finanzas personales: poner todo en orden y armar un plan de acción (táctico).
-* Libertad financiera. Tener cuidado con él, pues muchas veces se usa para vender la idea de que tenemos que ser millonarios y tener ingresos enormes para dejar de trabajar, realmente tiene otro significado.
-* Bienestar financiero. Agrupa de la mejor forma todos los conceptos de esta lista.
-* Independencia financiera. Otro concepto que se utiliza para imponer una visión única de lo que son las finanzas personales, esto contradice las *finanzas personales* per se, pues son diferentes para cada persona.
-* Salud financiera. Es una analogía de la salud corporal aplicado a las finanzas: así como hay buenos hábitos para la salud, los hay para las finanzas.
+* **Finanzas personales**. Es la forma más general, que engloba todos los tipos de decisiones que mencionamos anteriormente.
+* **Planeación financiera**. Se refiere a lo que hace un profesional de las finanzas personales: poner todo en orden y armar un plan de acción (táctico).
+* **Libertad financiera**. Tener cuidado con él, pues muchas veces se usa para vender la idea de que tenemos que ser millonarios y tener ingresos enormes para dejar de trabajar, realmente tiene otro significado.
+* **Bienestar financiero**. Agrupa de la mejor forma todos los conceptos de esta lista.
+* **Independencia financiera**. Otro concepto que se utiliza para imponer una visión única de lo que son las finanzas personales, esto contradice las *finanzas personales* per se, pues son diferentes para cada persona.
+* **Salud financiera**. Es una analogía de la salud corporal aplicado a las finanzas: así como hay buenos hábitos para la salud, los hay para las finanzas.
 
-## Bienestar financiero
+## Bienestar financiero
 
 Tomaremos el concepto *bienestar financiero*, pues agrupa a todos los demás conceptos; lo entenderemos como dos valores en dos momentos de tiempo:
 
@@ -113,27 +113,27 @@ Al sumar todos estos, tenemos un número, entre más cercanos estemos al 8 somos
 
 # Conceptos básicos de Finanzas Personales
 Antes de generar un plan financiero, es importante conocer los siguientes conceptos:
-* Costo de oportunidad. La mejor opción que hemos rechazado por llevar nuestro dinero a otro lado. Este concepto es muy usado para entender las decisiones de gasto o inversión.
-* Distribución del ingreso. ¿Cuál es la asignación que hacemos de nuestro dinero? Se puede aplicar al gasto o ahoro. Ésta se mide en porcentajes.
-* Escasez. No tiene que ver con lo limitado de un bien: "el agua de hace mil eaños era la misma, pero ahora alcanza menos porque somos más". El dinero siempre será limitado, si nuestras necesidades nos llevan a gastar más, no habrá dinero que nos alcance.
-* Oferta y demanda. Oferta es lo que los productores de productos, bienes o servicios ofrecen; demanda es lo que quieren comprar los consumidores. Si aumenta la demanda y la oferta no puede seguirle el ritmo, los precios subirán; si aumenta mucho la oferta pero no hay demanda, los precios se tendrán que bajar.
-* Rentabilidad. Es el porcentaje de ganancia que tiene una inversión = [(valor final/inversión inicial) - 1] * 100.
-* Utilidad. Monto bruto de la ganancia de una inversión = valor final - inversión inicial.
-* Riesgo. Probabilidad de que el resultado estamos esperando sea diferente al que esperamos. A mayor riesgo, mayor rentabilidad.
-* Tasa de interés. Se expresa de manera porcentual, representa la rentabilidad de una inversión o el costo de un crédito, siempre deben ser efectivas.
-* Flujo de caja y liquidez. Forma en la que se mueve el efectivo ¿cuánto dinero líquido tenemos?
-* Deudas. Son dinero que nos han prestado y tenemos que devolver o gastos que teníamos que pagar y no lo hicimos.
-* Gastos. Pagos que elegimos hacer para obtener un bien o un servicio.
+* **Costo de oportunidad**. La mejor opción que hemos rechazado por llevar nuestro dinero a otro lado. Este concepto es muy usado para entender las decisiones de gasto o inversión.
+* **Distribución del ingreso**. ¿Cuál es la asignación que hacemos de nuestro dinero? Se puede aplicar al gasto o ahoro. Ésta se mide en porcentajes.
+* **Escasez**. No tiene que ver con lo limitado de un bien: "el agua de hace mil eaños era la misma, pero ahora alcanza menos porque somos más". El dinero siempre será limitado, si nuestras necesidades nos llevan a gastar más, no habrá dinero que nos alcance.
+* **Oferta y demanda**. Oferta es lo que los productores de productos, bienes o servicios ofrecen; demanda es lo que quieren comprar los consumidores. Si aumenta la demanda y la oferta no puede seguirle el ritmo, los precios subirán; si aumenta mucho la oferta pero no hay demanda, los precios se tendrán que bajar.
+* **Rentabilidad**. Es el porcentaje de ganancia que tiene una inversión = [(valor final/inversión inicial) - 1] * 100.
+* **Utilidad**. Monto bruto de la ganancia de una inversión = valor final - inversión inicial.
+* **Riesgo**. Probabilidad de que el resultado estamos esperando sea diferente al que esperamos. A mayor riesgo, mayor rentabilidad.
+* **Tasa de interés**. Se expresa de manera porcentual, representa la rentabilidad de una inversión o el costo de un crédito, siempre deben ser efectivas.
+* **Flujo de caja y liquidez**. Forma en la que se mueve el efectivo ¿cuánto dinero líquido tenemos?
+* **Deudas**. Son dinero que nos han prestado y tenemos que devolver o gastos que teníamos que pagar y no lo hicimos.
+* **Gastos**. Pagos que elegimos hacer para obtener un bien o un servicio.
 
 # Evaluación de nuestra situación financiera
 Hay distintas formas de evaluar nuestra situación financiera. Para ello es importante qué factores están afectando a nuestro bienestar financiero, esto tiene que ver con *qué tan satisfechos estamos con nuestras finanzas*. No es importante los montos en sí, sino cómo nos sentimos con ello. Dependen muchos factores:
 
-* Entorno social y económico. Nadie puede decirnos cómo manejarnos financieramente pues no es lo mismo nacer en municipios apartados que en la ciudad principal, o las actividades económicas de nuestra ciudad.
-* Personalidad y actitudes. Hay personalidades muy ahorrativas o que gustan de la planeación, pero no es de todos, nuestros planes deben ser ad hoc a nosotros.
-* Contexto de decisión. No es lo mismo actuar cuando nos ponen en ciertos contextos que en otros.
-* Conocimiento y habilidades. Para ello estudiamos finanzas.
-* Oportunidades disponibles. No a todos se nos presentan las mismas oportunidades.
-* Bienestar financiero. Termina definido por lo que hacemos más que por lo que sabemos.
+* **Entorno social y económico**. Nadie puede decirnos cómo manejarnos financieramente pues no es lo mismo nacer en municipios apartados que en la ciudad principal, o las actividades económicas de nuestra ciudad.
+* **Personalidad y actitudes**. Hay personalidades muy ahorrativas o que gustan de la planeación, pero no es de todos, nuestros planes deben ser ad hoc a nosotros.
+* **Contexto de decisión**. No es lo mismo actuar cuando nos ponen en ciertos contextos que en otros.
+* **Conocimiento y habilidades**. Para ello estudiamos finanzas.
+* **Oportunidades disponibles**. No a todos se nos presentan las mismas oportunidades.
+* **Bienestar financiero**. Termina definido por lo que hacemos más que por lo que sabemos.
 
 ![bienestar- financiero](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/bienestar-financiero.jpg?raw=true)
 
@@ -145,13 +145,13 @@ Hay tres maneras de evaluar nuestras finanzas:
 Para la mayoría de las personas la más importante es la subjetiva, luego la relativa y finalmente la objetiva. La misión es saber cómo evaluarla en las tres dimensiones.
 
 ## Identificar patrones y lecciones de nuestro pasado
-Es la únic avez en que miraremos nuestro pasado para identificar rápidamente en qué hemos fallado para luego volver a nuestro presente y no repetir aquello, luego planear nuestro futuro.
+Es la única vez en que miraremos nuestro pasado para identificar rápidamente en qué hemos fallado para luego volver a nuestro presente y no repetir aquello, luego planear nuestro futuro.
 
 > Locura es hacer la misma cosa una y otra vez, pero esperar resultados diferentes
 
 **Ejercicio 2** 
-* Paso 1. Hacer una línea de tiempo del último año: indentificar los mejores momentos y los logros más importantes del año.
-* Paso 2. Contestar las siguientes preguntas:
+* **Paso 1**. Hacer una línea de tiempo del último año: indentificar los mejores momentos y los logros más importantes del año.
+* **Paso 2**. Contestar las siguientes preguntas:
   * ¿Cuál fue la mejor cosa que me pasó el año pasado?
   * ¿De qué logros te sientes más orgulloso?
   * ¿En qué creciste en los últimos 12 meses?
@@ -160,7 +160,7 @@ Es la únic avez en que miraremos nuestro pasado para identificar rápidamente e
   * ¿Cuáles son las grandes lecciones del último año?
   * ¿Qué cosas querías lograr y no lograste?
   * ¿Qué cosas puedes y quieres mejorarar del año pasado?
-* Paso 3. Identificar nuestras relaciones:
+* **Paso 3**. Identificar nuestras relaciones:
   * Haz una lista de las 15 personas más importantes en tu vida
   * Nuevas relaciones que creaste en el último año
   * ¿Qué personas han tenido un impacto significativo en tu vida? ¿Por qué?
@@ -169,7 +169,7 @@ Al final de todo esto, trataremos de identificar qué patrones de nuestra vida s
 * Cosas que nos gustan hacer y en qué sería bueno gastar nuestro dinero y qué cosas no gastarlo.
 * Cosas que podemos empezar a corregir en nuestra vida y finanzas personales.
 
-## Evaluando subjetivamente nuestra situación financiera
+## Evaluando subjetivamente nuestra situación financiera
 Tiene que ver con *cómo sentimos nuestras finanzas personales*. Usualmente se toman en cuenta dos factores:
 * **El estrés financiero**. No necesariamente es malo, pues nos puede ayudar a salir de una zona de confort y hacer algo por nuestras finanzas, pero tampoco es sano tener mucho estrés. En este punto valoramos:
   * Cómo concebimos nuestra habilidad para manejo de nuestras finanzas VS la satisfacción que tenemos en este momento de ellas (no es lógico que nos sintamos hábiles y que suframos a diario)
@@ -190,9 +190,9 @@ Tiene que ver con *cómo sentimos nuestras finanzas personales*. Usualmente se t
 
 ## Evaluando objetivamente nuestra situación financiera
 Es una parte muy importante, medir objetivamente, independiente de factores muy particulares, cómo nos encontramos en cuanto a *números*. Hay muchas formas de avaluarnos en este sentido, pero hay tres cosas que vale la pena evaluar:
-* Ingresos (flujo de caja). ¿Cuánto dinero y cuándo me ingresa? ¿En qué y cuándo gasto?
-* Deudas (pasivos). ¿Cuánto pago mensualmente? ¿Qué tan grandes son mis deudas? ¿Qué costo asumo? ¿Por qué me endeudé?
-* Bienes y derechos (activos). Nivel de ahorro, liquidez, productividad de nuestros activos.
+* **Ingresos (flujo de caja)**. ¿Cuánto dinero y cuándo me ingresa? ¿En qué y cuándo gasto?
+* **Deudas (pasivos)**. ¿Cuánto pago mensualmente? ¿Qué tan grandes son mis deudas? ¿Qué costo asumo? ¿Por qué me endeudé?
+* **Bienes y derechos (activos)**. Nivel de ahorro, liquidez, productividad de nuestros activos.
 
 ### Indicadores
 * Primeramente calcularemos el porcentaje de ingresos que queda libre después de gasto (sin considerar deuda ni créditos) con la siguiente fórmula (1 - total gasto mensual/ingreso neto) * 100.
