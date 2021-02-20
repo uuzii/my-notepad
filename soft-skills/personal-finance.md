@@ -138,9 +138,9 @@ Hay distintas formas de evaluar nuestra situación financiera. Para ello es impo
 ![bienestar- financiero](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/bienestar-financiero.jpg?raw=true)
 
 Hay tres maneras de evaluar nuestras finanzas:
-* Subjetiva. Depende del nivel de satisfacción personal, creencias, aprendizajes inconscientes, guioes mentales sobre el dinero.
-* Objetiva. Se relaciona con los númeris netos: ingresos, bienes, deuda, patrimonio.
-* Relativa. Depende de con quién nos comparamos y cómo lo hacemos.
+* **Subjetiva**. Depende del nivel de satisfacción personal, creencias, aprendizajes inconscientes, guioes mentales sobre el dinero.
+* **Objetiva**. Se relaciona con los númeris netos: ingresos, bienes, deuda, patrimonio.
+* **Relativa**. Depende de con quién nos comparamos y cómo lo hacemos.
 
 Para la mayoría de las personas la más importante es la subjetiva, luego la relativa y finalmente la objetiva. La misión es saber cómo evaluarla en las tres dimensiones.
 
@@ -168,3 +168,61 @@ Es la únic avez en que miraremos nuestro pasado para identificar rápidamente e
 Al final de todo esto, trataremos de identificar qué patrones de nuestra vida se están repitiendo el mismo año, con ello podemos obtener pistas como
 * Cosas que nos gustan hacer y en qué sería bueno gastar nuestro dinero y qué cosas no gastarlo.
 * Cosas que podemos empezar a corregir en nuestra vida y finanzas personales.
+
+## Evaluando subjetivamente nuestra situación financiera
+Tiene que ver con *cómo sentimos nuestras finanzas personales*. Usualmente se toman en cuenta dos factores:
+* **El estrés financiero**. No necesariamente es malo, pues nos puede ayudar a salir de una zona de confort y hacer algo por nuestras finanzas, pero tampoco es sano tener mucho estrés. En este punto valoramos:
+  * Cómo concebimos nuestra habilidad para manejo de nuestras finanzas VS la satisfacción que tenemos en este momento de ellas (no es lógico que nos sintamos hábiles y que suframos a diario)
+  * Cuál es nuestro optimistmo frente a nuestro futuro financiero
+  * Cuál es nuestra mayor preocupación financiera en este momento
+* **Guiones mentales de dinero**. Son creencias o supuestos sobre el dinero:
+  * Aprendidas en la infancia (que ha sido muy distinta en todos)
+  * Típicamente inconscientes (influyen en cómo nos manejamos)
+  * Pasadas de generación en generación
+  * Generalmente verdades a medias
+  * Responsables de nuestros resultados financieros
+  * Los tipos de guiones mentales son los siguientes:
+    * *Evitativo*. No les gusta cobrar o hablar de dinero.
+    * *Adoradores*. Les encanta el dinero y creen que el dinero resolvería todos sus problemas.
+    * *Buscadores de estatus*. Suelen decir que las personas son tan exitosas como su dinero y que se pueden tomar muchas fotos para redes.
+    * *Vigilantes*. Están encima del dinero, ahorran mucho, no gastan demasiado, etc.
+    > Es importante identificar qué guiones son más importantes en nosotros y cómo podemos usarlas a nuestro favor.
+
+## Evaluando objetivamente nuestra situación financiera
+Es una parte muy importante, medir objetivamente, independiente de factores muy particulares, cómo nos encontramos en cuanto a *números*. Hay muchas formas de avaluarnos en este sentido, pero hay tres cosas que vale la pena evaluar:
+* Ingresos (flujo de caja). ¿Cuánto dinero y cuándo me ingresa? ¿En qué y cuándo gasto?
+* Deudas (pasivos). ¿Cuánto pago mensualmente? ¿Qué tan grandes son mis deudas? ¿Qué costo asumo? ¿Por qué me endeudé?
+* Bienes y derechos (activos). Nivel de ahorro, liquidez, productividad de nuestros activos.
+
+### Indicadores
+* Primeramente calcularemos el porcentaje de ingresos que queda libre después de gasto (sin considerar deuda ni créditos) con la siguiente fórmula (1 - total gasto mensual/ingreso neto) * 100.
+* Calcularemos nuestro endeudamiento considerando:
+  * Lista de las obligaciones de crédito que tenemos
+  * Cuánto debemos en cada obligación a la fecha
+  * Estimado de cuánto hay que pagar mensualmente
+  * Clasificar la deuda si es de consumo o de otro tipo
+  En este caso calcularemos dos cosas:
+    * Porcentaje del ingreso que destinamos a pagar deudas de consumo: (total pagos mensuales a deuda de consumo/ingreso neto) * 100
+    * Porcentaje del ingreso destinado a pagar créditos en general: (total pagos mensuales a todas las deudas/ingreso neto) * 100
+* Calcularemos el valor de todos nuestros activos:
+  * Lista de todos nuestro bienes con su valor de mercado: dinero ahorrado, cuentas pro cobrar, inversiones a corto plazo, vehículos, propiedades, ropa y accesorios, electrodomésticos, tecnología, inversiones a largo plazo. Luego consideraremos si cada uno de estos activos son líquidos o no líquidos (si se pueden vender rápido o no) Para esto calcularemos:
+    * Meses de gasto que puedes cubrir con tus activos líquidos: (total de activos líquidos/gastos mensuales) * 100
+    * Porcentaje de nuestros activos líquidos: (total de activos líquidos/total de valor de todos los activos) * 100
+
+## Evaluando relativamente nuestra situación financiera
+Esta evaluación se refiera a una *comparación* con otros. Nuestro cerebro no tiene un medidor absoluto del valor de las cosas. Tomemos en cuenta lo siguiente:
+* Es muy difícil medir objetivamente la honestidad o la riqueza. No hay una escala global para estos indicadores.
+* Nuestro cerebro busa compararnos con los demás (lo cuál es muy arriesgado considerando la vida de cada persona en su contexto)
+* Está demostrado que el nivel de satisfacción que sentimos con nosotros mismos, está influenciado por las personas con las que nos comparamos. Puede que generemos más estrés que el que podemos soportar
+
+### ¿Cómo hacer comparaciones adecuadas?
+Todos debemos estar conscientes de que lo deseable es aumentar nuestro ingreso pero, cuánto es ingreso suficiente. Un buen indicador es el **ingreso per cápita** de cada país. En México ha caído en 2020 a $1,944.18 al mes. ¿Nos estamos comparando correctamente? ¿Es razonable nuestro estrés?
+
+Otra comparación es con nuestro grupo de edad en la región, la siguiente tabla, propiedad de [misfinanzaspersonales.co](https://misfinanzaspersonales.co/) nos muestra algunos promedios de las finanzas de personas en todo LATAM por grupos de edad:
+|Rango de edad|Fondo de emergencias|% de ingreso al gasto|% de ingreso a cuotas de deuda|% de activos líquidos|
+|-|-|-|-|-|
+|18 a 24 años|2.5 meses|74.97%|20.13%|29.1%|
+|25 a 34 años|5.1 meses|72.33%|38.09%|27.7%|
+|35 a 44 años|7.6 meses|76.47%|42.06%|21.1%|
+|45 a 54 años|8.0 meses|74.95%|46.81%|12.8%|
+|Mayores de 55|11.9 meses|77.48%|35.87%|13.5%|
