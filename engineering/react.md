@@ -1125,6 +1125,3 @@ const Login = (props) => {
   }
   ...
 ```
-
-# Implementando gravatar en nuestro proyecto
-Gravatar es un servicio para generar avatars
