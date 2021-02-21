@@ -1108,3 +1108,20 @@ const mapDispatchToProps = {
 
 export default connect(null, mapDispatchToProps)(CarouselItem)
 ```
+
+## Cambiando de ruta con un action
+En este ejemplo, la función `handleSubmit` es utilizada para enviar los datos de un formulario, la función `loginRequest` es su action. Para enviar al usuario a la ruta raíz de la página, se usa `history`, esto es, considerando que estamos bajo el `Provider` de react redux:
+```jsx
+... 
+const Login = (props) => {
+  const [form, setValues] = useState({
+    email: '',
+  })
+  ...
+  const handleSubmit = event => {
+    event.preventDefault()
+    props.loginRequest(form)
+    props.history.push('/')
+  }
+  ...
+```
