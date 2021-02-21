@@ -135,7 +135,7 @@ Hay distintas formas de evaluar nuestra situación financiera. Para ello es impo
 * **Oportunidades disponibles**. No a todos se nos presentan las mismas oportunidades.
 * **Bienestar financiero**. Termina definido por lo que hacemos más que por lo que sabemos.
 
-![bienestar- financiero](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/bienestar-financiero.jpg?raw=true)
+![bienestar financiero](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/bienestar-financiero.jpg?raw=true)
 
 Hay tres maneras de evaluar nuestras finanzas:
 * **Subjetiva**. Depende del nivel de satisfacción personal, creencias, aprendizajes inconscientes, guioes mentales sobre el dinero.
@@ -226,3 +226,43 @@ Otra comparación es con nuestro grupo de edad en la región, la siguiente tabla
 |35 a 44 años|7.6 meses|76.47%|42.06%|21.1%|
 |45 a 54 años|8.0 meses|74.95%|46.81%|12.8%|
 |Mayores de 55|11.9 meses|77.48%|35.87%|13.5%|
+
+# Creando nuestro plan financiero
+¿Por qué es importante planear?
+Si no sabemos para dónde vamos, cualquier bus nos sirve, pero planear nos sirve para alcanzar todas las cosas que queramos. La diferencia radica en que hay un recurso en el que muchas veces no meditamos y que es más valioso que el dinero: **el tiempo**.
+
+> Siempre que camines lo suficiente llegarás a alguna parte
+
+Consideremos que el tiempo que tenemos disponible para trabajar es muy reducido cada año, realmente se estima que es medio año el que tenemos disponible, quitando las horas que usamos para dormir, para comer, para cuidar de nuestros seres queridos y para transportarnos. Exieten muchos métodos para planear, lo que se aconseja ahora es solo una propuesta, que nos puede ayudar a cambiar la forma en la que nos relacionamos con nuestro dinero.
+
+## Analizando nuestro estado actual: activos
+La primera etapa para hacer nuestro plan es reconocer nuestro estado actual, en nuestro estado actual, **consideraremos nuestros ahorros, para luego convertirlos en inversión.**
+
+En las finanzas corporativas empresas, existen tres tipos de informes básicos:
+* **Estado de resultados**. Muestra cómo la empresa vende, gasta y genera utilidades.
+* **Flujo de caja**. Muestra cómo se mueve el efectivo dentro de la compañía.
+* **Estado de situación financiera**. Muestra los activos, pasivos y el patrimonio de la compañía.
+
+También se tienen estas consideraciones:
+* Los ingresos deben ser más grandes que los gastos que genera la compañía
+* La utilidad de la empresa debe ser mayormente en efectivo para que los socios puedan llevarse su parte y puedan reinvertir
+
+![diagrama empresas](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/diagrama-empresas.jpg?raw=true)
+
+¿Cómo funciona esto aplicado a nuestra vida?
+* El flujo de caja, es el estado de resultados en sí, pues tenemos efectivo y lo gastamos
+* Esperamos que siempre nuestros ingresos sean mayores a nuestros gastos (generamos utilidad)
+* Nuestra utilidad, es el potencial ahorro que podemos generar
+* El ahorro se destina mayormente a gastos (ropa, artefactos) o a metas de mediano plazo (viajes). El problema viene cuando terminamos convirtiendo todo en gasto. Es importante re-invertir en nosotros mismos para aumentar nuestros activos.
+
+Es decir que, nuestro ahorro se debe destinar a:
+* Pago de deudas
+* Gasto (no igual o mayor a cantidad de ahorro)
+* Inversiones que generen otros ingresos y crezcan nuestro ahorro
+
+![diagrama personas](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/diagrama-personas.jpg?raw=true)
+
+### Calculando nuestro ahorro
+Para este punto, evaluaremos:
+* Tasa de ahorro actual: (ahorros mensuales/ingreso neto) * 100
+* Solvencia: total de activos/total de deudas
