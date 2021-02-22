@@ -226,3 +226,51 @@ int main() {
   return 0;
 }
 ```
+
+## Insertion sort
+Este algoritmo va comparando cada elemento del array con el siguiente para determinar si es mayor o menor, en caso de que sea menor, lo mueve n posiciones atrás, hasta que encuentra el sitio donde ya no hay un número mayor.
+
+![insertion-sort](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/insertion-sort-diagram.jpg?raw=true)
+
+Trasladando esto a código, escribimos primeramente nuestros pasos:
+1. Comparo y swapeo los elementos adyacentes
+2. Repito hasta tener un recorrido completo sin ningún swap
+
+Implementando el código en C:
+```c
+#include <stdio.h>
+
+void insertion_sort(int input_arr[], int n)
+{
+  int current_index, current_val, prev_index;
+  for(current_index = 1; current_index < n; current_index++)
+  {
+    current_val = input_arr[current_index];
+    prev_index = current_index - 1;
+    while (prev_index >= 0 && input_arr[prev_index] > current_val)
+    {
+      input_arr[prev_index + 1] = input_arr[prev_index];
+      prev_index = prev_index - 1;
+    }
+    input_arr[prev_index + 1] = current_val;
+  }
+}
+
+void print_array(int input_arr[], int n)
+{
+  int i;
+  printf("[ ");
+  for(i = 0; i < n ; i++)
+    printf("%d ,", input_arr[i]);
+  printf(" ]\n");
+}
+
+int main() {
+  int input_arr[] = {100, 1992, 0, 5, -1, 60, 70, 15, 14};
+  int n = sizeof(input_arr) / sizeof(input_arr[0]);
+  insertion_sort(input_arr, n);
+  print_array(input_arr, n);
+  printf("\n");
+  return 0;
+}
+```
