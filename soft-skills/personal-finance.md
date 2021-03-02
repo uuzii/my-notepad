@@ -135,7 +135,7 @@ Hay distintas formas de evaluar nuestra situación financiera. Para ello es impo
 * **Oportunidades disponibles**. No a todos se nos presentan las mismas oportunidades.
 * **Bienestar financiero**. Termina definido por lo que hacemos más que por lo que sabemos.
 
-![bienestar- financiero](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/bienestar-financiero.jpg?raw=true)
+![bienestar financiero](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/bienestar-financiero.jpg?raw=true)
 
 Hay tres maneras de evaluar nuestras finanzas:
 * **Subjetiva**. Depende del nivel de satisfacción personal, creencias, aprendizajes inconscientes, guioes mentales sobre el dinero.
@@ -226,3 +226,124 @@ Otra comparación es con nuestro grupo de edad en la región, la siguiente tabla
 |35 a 44 años|7.6 meses|76.47%|42.06%|21.1%|
 |45 a 54 años|8.0 meses|74.95%|46.81%|12.8%|
 |Mayores de 55|11.9 meses|77.48%|35.87%|13.5%|
+
+# Creando nuestro plan financiero
+¿Por qué es importante planear?
+Si no sabemos para dónde vamos, cualquier bus nos sirve, pero planear nos sirve para alcanzar todas las cosas que queramos. La diferencia radica en que hay un recurso en el que muchas veces no meditamos y que es más valioso que el dinero: **el tiempo**.
+
+> Siempre que camines lo suficiente llegarás a alguna parte
+
+Consideremos que el tiempo que tenemos disponible para trabajar es muy reducido cada año, realmente se estima que es medio año el que tenemos disponible, quitando las horas que usamos para dormir, para comer, para cuidar de nuestros seres queridos y para transportarnos. Exieten muchos métodos para planear, lo que se aconseja ahora es solo una propuesta, que nos puede ayudar a cambiar la forma en la que nos relacionamos con nuestro dinero.
+
+## Analizando nuestro estado actual: activos
+La primera etapa para hacer nuestro plan es reconocer nuestro estado actual, en nuestro estado actual, **consideraremos nuestros ahorros, para luego convertirlos en inversión.**
+
+En las finanzas corporativas empresas, existen tres tipos de informes básicos:
+* **Estado de resultados**. Muestra cómo la empresa vende, gasta y genera utilidades.
+* **Flujo de caja**. Muestra cómo se mueve el efectivo dentro de la compañía.
+* **Estado de situación financiera**. Muestra los activos, pasivos y el patrimonio de la compañía.
+
+También se tienen estas consideraciones:
+* Los ingresos deben ser más grandes que los gastos que genera la compañía
+* La utilidad de la empresa debe ser mayormente en efectivo para que los socios puedan llevarse su parte y puedan reinvertir
+
+![diagrama empresas](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/diagrama-empresas.jpg?raw=true)
+
+¿Cómo funciona esto aplicado a nuestra vida?
+* El flujo de caja, es el estado de resultados en sí, pues tenemos efectivo y lo gastamos
+* Esperamos que siempre nuestros ingresos sean mayores a nuestros gastos (generamos utilidad)
+* Nuestra utilidad, es el potencial ahorro que podemos generar
+* El ahorro se destina mayormente a gastos (ropa, artefactos) o a metas de mediano plazo (viajes). El problema viene cuando terminamos convirtiendo todo en gasto. Es importante re-invertir en nosotros mismos para aumentar nuestros activos.
+
+Es decir que, nuestro ahorro se debe destinar a:
+* Pago de deudas
+* Gasto (no igual o mayor a cantidad de ahorro)
+* Inversiones que generen otros ingresos y crezcan nuestro ahorro
+
+![diagrama personas](https://github.com/uuzii/my-notepad/blob/wip/soft-skills/soft-skills/assets/diagrama-personas.jpg?raw=true)
+
+### Calculando nuestro ahorro
+Para este punto, evaluaremos:
+* Tasa de ahorro actual: (ahorros mensuales/ingreso neto) * 100
+* Solvencia: total de activos/total de deudas
+
+> Es importante tomar en cuenta que estos números deben reflejar nuesra situación actual, no lo que queremos llegara hacer.
+
+### Fondo de emergencias
+Es un *colchón* que nos ayudaría en cualquier emergencia que tengamos. Se calcula de la siguiente manera: total activos líquidos / gastos mensuales.
+
+Algunos de los riesgos a los que nos enfrentamos, es a una emergencia de salud, pérdida de empleo, entre otras. La idea es que si perdemos nuestros ingresos, podamos continuar viviendo manteniendo nuestra calidad de vida y buscando un nuevo empleo. Lo ideal es que nuestro fondo de emergencias pueda cubrir **al menos 4.5 meses** de nuestros gastos.
+
+Es importante tener activos líquidos (que podamos disponer de ellos). No necesariamente significa tener este dinero debajo del colchón, bien puede estar en: cetes, fondos de inversión a plazos cortos, entre otros. El ahorro es el medio más eficiente para generar este tipo de activos, los cuáles debemos procurar conforme vamos avanzando en nuestra vida.
+
+> Tenemos que cuidarnos de la falta de liquidez, pues puede ser muy peligrosa.
+
+## Analizando nuestro estado actual: pasivos
+De cara a las deudas, nos conviene hacer una lista de todas nuestras deudas clasificándolas como consumo y no consumo:
+* **De consumo**. Aquellas deudas que adquirimos y cuyo beneficio ya lo consumimos, ejemplo: comidas, supermercados, porcentajes de vvacaciones, cualquier artefacto que ya lo hemos terminado de utilizar, no se pueden re vender pero nos quedó la deuda.
+* **No consumo**. Aquellas que tienen un activo por detrás: inmuebles, automóviles (a pesar de que se deprecian podemos venderlos), tecnología, electrodomésticos, educación.
+
+Entendiendo esto, son importantes las siguientes consideraciones:
+
+* **No destinar más de 10% de nuestro ingreso a deudas de consumo**.
+* **No destinar más de 35% de nuestro ingreso a deudas en general**.
+
+Esto no significa que no podemos adqurir deuda, sino que lo tenemos que hacer con medida.
+
+### Costo de la deuda
+La siguiente cuestión que siempre debemos plantearnos es: ¿Cuánto cuesta mi deuda? es decir, ¿Cuánto porcentaje de mis ingresos estoy dejando de destinar a otras cosas por estarlo destinando a deudas?. A continuación, se muestra un ejemplo de este cálculo con todas las deudas de una persona:
+
+||Total Deuda|% de la deuda total|Tasa de interés anual|Aporte al costo|
+|-|-|-|-|-|
+|Deuda 1|$150|13.8%|29%|4.0%|
+|Deuda 2|$360|33%|24%|7.9%|
+|Deuda 3|$35 |3.2%|10%|0.3%|
+|Deuda 4|$545|50.0%|18%|9.0%|
+|Total  |$1090|100%||21.2%|
+
+Donde el valor de la última celda (21.2%) es un promedio de todas nuestras tasas de interés, el costo de nuestra deuda es: total deuda * tasa de interés promedio. Ésto es lo que estamos dejando de destinar a otras cosas por estar pagando deuda. Con esto podemos saber si nos estamos sobrepasando de deuda.
+
+## Analizando nuestro estado actual: gasto
+Una vez habiendo entendido nuestros activos y nuestros pasivos, pasamos a la base de nuestras finanzas: ¿qué tan adecuadamente estoy gastando?. Es probable que si estoy muy endeudado, no tengo buenos porcentajes de ahorro. Ahora anlziaremos: cómo priorizo lo destinado a ahorro y lo destinado a deuda. Para esto, es necesario identificar cuánto de nuestros ingresos estamos destinando a gastos, lo cuál **no debe superar el 80%**. La razón, es porque lo restante se debe destinar a:
+* Ahorros
+* Pago de deudas
+* Inversiones
+
+Consideremos lo siguiente:
+
+* Si nuestro gasto es del mismo tamaño de nuestro ingreso y tenemos deuda, tenemos problemas financieros.
+* Si nuestro gasto es del mismo tamaño de nuestro ingreso y no tenemos deuda, tampoco generamos ahorro y este es importante para hacer crecer nuestros activos líquidos.
+
+En todo caso, lo que debemos evitar es que crezca nuestra deuda para evitar caer en la *iliquidez*, que significa que no tenemos activos líquidos (por no tener dinero para ahorrar) o peor *insolvencia* que es llegar a carecer incluso de dinero para pagar las deudas. Muchas veces estos fenómenos se dan porque gastamos en el presente creyendo que el futuro será mejor y esto no sucede.
+
+Existen estartegias de flujo de caja para evitar esto a toda costa y al contrario hacer crecer nuestros activos líquidos, pero empecemos creando un presupuesto anual. Para este, enlistamos todos nuestros ingresos calsificándolos por mensuales y anuales, luego enlistamos todos nuestros gastos clasificándolos por mensuales y anuales. Hacemos un balance con toda esta información, si notamos que de pronto los gastos que hacemos mensualmente nos superan, quizá vale la pena invertirle buena parte de los bonos que nos entran una o dos veces al año, si vemos que los gastos que no hacemos mensualmente superan nuestros bonos, consideremos diferir esos gastos a meses por ejemplo.
+
+### Establecer objetivos
+Si bien, hasta aquí ya hemos analizado nuestra situación y hemos empezado a hacer nuestra planeación,no seremos inmediatamente grandes inversores ni creceremos nuestros activos en wall street de la noche a la mañana, es necesario establecer objetivos financieros. Pero para esto debemos considerar qué objetivos tenemos.
+
+Primero consideremos: ¿Cuál es mi objetivo de este año? No se puede lograr todo a la vez ¿Qué cosas, hábtosm creencias, miedos, relaciones queremos?. Podemos guiarnos de la siguiente matriz:
+
+||deseas|no deseas|
+|-|-|-|
+|tienes|...quieres conservar?|...quieres elminar?|
+|no tienes|...quieres alcanzar?|...quieres evitar?|
+
+En cualquiera de estas zonas podemos encontrar objetivos financieros. Pero hasta este momento lo haremos a modo de lluvia de ideas, posteriormente, definimos ahora sí de manera específica mediante las siguientes preguntas:
+
+* ¿Qué competencias te gustaría adquirir?
+* ¿Cuál será el superpoder que quisieras que te permitiera cumplir todas tus metas?
+* ¿En qué cosas quieres ser diferente de aquí a un año?
+* ¿Qué cosas ya no te sirven?
+* ¿De qué cosas te gustaría alejarte?
+* ¿Qué hábitos/comportamentos quieres continuar teniendo este año?
+* ¿A quién te gustaría ayudar?
+* ¿Quién te gustaría que te ayudara? ¿Con qué?
+* ¿Quién/qué merece más atención este año?
+* ¿Quién/qué no merece tanta atención este año?
+
+Al final, sintetizamos, escribiendo nuestros 3 objetivos principales:
+* Para los próximos 30 días
+* Para los próximos 90 días
+* Para los próximos 360 días
+
+Para que se nos facilite la escritura de estos objetivos consideremos lo siguiente: escribir las ventajas de lograrlo, compartirlo con nuestros familiares y escribir aquellas cosas que se pueden interponer para que lo logremos.
