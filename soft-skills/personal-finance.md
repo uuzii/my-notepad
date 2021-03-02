@@ -317,3 +317,33 @@ Consideremos lo siguiente:
 En todo caso, lo que debemos evitar es que crezca nuestra deuda para evitar caer en la *iliquidez*, que significa que no tenemos activos líquidos (por no tener dinero para ahorrar) o peor *insolvencia* que es llegar a carecer incluso de dinero para pagar las deudas. Muchas veces estos fenómenos se dan porque gastamos en el presente creyendo que el futuro será mejor y esto no sucede.
 
 Existen estartegias de flujo de caja para evitar esto a toda costa y al contrario hacer crecer nuestros activos líquidos, pero empecemos creando un presupuesto anual. Para este, enlistamos todos nuestros ingresos calsificándolos por mensuales y anuales, luego enlistamos todos nuestros gastos clasificándolos por mensuales y anuales. Hacemos un balance con toda esta información, si notamos que de pronto los gastos que hacemos mensualmente nos superan, quizá vale la pena invertirle buena parte de los bonos que nos entran una o dos veces al año, si vemos que los gastos que no hacemos mensualmente superan nuestros bonos, consideremos diferir esos gastos a meses por ejemplo.
+
+### Establecer objetivos
+Si bien, hasta aquí ya hemos analizado nuestra situación y hemos empezado a hacer nuestra planeación,no seremos inmediatamente grandes inversores ni creceremos nuestros activos en wall street de la noche a la mañana, es necesario establecer objetivos financieros. Pero para esto debemos considerar qué objetivos tenemos.
+
+Primero consideremos: ¿Cuál es mi objetivo de este año? No se puede lograr todo a la vez ¿Qué cosas, hábtosm creencias, miedos, relaciones queremos?. Podemos guiarnos de la siguiente matriz:
+
+||deseas|no deseas|
+|-|-|-|
+|tienes|...quieres conservar?|...quieres elminar?|
+|no tienes|...quieres alcanzar?|...quieres evitar?|
+
+En cualquiera de estas zonas podemos encontrar objetivos financieros. Pero hasta este momento lo haremos a modo de lluvia de ideas, posteriormente, definimos ahora sí de manera específica mediante las siguientes preguntas:
+
+* ¿Qué competencias te gustaría adquirir?
+* ¿Cuál será el superpoder que quisieras que te permitiera cumplir todas tus metas?
+* ¿En qué cosas quieres ser diferente de aquí a un año?
+* ¿Qué cosas ya no te sirven?
+* ¿De qué cosas te gustaría alejarte?
+* ¿Qué hábitos/comportamentos quieres continuar teniendo este año?
+* ¿A quién te gustaría ayudar?
+* ¿Quién te gustaría que te ayudara? ¿Con qué?
+* ¿Quién/qué merece más atención este año?
+* ¿Quién/qué no merece tanta atención este año?
+
+Al final, sintetizamos, escribiendo nuestros 3 objetivos principales:
+* Para los próximos 30 días
+* Para los próximos 90 días
+* Para los próximos 360 días
+
+Para que se nos facilite la escritura de estos objetivos consideremos lo siguiente: escribir las ventajas de lograrlo, compartirlo con nuestros familiares y escribir aquellas cosas que se pueden interponer para que lo logremos.
