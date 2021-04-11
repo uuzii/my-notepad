@@ -1,1 +1,1 @@
-awk '{print "|**"  $0 "**||"}' voc.txt | sort >> vocabulary.md
+awk '{print "|**"  $1 "**|" $2 "|"}' voc.txt | sort >> vocabulary.md
