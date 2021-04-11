@@ -10,7 +10,7 @@ Es un entorno de ejecución de JavaScript fuera del navegador. Fue creado en 200
 # Eventloop
 El eventloop es un bucle que se está ejecutando todo el tiempo, este está gestionado automáticamente por un proceso que permite que todo lo que se reciba funcione de maera asíncrona, es decir, que no se bloqueará el bucle, sino que delegará el procesamiento al *Thread pool* para procesar operaciones lentas y el eventloop seguirá recibiendo eventos. El *thread pool* levantará un hilo para cada tarea que requiera y cuando estén listas, su resolución se encolará para poder presentarse de nuevo al eventloop.
 
-![Eventloop](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventlooop-thread.jpg?raw=true)
+![Eventloop](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/eventloop-thread.jpg?raw=true)
 
 # Monohilo: implicaciones en diseño y seguridad
 El hecho de que solo exista un hilo puede ser tanto ventaja como desventaja si no se entiende su funcionamiento.
