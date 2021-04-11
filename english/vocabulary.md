@@ -227,40 +227,64 @@ This file contains some words I've learned trough my english career :)
 |**English word**|Spanish approximations|
 |-|-|
 |**astonishing**|sorprendente|
-|**bait**|carnada|
-|**bask**|estar recostado|
-|**beam**|viga, travesaño|
+|**bait**|anzuelo|
+|**basking**|estar tumbado|
+|**beam**|viga|
 |**beleaguered**|sitiado|
-|**bluegrass**|hierba norteamericana|
-|**brads**|clavito, puntilla|
-|**bump**|bulto, bache, chichón|
+|**brads**|clavito|
+|**bump**|bulto|
+|**cheesy**|queso|
 |**cherised**|preciado|
-|**chickadee**|carbonero|
+|**chickadees**|carbonero|
 |**cranky**|malhumorado|
-|**disrespectful**|irrespetuoso|
-|**dread**|pavor|
+|**disrespectful**||
+|**dread**|irrespetuoso|
 |**endure**|aguantar|
-|**foster**|fomentar, adoptivo(adj)|
+|**foster**|fomentar|
 |**futile**|inútil|
-|**geese**|ganso|
-|**goofy**|bobo, relativo a dientes salidos|
-|**grace**||gracia, elegancia
-|**heal**|curar, cicatrizar|
-|**jar**|frasco, bote|
-|**lid**|tapa, párpado|
-|**mason**|albañil, labrar en piedra|
-|**moisturize**|hidratar, humectar|
+|**geese**|gansos|
+|**goofy**|bobo|
+|**grace**|gracia|
+|**heal**|curar|
+|**jar**|frasco|
+|**lid**|tapa|
+|**mason**|albañil|
+|**moisturize**|hidratar|
 |**punk**|vándalo|
-|**realm**|reino, campo, ámbito|
-|**screw**|tornillo, hélice, cogida|
+|**realm**|reino|
+|**screw**|tornillo|
 |**slither**|deslizarse|
-|**sleeve**|manga, funda|
+|**sleeve**|manga|
 |**sober**|sobrio|
-|**summon**|llamar, pedir, convocar|
-|**swirl**|remolino, espiral|
+|**summon**|llamar|
+|**swirl**|remolino|
 |**throes**|agonía|
 |**tinfoil**|papel aluminio|
-|**tug**|tirar de, jalar|
-|**unfathomably**|insondable|
+|**tug**|tirar de|
+|**unfathomably**|de modo insondable|
 |**woobly**|tambaleante|
 |**yikes**|caramba|
+
+## List 9
+|**English word**|Spanish approximations|
+|-|-|
+|**betray**|traicionar|
+|**towards**|hacia|
+|**whole**|todo|
+|**betray**|traicionar|
+|**delight**|delicia|
+|**depict**|representar|
+|**exploit**|hazaña|
+|**feasible**|factible|
+|**flattery**|adulación|
+|**handicap**|desventaja|
+|**hunk**|trozo|
+|**likely**|probable|
+|**scrape**|rasguñar|
+|**temp**|empleado|
+|**threaten**|amenazar|
+|**towards**|hacia|
+|**weakness**|debilidad|
+|**whole**|todo|
+|**willing**|dispuesto|
+|**yardstick**|regla|
