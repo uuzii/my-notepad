@@ -91,6 +91,142 @@ This file contains some words I've learned trough my english career :)
 ## List 4
 |**English word**|Spanish approximations|
 |-|-|
+|**allegedly**|presuntamente, supuestamente|
+|**ancient**|antiguo, viejo, prehistórico, anciano|
+|**bagpipe**|gaita|
+|**bark**|ladrar, gritar, rascarse|
+|**bondage**|esclavitud, cautiverio, servidumbre|
+|**burst**|cepillo, brocha, pincel, maleza, roce|
+|**chick**|pollito|
+|**couturier**|modista|
+|**crawl**|gatear, arrastrasrse, avanzar lentamente, rebajarse|
+|**drove**|manada|
+|**enforced**|forzoso, impuesto|
+|**frightened**|asustado, tener miedo|
+|**gather**|recoger, reunir, juntar, recolectar, acumular|
+|**harsh**|duro, severo, riguroso, violento|
+|**lying**|yacer, estar tendido, radicar, mentir|
+|**marshmallow**|malvavisco, esponjita, nube|
+|**punish**|castigar, sancionar|
+|**realised**|darse cuenta, reconocer, desarrollar, realizar, producir|
+|**robbery**|robo, atraco, asalto|
+|**shamrock**|trébol|
+|**stiff**|duro, rígido, tiezo, consistente, agarrotado, entumecido|
+|**stinging**|punzante, hiriente|
+|**stray**|extraviado, perdido, descarriado, callejero|
+|**tailor**|sastre, confeccionar, adaptar|
+|**thigh**|muslo|
+|**though**|aunque, pero|
+|**thoughtful**|pensativo, serio|
+|**trusty**|fiel, leal, de confianza|
+|**twist**|girar, retorcer, tergiversar|
+|**unwillingly**|de mala gana|
+|**winged**|con alas|
+|**yeast**|levadura|
+## List 5
+|**English word**|Spanish approximations|
+|-|-|
+|**avert**|apartar, desviar|
+|**berserk**|loco|
+|**complaint**|queja, reclamación, denuncia|
+|**dash**|pizca, gota|
+|**derelict**|en ruinas, abandonado|
+|**dilapidated**|destartalado, ruinoso|
+|**feed**|alimentar|
+|**fussy**|quisquilloso, exigente|
+|**garish**|chillón, llamativo|
+|**hallway**|pasillo|
+|**indeed**|ciertamentte|
+|**inmate**|preso, recluso, paciente,enfermo|
+|**mistreatment**|maltrato|
+|**proper**|correcto, apropiado, adecuado|
+|**punchline**|remate, final|
+|**sack**|saco, costal, saqueo, sobre|
+|**scowl**|ceño fruncido|
+|**scum**|capa de suciedad, espuma, basura|
+|**shake**|agitar, sacudir|
+|**shelve**|colocar en estantes, aparcar|
+|**slime**|baba, canalla|
+|**smear**|mancha, calumnia, difamación|
+|**squidgy**|blando y húmedo|
+|**steep**|empinado, escarpado, abrupto, brusco, considerable|
+|**stink**|apestar|
+|**sturdy**|robusto, firme, tenaz|
+|**venue**|lugar, local, estadio, juristicción|
+|**wardrobe**|armario, ropero|
+|**whimpering**|gemidos, lloriqueo|
+## List 6
+|**English word**|Spanish approximations|
+|-|-|
+|**befall**|suceder, ocurrir|
+|**bunk**|litera|
+|**clumsy**|torpe, brusco|
+|**counsel**|consejo, aconsejar, recomendar|
+|**downturn**|disminución, contracción, deterioro|
+|**erupt**|estallar|
+|**fours**|en cuatro patas|
+|**frantic**|frenético, desesperado|
+|**glean**|recoger, cosechar|
+|**hassle**|lío, problema, molestar|
+|**kidney**|riñón|
+|**merely**|simplemente, solamente, meramente|
+|**midst**|medio, mitad|
+|**nap**|siesta|
+|**peer**|par, igual|
+|**praise**|elogiar, alabar|
+|**relive**|revivir|
+|**ripple**|onda|
+|**scrambled**|codificado, cifrado|
+|**sniper**|francotirador|
+|**stumble**|tropezar|
+|**threatening**|amenazante|
+|**towards**|a, hacia, para|
+|**undergirds**|sustentar, basar|
+|**worth**|valor|
+## List 7
+|**English word**|Spanish approximations|
+|-|-|
+|**bleed**|sangrar|
+|**carnation**|clavel|
+|**decorate**|decorar, condecorar|
+|**mourning**|luto, duelo|
+|**overwhelmed**|abrumado, agobiado|
+|**personnel**|personal, staff|
+|**sail**|navegar, zarpar, salir|
+|**stepmothers**|madrastra|
+|**unwind**|desenrollar, relajarse|
+|**widely**|mucho, ampliamente|
+|**ain't**|no soy, no estoy, no somos, no eres|
+|**amid**|entre|
+|**ammonia**|amoníaco|
+|**appealing**|atractivo|
+|**avid**|ávido|
+|**blunty**|desafilado, sin punta|
+|**cramp**|calambre|
+|**damp**|húmedo, humedad, humedecer|
+|**delight**|deleites, placer|
+|**facility**|instalación, servicio|
+|**farewell**|despedida|
+|**floss**|hilo dental|
+|**fussy**|quisquilloso, exigente||
+|**grim**|sombrío, desalentador, duro|
+|**lure**|atraer, señuelo|
+|**madness**|locura, demencia|
+|**mob**|muchedumbre, turba|
+|**nurture**|criar, nutrir, educar|
+|**ought**|deber|
+|**poignant**|conmovedor, patético|
+|**softback**|tapa rústica|
+|**spine**|columna, espina|
+|**squeegee**|escoba de goma, limpiavidrios, limpiar con escobilla|
+|**therefore**|por lo tanto|
+|**tightly**|bien, con fuerza, firmemente|
+|**treacherous**|traicionero, peligroso|
+|**unbearable**|insoportable|
+|**uproar**|alboroto, estruendo, jaleo|
+## List 8
+|**English word**|Spanish approximations|
+|-|-|
 |**astonishing**|sorprendente|
 |**bait**|anzuelo|
 |**basking**|estar tumbado|
@@ -130,7 +266,8 @@ This file contains some words I've learned trough my english career :)
 |**woobly**|tambaleante|
 |**yikes**|caramba|
 
-## List 5
+
+## List 9
 |**English word**|Spanish approximations|
 |-|-|
 |**betray**|traicionar|
