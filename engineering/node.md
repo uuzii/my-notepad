@@ -86,3 +86,262 @@ npm install -g pm2
 ```
 
 Este paquete nos permitirá ejecutar nuestra aplicación en un cluster, hacer watch and reload, monitorear la aplicación, imprimir los logs en un archivo, volver a ejecutar la aplicación si falla, entre otras utilidades.
+
+# Callbacks
+Ahora entraremos en el análisis de cómo gestionar procesos asíncronos. Consideremos el siguiente ejemplo, al ejecutar este código veremos que las impresiones en consola se ejecutan directamente una tras de otra en el orden en el que las escribimos.
+```javascript
+function soyAsincrona() {
+  console.log('Hola soy una función asíncrona');
+}
+
+console.log('Iniciando proceso...');
+soyAsincrona();
+console.log('Terminando proceso...');
+```
+
+Sin embargo consideremos este otro ejemplo, en el que veremos que primero terminan las líneas principales y posteriormente se procesa lo que está dentro de la función `setTimeout`:
+```javascript
+function soyAsincrona() {
+  setTimeout(() => {
+    console.log('Hola soy una función asíncrona');
+  }, 1000);
+}
+
+console.log('Iniciando proceso...');
+soyAsincrona();
+console.log('Terminando proceso...');
+```
+
+Ahora pensemos que requerimos que se ejecute otra función cuando termine nuestro proceso asíncrono. Para esto recordemos que las funciones son ciudadanos de primer nivel, quiere decir que podemos pasarlas como parámetro, de hecho esto ya lo estamos haciendo con el `console.log` que está dentro del `setTimeout`. A esta acción se le denomina *callback*. Hagámos unas modificaciones para ver cómo se usan las funciones como parámetro:
+```javascript
+function soyAsincrona(miCallback) {
+  setTimeout(() => {
+    console.log('Estoy siendo asíncrona');
+    miCallback();
+  }, 1000);
+}
+
+console.log('Iniciando proceso...');
+soyAsincrona(function() {
+  console.log('Terminando proceso...');
+});
+```
+
+Agreguemos más parámetros para subir la complejidad, en este caso lo que haremos será *concatenar* una función asíncrona detrás de otra para que justo se ejecute después y además le transfiera una variable:
+```javascript
+function hola(nombre, miCallback) {
+  setTimeout(() => {
+    console.log('Hola ' + nombre);
+    miCallback(nombre);
+  }, 1000);
+}
+
+function adios(nombre, otroCallback) {
+  setTimeout(() => {
+    console.log('Adios ' + nombre);
+    otroCallback();
+  }, 1000);
+}
+
+console.log('Iniciando proceso...');
+hola('Uzi', function(nombre) {
+  adios(nombre, function() {
+    console.log('Terminando proceso...');
+  });
+});
+```
+
+## Callback hell
+Debemos tener cuidado al manejar estas funciones asíncronas, pues se puede volver muy intricada su concatenación. imaginemos para el ejemplo anterior, que agragamos una tercera función y que la mandaremos a llamar de manera intermedia:
+```javascript
+function hola(nombre, miCallback) {
+  setTimeout(() => {
+    console.log('Hola ' + nombre);
+    miCallback(nombre);
+  }, 1500);
+}
+
+function hablar(callbackHablar) {
+  setTimeout(() => {
+    console.log('bla bla bla bla...');
+    callbackHablar();
+  }, 1500);
+}
+
+function adios(nombre, otroCallback) {
+  setTimeout(() => {
+    console.log('Adios ' + nombre);
+    otroCallback();
+  }, 1000);
+}
+
+console.log('Iniciando proceso...');
+hola('Uzi', function(nombre) {
+  hablar(function() {
+    hablar(function() {
+      adios(nombre, function() {
+        console.log('Terminando proceso...');
+      });
+    });
+  });
+});
+```
+
+Como podemos notar, nuestro código se empieza a acrecentar pero sobre todo comienza a verse muy horizontal, para empezar a solventar este código intrincado, un primer paso sería resumir nuestras funciones `hablar` en una función recursiva para configurar diretamente el número de veces que se ejecute:
+```javascript
+function hola(nombre, miCallback) {
+  setTimeout(() => {
+    console.log('Hola ' + nombre);
+    miCallback(nombre);
+  }, 1500);
+}
+
+function hablar(callbackHablar) {
+  setTimeout(() => {
+    console.log('bla bla bla bla...');
+    callbackHablar();
+  }, 1500);
+}
+
+function conversacion(nombre, veces, callback) {
+  if(veces > 0) {
+    hablar(function() {
+      conversacion(nombre, --veces, callback);
+    });
+  } else {
+    adios(nombre, callback);
+  }
+  
+}
+
+function adios(nombre, otroCallback) {
+  setTimeout(() => {
+    console.log('Adios ' + nombre);
+    otroCallback();
+  }, 1000);
+}
+
+console.log('Iniciando proceso...');
+hola('Uzi', function(nombre) {
+  conversacion(nombre, 3, function() {
+    console.log('proceso terminado');
+  });
+});
+```
+
+# Promesas
+Las promesas nos permiten gestionar nuestras funciones asíncronas de una manera más limpia (sugar syntax). La diferencia con el simple uso de callbacks es que éstas manejan diferentes estados como *resolve*, *pending*, *reject*. Refactorizando las funciones de los ejemplos anteriores tendríamos lo siguiente:
+```javascript
+function hola(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('Hola ' + nombre);
+      resolve(nombre);
+    }, 1500);
+  });
+  
+}
+
+function hablar(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('bla bla bla bla...');
+      resolve(nombre);
+    }, 1500);
+  });
+}
+
+function adios(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('Adios ' + nombre);
+      resolve();
+    }, 1000);
+  });
+}
+
+console.log('Iniciando el proceso');
+hola('Uzi')
+  .then(hablar)
+  .then(adios)
+  .then(() => {
+    console.log('Terminado el proceso');
+  })
+```
+
+En este ejemplo vemos que el promise recibe dos funciones genéricas: `resolve` y `reject` en lugar de callbacks, la primera sirve para enviar parámetros a toda la cadena de nuestras promesas y la segunda sirve para indicar a la cadena de promesas cuando no se ha podidido ejecutar el proceso asíncrono. También vemos que la concatenación de dicha cadena es mucho más legible y no nos exige el pase de parámetros. ¿Cómo funciona el reject? imaginemos que configuramos el promise de nuestra función `hablar` para que ejecute un reject, entonces basta con colocar un `catch`al final de nuestra cadena de promesas para que ese error sea notificado:
+```javascript
+...
+function hablar(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('bla bla bla bla...');
+      //resolve(nombre);
+      reject('Hay un error');
+    }, 1500);
+  });
+}
+...
+
+console.log('Iniciando el proceso');
+hola('Uzi')
+  .then(hablar)
+  .then(adios)
+  .then(() => {
+    console.log('Terminado el proceso');
+  })
+  .catch(error => {
+    console.error('ha habido un error');
+    console.error(error);
+  });
+```
+
+Dado este ejemplo, podemos ver la importancia de utilizar siempre el `catch` pues no sabemos cuándo puede fallar uno de nuestros procesos, cualquier proceso puede fallar.
+
+# Async-await
+Async-await es una nueva sintaxis que nos permite definir cualquier función como asíncrona para que dentrode ella se puedan crear fácilmente procesos asíncronos de manera sencilla. Técnicamente sigue funcionando de la misma manera el asincronismo, solo es sugar syntax. Refactoricemos las funciones del ejemplo anterior:
+```javascript
+async function hola(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('Hola ' + nombre);
+      resolve(nombre);
+    }, 1500);
+  });
+  
+}
+
+async function hablar(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('bla bla bla bla...');
+      resolve(nombre);
+    }, 1500);
+  });
+}
+
+async function adios(nombre) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('Adios ' + nombre);
+      resolve();
+    }, 1000);
+  });
+}
+
+async function main() {
+  let nombre = await hola('Uzi');
+  await hablar();
+  await hablar();
+  await hablar();
+  await adios(nombre);
+  console.log('Terminando proceso...');
+}
+
+console.log('Iniciando proceso...');
+main();
+console.log('Segunda instrucción');
+```
+
+Aquí vemos como podemos guardar el `resolve` de una promesa dentro de una variable para poder utilizar el valor obtenido en cualquier parte subsecuente de nuestro código con el simple hecho de colocar la palabra reservada `await`, el único requisito es que la función se anteceda también con la palabra reservada `async`.
+
