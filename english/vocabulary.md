@@ -87,3 +87,69 @@ This file contains some words I've learned trough my english career :)
 |**stitch**|puntada, sutura, punzada|
 |**swank**|fanfarronear|
 |**underneath**|debajo de|
+
+## List 4
+|**English word**|Spanish approximations|
+|-|-|
+|**astonishing**|sorprendente|
+|**bait**|anzuelo|
+|**basking**|estar tumbado|
+|**beam**|viga|
+|**beleaguered**|sitiado|
+|**brads**|clavito|
+|**bump**|bulto|
+|**cheesy**|queso|
+|**cherised**|preciado|
+|**chickadees**|carbonero|
+|**cranky**|malhumorado|
+|**disrespectful**||
+|**dread**|irrespetuoso|
+|**endure**|aguantar|
+|**foster**|fomentar|
+|**futile**|inútil|
+|**geese**|gansos|
+|**goofy**|bobo|
+|**grace**|gracia|
+|**heal**|curar|
+|**jar**|frasco|
+|**lid**|tapa|
+|**mason**|albañil|
+|**moisturize**|hidratar|
+|**punk**|vándalo|
+|**realm**|reino|
+|**screw**|tornillo|
+|**slither**|deslizarse|
+|**sleeve**|manga|
+|**sober**|sobrio|
+|**summon**|llamar|
+|**swirl**|remolino|
+|**throes**|agonía|
+|**tinfoil**|papel aluminio|
+|**tug**|tirar de|
+|**unfathomably**|de modo insondable|
+|**woobly**|tambaleante|
+|**yikes**|caramba|
+
+## List 5
+|**English word**|Spanish approximations|
+|-|-|
+|**betray**|traicionar|
+|**towards**|hacia|
+|**whole**|todo|
+|**betray**|traicionar|
+|**delight**|delicia|
+|**depict**|representar|
+|**exploit**|hazaña|
+|**feasible**|factible|
+|**flattery**|adulación|
+|**handicap**|desventaja|
+|**hunk**|trozo|
+|**likely**|probable|
+|**scrape**|rasguñar|
+|**temp**|empleado|
+|**threaten**|amenazar|
+|**towards**|hacia|
+|**weakness**|debilidad|
+|**whole**|todo|
+|**willing**|dispuesto|
+|**yardstick**|regla|
