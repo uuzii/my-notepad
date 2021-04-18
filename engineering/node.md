@@ -345,3 +345,105 @@ console.log('Segunda instrucción');
 
 Aquí vemos como podemos guardar el `resolve` de una promesa dentro de una variable para poder utilizar el valor obtenido en cualquier parte subsecuente de nuestro código con el simple hecho de colocar la palabra reservada `await`, el único requisito es que la función se anteceda también con la palabra reservada `async`.
 
+# Core modules
+Con la finalidad de entender los módulos que nos brinda node, es importante recurrir a la [referencia](https://nodejs.org/es/docs/) de la api, donde podremos encontrar la documentación de los módulos que existen.
+
+## Globales
+Son módulos que ya vienen incluídos en el core de node, sin darnos cuenta hemos usado `console`, `setTimeout`, no han salido de la nada sino de estos módulos.
+
+Si imprimimos en una terminal la palabra `global` podríamos ver los módulos del core, ejemplo clearInterval, setInterval, etc:
+```javascript
+console.log(global);
+```
+
+Por ejemplo, las funciones mencionadas se usan mucho cuando se está reintentando acceder a una BD después de cierto número de fallos:
+```javascript
+let i = 0;
+let interval = setInterval(function() {
+  console.log('hola');
+  if(i === 3) {
+    clearInterval(interval);
+  }
+  i++
+});
+```
+
+En los globales encontramos muchas más funciones como `require`, obtener mucha información del `process`, tenemos acceso al path en el que nos encontramos como `__dirname` o `__filename` para leer el nombre del archivo. Debemos evitar utilizar variables globales, pero también podríamos hacerlas con:
+```javascript
+global.miVariable = 'value';
+console.log(miVariable);
+```
+
+## File system
+Este será un módulo muy utilizado pues podremos analizar archivos, generarlos, eliminarlos, etc. Lo que tenemos que hacer para implementarlo es requerir filesystem con:
+```javascript
+const fs = require('fs');
+```
+
+Para leer un archivo, por ejemplo, podríamos creat un archivo llamado `file.txt` a la par de nuestor js e implementar lo siguiente:
+```javascript
+const fs = require('fs');
+
+function read(path, cb) {
+  fs.readFile(path, (err, data) => {
+    console.log(data.toString())
+  })
+}
+
+read(__dirname + '/file.txt');
+```
+
+Para generar un archivo:
+```javascript
+function write(path, content, cb) {
+  fs.writeFile(path, content, function(err) {
+    if(err) {
+      console.error('No he podido escribirlo', err);
+    } else {
+      console.log('Se ha escrio correctamente');
+    }
+  })
+}
+
+write(__dirname + '/another-file.txt', 'im that file', console.log);
+```
+
+Para borrar un archivo:
+```javascript
+function deleteSomeFile(path, cb) {
+  fs.unlink(path, cb);
+}
+
+deleteSomeFile(__dirname + '/another-file.txt', console.log);
+```
+
+## Console
+El módulo `console` es uno de los más usados pero muchas veces no se conocen todas sus funcionalidades, veremos algunas:
+```javascript
+// imprime un mensaje informativo
+console.info('another thing');
+// imprime un warning
+console.warn('another thing');
+// imprime error
+console.error('some error');
+
+var table = [
+  { a: 1, b: 2 },
+  { a: 3, b: 4 }
+]
+// imprime un objeto con la información en una tabla
+console.table(table);
+// imprime un grupo de mensajes con indentación
+console.group('conversation');
+console.log('Hola');
+console.log('bla bla bla');
+console.log('Adiós');
+console.groupEnd('conversation');
+
+// Imprime un mensaje + las veces que se ha impreso y luego limpia el contador
+console.count('veces');
+console.count('veces');
+console.count('veces');
+console.countReset('veces');
+console.count('veces');
+```
