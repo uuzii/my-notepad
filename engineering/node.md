@@ -447,3 +447,127 @@ console.count('veces');
 console.countReset('veces');
 console.count('veces');
 ```
+
+## Errores
+Es importante que siempre tengamos prevención para los errores que pudieran saltar en nuestro código. Consideremos la siguiente función en la que ocurrirá un error:
+```javascript
+function itBreaks() {
+  return 3 + z;
+}
+
+itBreaks();
+```
+
+Para prevenir este error, envolvemos la ejecución de la función dentro de un *try catch*, esto es importante ya que en JS los errores pueden detener nuestro único hilo y así detener todo nuestro programa, pero con try catch podemos hacer un *handle* y reintentar o al menos imprimir un mensaje:
+```javascript
+try {
+  itBreaks();
+} catch(err) {
+  console.error('Something is broken...', err);
+}
+```
+
+Ahora, consideremos que los errores se propagan hasta la primera función en la que se han originado, esto quiere decir que si en dicha función se quiere hacer un tratamiento, por ejemplo, podemos tener acceso al mismo para modificar el comportamiento de nuestro programa:
+```javascript
+function anotherFunction() {
+  return itBreaks();
+}
+
+function itBreaks() {
+  return 3 + z;
+}
+
+try {
+  anotherFunction();
+} catch(err) {
+  console.error('Something is broken...', err);
+}
+```
+
+El ejemplo anterior, como quiera nos imprime el error puntual que ocurrió en una función interna y además nos indicará una traza del mismo.
+
+Para funciones asíncronas, consideremos lo siguiente:
+```javascript
+function itBreaksAsynchronus() {
+  setTimeout(() => {
+    return 3 + z;
+  }, 1000);
+}
+
+try {
+  itBreaksAsynchronus();
+} catch(err) {
+  console.error('Something is broken...', err);
+}
+```
+
+En este ejemplo, se romperá toda nuestra aplicación, pues no se tiene prevenida la excepción dentro del callback, sino en el hilo principal y hasta él nunca llegó, por lo cuál, si queremos provenir un error desde la función asíncrona, podemos enviar un callback y generar el bloque *try catch* dentro del propio proceso asíncrono:
+```javascript
+function itBreaksAsynchronus(cb) {
+  setTimeout(() => {
+    try {
+      return 3 + z;
+    } catch(err) {
+      console.error('Error en proceso asíncrono');
+      cb(err)
+    }
+  }, 1000);
+}
+
+try {
+  itBreaksAsynchronus(function(err) {
+    console.error(err.message)
+  });
+} catch(err) {
+  console.error('Something is broken...', err);
+}
+```
+
+## Procesos hijo
+Node.js nos permite ejecutar sus propios procesos y además ejecutar otros procesos hijo, pueden ser otros de node, de python, variables del sistema, scripts, etc. Consideremos el siguiente fragmento:
+```javascript
+const { exec } = require('child_process');
+
+exec('ls -la', (err, stdout, sterr) => {
+  if(err) {
+    console.error(err);
+    return false;
+  }
+
+  console.log(stdout);
+});
+```
+
+El ejemplo anteriro nos permite listar todos los archivos en el directorio actual, de la misma forma podríamos ejecutar otro de nuestros módulos o el proceso que queramos del sistema.
+
+Si queremos solo ejecutar un proceso nuevo y trackearlo, escribimos lo siguiente:
+```javascript
+const { spawn } = require('child_process');
+// se separan los parámetros
+let process = spawn('ls', ['-la']);
+```
+
+Ahora podemos saber cosas acerca del proceso, veamos:
+```javascript
+//const { exec } = require('child_process');
+const { spawn } = require('child_process');
+
+let process = spawn('ls', ['-la']);
+
+// imprimir todo el proceso
+console.log(process);
+
+// Imprime el  id del proceso
+console.log(process.pid);
+
+// imprime si el proceso está conectado
+console.log(process.connected);
+
+// imprime el flujo de datos del proceso
+process.stdout.on('data', function(info) {
+  console.log(info.toString())
+});
+
+process.on('exit', function() {
+  console.log('el proceso terminó');
+});
