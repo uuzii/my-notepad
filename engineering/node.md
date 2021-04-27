@@ -571,3 +571,56 @@ process.stdout.on('data', function(info) {
 process.on('exit', function() {
   console.log('el proceso terminó');
 });
+```
+
+## Módulos nativos en C++ desde JavaScrip
+Veremos un ejemplo de cómo compilar un módulo externo de C++, esto será útil cuando encontremos código útil propio o de terceros y lo queramos usar en nuestras aplicaciones.
+
+Lo primero que tendremos que hacer es instalar node gyp:
+```bash
+npm i -g node-gyp
+```
+
+Ahora necesitaremos un archivo de código fuente. Para esto podríamos usar el [HelloWorld](https://nodejs.org/api/addons.html#addons_hello_world) de los addons de la página oficial de Node. Tomamos el código fuente en un archivo que nombraremos `hola.cc` y le haremos algunas modificaciones.
+
+```c++
+// hola.cc
+#include <node.h>
+
+namespace demo {
+
+using v8::FunctionCallbackInfo;
+using v8::Isolate;
+using v8::Local;
+using v8::Object;
+using v8::String;
+using v8::Value;
+
+void Method(const FunctionCallbackInfo<Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  args.GetReturnValue().Set(String::NewFromUtf8(
+      isolate, "mundo").ToLocalChecked());
+}
+
+void Initialize(Local<Object> exports) {
+  NODE_SET_METHOD(exports, "hola", Method);
+}
+
+NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
+
+}  // namespace demo
+```
+
+Posteriromente hacemos la configuración para poder mandar llamar este módulo. Lo haremos en un archivo que nombraremos `binding.gyp`:
+
+```gyp
+{
+  "targets": [
+    {
+      "target_name": "addon",
+      "sources": [ "hola.cc" ]
+    }
+  ] 
+}
+```
+
