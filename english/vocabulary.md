@@ -290,19 +290,21 @@ This file contains some words I've learned trough my english career :)
 |**yardstick**|regla|
 
 ## List 10
+|**English word**|Spanish approximations|
+|-|-|
 |**ape**|simio|
 |**countless**|incontable|
-|**cram**|estudiar-intesivamente|
+|**cram**|estudiar intesivamente|
 |**crowded**|lleno|
 |**fell**|cortar|
 |**fireflies**|luciérnagas|
 |**jellyfish**|medusa|
 |**kidney**|riñon|
 |**merely**|simplemente|
-|**neverthless**|sin-embargo|
+|**neverthless**|sin embargo|
 |**slaughterhouse**|matadero|
 |**teardrop**|lágrima|
-|**trustworthy**|de-confianza|
+|**trustworthy**|de confianza|
 |**unfold**|desdoblar|
-|**woodpeckers**|pájaro-carpintero|
+|**woodpeckers**|pájaro carpintero|
 |**worth**|valor|
