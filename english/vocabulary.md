@@ -290,3 +290,23 @@ This file contains some words I've learned trough my english career :)
 |**whole**|todo|
 |**willing**|dispuesto|
 |**yardstick**|regla|
+
+## List 10
+|**English word**|Spanish approximations|
+|-|-|
+|**ape**|simio|
+|**countless**|incontable|
+|**cram**|estudiar intesivamente|
+|**crowded**|lleno|
+|**fell**|cortar|
+|**fireflies**|luciérnagas|
+|**jellyfish**|medusa|
+|**kidney**|riñon|
+|**merely**|simplemente|
+|**neverthless**|sin embargo|
+|**slaughterhouse**|matadero|
+|**teardrop**|lágrima|
+|**trustworthy**|de confianza|
+|**unfold**|desdoblar|
+|**woodpeckers**|pájaro carpintero|
+|**worth**|valor|
