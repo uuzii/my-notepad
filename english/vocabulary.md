@@ -308,3 +308,16 @@ This file contains some words I've learned trough my english career :)
 |**unfold**|desdoblar|
 |**woodpeckers**|pájaro carpintero|
 |**worth**|valor|
+
+## List 10
+|**English word**|Spanish approximations|
+|-|-|
+|**defy**|desafiar|
+|**drawback**|inconveniente|
+|**flirt**|coquetear|
+|**ledger**|libro-mayor|
+|**merchants**|comerciante|
+|**overwhelming**|irresistible|
+|**ribbon**|cinta|
+|**slam**|portazo|
+|**stuck**|atascado|
