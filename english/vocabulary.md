@@ -321,3 +321,11 @@ This file contains some words I've learned trough my english career :)
 |**ribbon**|cinta|
 |**slam**|portazo|
 |**stuck**|atascado|
+
+## List 11
+|**English word**|Spanish approximations|
+|-|-|
+|**grab**|agarrar|
+|**petting**|caricias|
+|**poke**|empujón|
+|**slape**|forma|
