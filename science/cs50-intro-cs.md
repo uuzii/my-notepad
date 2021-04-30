@@ -121,4 +121,34 @@ int main()
 }
 ```
 
-Pero dado que hay mucha sintáxis que veremos más adelante, representaremos nuestros algoortimos en una interfaz más amigable llamada **Scratch** para enfocarnos en la lógica sin preocuparnos por la sintáxis de un lenguaje. Ésta es una herramienta creada en el MIT justo para este fin, en ella podemos generar rutinas que sean obedecidas por objetos mediante *grag & drop* de bloques que ejecutan ciertas acciones.
+## Scratch
+
+Pero dado que hay mucha sintáxis que veremos más adelante, representaremos nuestros algoortimos en una interfaz más amigable llamada **Scratch** para enfocarnos en la lógica sin preocuparnos por la sintáxis de un lenguaje. Ésta es una herramienta creada en el MIT justo para este fin, en ella podemos generar rutinas que sean obedecidas por objetos mediante *drag & drop* de bloques que ejecutan ciertas acciones.
+
+Para acceder, entramos a este [enlace](https://scratch.mit.edu), scratch, incialmente nos muestra en una pantalla blanca un gato al que podemos dictarle que haga ciertas acciones, por ejemplo, si queremos que diga "hola mundo", podemos utilizar uno de los *building blocks* de la sección de eventos y una de la sección de apariencia, de modo que al presionar la bandera verde, se muestre el mesaje como si lo dijer el gato. Así podemos generar otros tipos de bloques que nos poremitna, por ejemplo, controlar el flujo, recibir inputs del usuario, hacer operaciones, guardar variables, generar bloques de código propios, etc.
+
+Un ejemplo más complejo con scratch, podría ser levantar una variable escrita por el usuario, en este caso nuestro nombre, para que el gato nos salude, en la siguiente imagen se muestran los bloques:
+
+![Ask name on scratch](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-ask-name.jpg?raw=true)
+
+Como podemos ver, en este ejemplo estamos anidando la salida de un algoritmo con la entrada de otro para mostrar el mensaje, ya que sucede algo como lo siguiente:
+
+![Scratch concatenate algorithms](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-algorithms.jpg?raw=true)
+
+Otra cosa que podríamos intentar en Scratch, es hacer la repetición de un maullido n número de veces, para ello una opción sería copiar y pegar n veces nuestro bloques, pero para hacerlo más sencillo, podemos utilizar una estructura de control de flujo como es el *repetir*:
+
+![Scratch repeat structure](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-repeat.jpg?raw=true)
+
+En este caso, hemos añadido también una instrucción a cada ciclo, para que espere un segundo antes del siguiente maullido, de otra forma todo se haría alaa instante dada la velocidad de nuestros procesadores.
+
+El siguiente ejemplo, nos permitiría hacer girar al gato cada que toque el borde por siempre, con el añadido de que la sentencia "siguiente disfraz" hará parecer que está caminando:
+
+![Scratch cat walkink](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-walking.jpg?raw=true)
+
+Con esto se instroduce la idea de las animaciones, mismas que podríamos utilizar (sin emplear código aún) para generar juegos o secuencias que nos imaginemos para entender cómo funcionan los algoritmos.
+
+Ahora generaremos el siguiente ejemplo en el que van a interactuar dos "scripts", el primero de ellos, se encarga de hacer rugir a un león indefinidamente si es que la variable mutes contiene el valor *false*, el siguiente se encargará de estar preguntando cada segundo si la barra espaciadora se ha pulsado para hacer el cambio de nuestra variable y entonces mutear al león:
+
+![Scratch muted example](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-muted-example.jpg?raw=true)
+
+Existen otras features en scratch que nos permiten utilizar los inputs de nuestra computadora para recibir señales y hacer cosas, todo esto lo podemos usar así como herramientas de la nube, ejemplo: traducir un texto. Toda esta caja de herramientas nos puede servir para el primer reto que será crear un juego.
