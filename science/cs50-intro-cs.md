@@ -153,6 +153,6 @@ Ahora generaremos el siguiente ejemplo en el que van a interactuar dos "scripts"
 
 Existen otras features en scratch que nos permiten utilizar los inputs de nuestra computadora para recibir señales y hacer cosas, todo esto lo podemos usar así como herramientas de la nube, ejemplo: traducir un texto. Toda esta caja de herramientas nos puede servir para el primer reto que será crear un juego.
 
-Algo más a considerar, es la posibilidad de crear *bloques*, esto es, encapsular cierta secuencia de instrucciones en un bloque nombrado por nostros, lo cuál ayudará a hacer más legibles nuestros bloques, además, podemos enviarle parámetros para que dicho bloque se hagfa agnóstico al número de veces que se repite nuestro bloque.
+Algo más a considerar, es la posibilidad de crear *bloques*, esto es, encapsular cierta secuencia de instrucciones en un bloque nombrado por nostros, lo cuál ayudará a hacer más legibles nuestros bloques, además, podemos enviarle parámetros para que dicho bloque se haga agnóstico al número de veces que se repite nuestro bloque.
 
-![Scratch block](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-muted-example.jpg?raw=true)
+![Scratch block](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-block.jpg?raw=true)
