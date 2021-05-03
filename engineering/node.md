@@ -746,3 +746,57 @@ console.log('Esto si el error no se recoje, no aparece');
 ```
 
 Así como estas, hay muchas señales del proceso que podemos escuchar para detonar acciones precisas conforme a nuestras necesidades.
+
+# Paquetes y módulos externos
+Hasta ahora hemos revisado el uso de módulos propios de node, pero también existen módulos y paquetes de terceros, para utilizar estos paquetes, el gestor más famoso es `npm`. Para encontrar estos paquetes, navegaremos a través de la web de [npm](https://www.npmjs.com). Ejemplo, podríamos utilizar el paquete [is-odd](https://www.npmjs.com/package/is-odd) para determinar si el número es par o impar, aunque esta feature pareciera simple, el paquete incluye casos de uso que posiblemente nosotros no hemos contemplado y así nos ahorraría programarlos. Cuando queramos implementar alguno de estos paquetes, diremos que nos hemos añadido una *depedencia*, pues en cierto grado dependemos de ese código para que funcione nuestra aplicación, todos estos paquetes a su vez tienen dependencias pero siempre es importante revisar su estabilidad y actualizaciones para saber si es conveniente usarlo. Para instalar un paquete usamos el comando:
+
+```bash
+npm install [package-name]
+```
+
+Notamos que al instalar un paquete nos genera un archivo llamado `package-lock.json` y una carpeta llamada `node_modules`, pero ¿qué es esto?. Vayamos un paso atrás y consideremos que no están estos archivos, si estando en nuestra carpeta raíz ejecutamos el comando `npm init`, veremos que también se genera el archivo `package.json`, el `package-lock.json` y la carpeta `node_modules` en el primer archivo se enlistan todas las dependencias que usará nuestro proyecto, mismas cuyo código se guardará en `node_modules` solo con la palabra `require([package-name])`.
+
+## Construyendo módulos
+Si nosotros queremos construir nuestro propio módulo, seguiremos los siguientes pasos: generamos una carpeta, llamémosla `modulo` con un archivo `index.js` y un archivo `modulo.js`, cuyo contenido será:
+```javascript
+// modulo.js
+function saludar() {
+  console.log('Hola mundo');
+}
+
+module.exports = {
+  saludar,
+  prop: 'info'
+};
+```
+
+Ahora en nuestro index:
+```javascript
+// index.js
+const modulo = require('./modulo');
+modulo.saludar(); // 'Hola mundo'
+console.log(modulo.prop); // 'info'
+```
+
+Con esto podríamos ver en nuestro index tanto funciones como información que está dentro de un módulo. Ésta es la sintáxis de `require`, pero existe una nueva sintáxis en ES6, donde nuestro módulo se exportaría de la siguiente manera:
+```javascript
+// modulo.js
+function saludar() {
+  console.log('Hola mundo');
+}
+
+export default {
+  saludar,
+  prop: 'info
+}
+```
+
+Y en nuestro index:
+```javascript
+// index.js
+import modulo from './modulo.js'
+modulo.saludar(); // 'Hola mundo'
+console.log(modulo.prop); // 'info'
+```
+
+Con lo cual obtendremos el mismo resultado, si bien esta feature era experimental hace algún tiempo, ahora ya es estándar y podemos usarla en nuestro módulos para producción.
