@@ -581,7 +581,7 @@ Lo primero que tendremos que hacer es instalar node gyp:
 npm i -g node-gyp
 ```
 
-Ahora necesitaremos un archivo de código fuente. Para esto podríamos usar el [HelloWorld](https://nodejs.org/api/addons.html#addons_hello_world) de los addons de la página oficial de Node. Tomamos el código fuente en un archivo que nombraremos `hola.cc` y le haremos algunas modificaciones.
+Ahora necesitaremos un archivo de código fuente. Para esto podríamos usar el [HelloWorld](https://nodejs.org/api/addons.html#addons_hello_world) de los addons de la página oficial de Node. Tomamos el código fuente en un archivo que nombraremos `hola.cc` y le haremos algunas modificaciones:
 
 ```c++
 // hola.cc
@@ -611,7 +611,7 @@ NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
 }  // namespace demo
 ```
 
-Posteriromente hacemos la configuración para poder mandar llamar este módulo. Lo haremos en un archivo que nombraremos `binding.gyp`:
+Posteriromente hacemos la configuración para poder mandar llamar este módulo. Lo haremos en un archivo que nombraremos `binding.gyp`, en el cual indicaremos mediante un json el módulo a compilar, cómo se va a llamar y la ruta:
 
 ```gyp
 {
@@ -624,3 +624,179 @@ Posteriromente hacemos la configuración para poder mandar llamar este módulo. 
 }
 ```
 
+Ahora ejecutamos:
+```bash
+node -gyp configure
+```
+
+Al finalizar la ejecución veremos que nos genera una carpeta `/build` en la cuál estará todo el código que necesita node para poder utilizar nuestro módulo. Para construirlo, ejecutamos:
+```bash
+node-gyp build
+```
+
+Al finalizar la ejecución ya estará listo nuestro módulo, podemos probarlo en un `index.js` genérico:
+```javascript
+//index.js
+const miAddon = require('./build/Release/addon');
+console.log(miAddon.hola());
+```
+
+Lo anterior considerando que hemos configurado el nombre de nuestro módulo como `addon`. Veremos imprimirse la palabra "mundo".
+
+## HTTP
+Este módulo nos permitirá conectarnos a un servidor o crear uno desde node sin pasar por ningún otro sitio. Para empezar, generaremos un archivo `http.js`:
+```javascript
+//http.js
+const http = require('http');
+
+http.createServer(function(req, res) {
+  console.log('nueva petición');
+  console.log(req.url);
+  
+  res.end();
+}).listen(3000);
+
+console.log('Escuchando http en el puerto 3000');
+```
+
+Hasta aquí hemos creado un servidor que está escuchando el puerto 3000 y nos avisará cada que haya una nueva petición así como la url de donde proviene la misma.
+Si queremos escribir algo a la respuesta, hacemos lo siguiente:
+```javascript
+// http.js
+  http.createServer(function(req, res) {
+    console.log('nueva petición');
+    console.log(req.url);
+    
+    // escribir respuesta
+    res.write('Hola ya sé usar http');
+
+    res.end();
+  }).listen(3000);
+```
+
+Para enviar headers hacemos lo siguiente:
+```javascript
+  res.writeHead(201, {'Content-Type': 'text/plain'})
+```
+
+Con ello veríamos el status 201 y un nuevo content type. Para hacer nuestro código más funcional, podríamos generar un *router*, cuya función sería enviar respuestas distintas para cada url, para ello refactorizaremos nuestro código separando primeramente el callback:
+```javascript
+const http = require('http');
+
+http.createServer(router).listen(3000);
+
+function router(req, res) {
+  console.log('nueva petición');
+  console.log(req.url);
+
+  switch(req.url) {
+    case '/hola':
+      res.write('Hola, qué tal');
+      res.end();
+      break;
+    default:
+      res.write('Error 404: no sé lo que quieres');
+      res.end();
+  }
+}
+
+console.log('Escuchando http en el puerto 3000');
+```
+
+## OS
+Con este módulo podremos acceder a información que normalmente solo se obtiene en lenguajes de muy bajo nivel desde Javascript. Para empezar crearemos un archivo `os.js` donde podremos usar distintas funciones del módulo:
+```javascript
+const os = require('os');
+console.log(os.arch()); // arquitectura
+console.log(os.platform()); // sistema operativo
+console.log(os.cpus()); // núcleos
+console.log(os.constants); // errores y señales del sistema
+console.log(os.freemem()); // bytes disponibles
+console.log(os.totalmem()); // bytes totales
+console.log(os.homedir()); // directorio raiz
+console.log(os.tmpdir()); // directorio temporal
+console.log(os.hostname()); // nombre del host de la máquina
+console.log(os.networkInterfaces()); // interfaces de red
+```
+
+## Process
+Ahora veremos cómo podemos acceder a nuestro proceso de node para ver su ejecución. Los primeros indicadores que podemos ver del proceso son al salir o antes de salir:
+```javascript
+process.on('beforeExit', () => {
+  console.log('El proceso va a terminar');
+});
+
+process.on('exit', () => {
+  console.log('El proceso acabó');
+});
+```
+
+Consideremos que, una vez que se ha ejecutado el exit, ya se ha cerrado el evenloop y ya no se podría ejecutar nada.
+
+> Nótese que no es necesario requerir `process`.
+
+Si queremos recoger algún error que no haya sido tomado usamos:
+```javascript
+process.on('uncaughtException', (err, origin) => {
+  console.log('Hemos olvidado capturar el error', err);
+});
+
+functionQueNoExiste()
+console.log('Esto si el error no se recoje, no aparece');
+```
+
+Así como estas, hay muchas señales del proceso que podemos escuchar para detonar acciones precisas conforme a nuestras necesidades.
+
+# Paquetes y módulos externos
+Hasta ahora hemos revisado el uso de módulos propios de node, pero también existen módulos y paquetes de terceros, para utilizar estos paquetes, el gestor más famoso es `npm`. Para encontrar estos paquetes, navegaremos a través de la web de [npm](https://www.npmjs.com). Ejemplo, podríamos utilizar el paquete [is-odd](https://www.npmjs.com/package/is-odd) para determinar si el número es par o impar, aunque esta feature pareciera simple, el paquete incluye casos de uso que posiblemente nosotros no hemos contemplado y así nos ahorraría programarlos. Cuando queramos implementar alguno de estos paquetes, diremos que nos hemos añadido una *depedencia*, pues en cierto grado dependemos de ese código para que funcione nuestra aplicación, todos estos paquetes a su vez tienen dependencias pero siempre es importante revisar su estabilidad y actualizaciones para saber si es conveniente usarlo. Para instalar un paquete usamos el comando:
+
+```bash
+npm install [package-name]
+```
+
+Notamos que al instalar un paquete nos genera un archivo llamado `package-lock.json` y una carpeta llamada `node_modules`, pero ¿qué es esto?. Vayamos un paso atrás y consideremos que no están estos archivos, si estando en nuestra carpeta raíz ejecutamos el comando `npm init`, veremos que también se genera el archivo `package.json`, el `package-lock.json` y la carpeta `node_modules` en el primer archivo se enlistan todas las dependencias que usará nuestro proyecto, mismas cuyo código se guardará en `node_modules` solo con la palabra `require([package-name])`.
+
+## Construyendo módulos
+Si nosotros queremos construir nuestro propio módulo, seguiremos los siguientes pasos: generamos una carpeta, llamémosla `modulo` con un archivo `index.js` y un archivo `modulo.js`, cuyo contenido será:
+```javascript
+// modulo.js
+function saludar() {
+  console.log('Hola mundo');
+}
+
+module.exports = {
+  saludar,
+  prop: 'info'
+};
+```
+
+Ahora en nuestro index:
+```javascript
+// index.js
+const modulo = require('./modulo');
+modulo.saludar(); // 'Hola mundo'
+console.log(modulo.prop); // 'info'
+```
+
+Con esto podríamos ver en nuestro index tanto funciones como información que está dentro de un módulo. Ésta es la sintáxis de `require`, pero existe una nueva sintáxis en ES6, donde nuestro módulo se exportaría de la siguiente manera:
+```javascript
+// modulo.js
+function saludar() {
+  console.log('Hola mundo');
+}
+
+export default {
+  saludar,
+  prop: 'info
+}
+```
+
+Y en nuestro index:
+```javascript
+// index.js
+import modulo from './modulo.js'
+modulo.saludar(); // 'Hola mundo'
+console.log(modulo.prop); // 'info'
+```
+
+Con lo cual obtendremos el mismo resultado, si bien esta feature era experimental hace algún tiempo, ahora ya es estándar y podemos usarla en nuestro módulos para producción.
