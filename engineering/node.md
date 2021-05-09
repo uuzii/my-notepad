@@ -800,3 +800,77 @@ console.log(modulo.prop); // 'info'
 ```
 
 Con lo cual obtendremos el mismo resultado, si bien esta feature era experimental hace algún tiempo, ahora ya es estándar y podemos usarla en nuestro módulos para producción.
+
+# Algunos módulos útiles
+Los siguientes módulos nos permitirán trabajar con fechas, imágenes y cifrados:
+
+## bcrypt
+Este módulo nos permite cifrar, para empezar a usarlo, inicializamos nuestro proyecto:
+```bash
+npm init -y
+```
+
+Ahora instalamos `bcrypt` mediante:
+```bash
+npm i bcrypt
+```
+
+Para implementar bcrypt podemos hacerlo con la siguiente función:
+```javascript
+const bcrypt = require('bcrypt');
+
+const password = '1234segura!';
+
+/**
+ * con la función hash cifraremos el dato
+ * @param {Any} password dato a encriptar
+ * @param {Number} 5 número de veces que se aplica el hash
+ * @param {Function} callaback
+ */
+bcrypt.hash(password, 5, function(err, hash) {
+  console.log(hash)
+});
+```
+
+En esta última ejecución, veremos la información acerca del algoritmo del hash y el número de veces + nuestro hash que será diferente cada vez.
+
+Si queremos comprobar que el hash que hemos generado proviene del texto inicial, implementamos la función `compare` dentro del callback;
+```javascript
+bcrypt.hash(password, 5, function(err, hash) {
+  console.log(hash);
+  bcrypt.compare(password, hash, function(err, res) {
+    console.log(res);
+  })
+});
+```
+
+## moment
+Para manejar horas y fechas, la librería por defecto es `moment.js`, para instalarlo, usamos
+```bash
+npm i moment
+```
+
+Algunos ejemplos básicos de uso son los siguientes:
+```javascript
+const moment = require('moment');
+
+let ahora = moment();
+// Imrimir hora, fecha, zona horaria actuales
+console.log(ahora.toString());
+
+// imprimir hora y fecha con cierto formato
+console.log(ahora.format('YY/MM/DD - HH:mm'));
+```
+
+Pero además de estos pequeños ejemplos, moment tiene muchísimas opciones para trabajar con fechas y horas.
+
+## sharp
+Sharp nos permite modificar imágenes, este sería un ejemplo en el que redimensionaríamos una imagen y la pasaríamos a blanco y negro:
+```javascript
+const sharp = require('sharp');
+
+sharp('image.png')
+  .resize(80)
+  .grayscale()
+  .toFile('resized.png')
+```
