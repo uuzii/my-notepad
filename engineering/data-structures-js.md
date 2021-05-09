@@ -88,3 +88,48 @@ Adicional, podríamos agregar má método propios del array, en este caso `shift
   }
 ```
 
+# Strings
+Los strings no son uns estructura de datos en sí, pero la forma en la que se guardan, tiene un mecanismo por el cual sí lo analizaremos como tal. en la mayoría de lenguajes de programación, como en JS, los strings son *inmutables*, lo cuál quiere decir que una vez creados ya no se pueden modificar, esto se debe a que cada caracter que forma los strings toma una posición de memoria (de manera similar a los arrays), entonces para manipularlos, hay que tomar cada posición de la memoria, buscar espacios nuevos disponibles o hacer distintos cómputos.
+
+|Adress|Data|
+|-|-|
+|0|H|
+|1|o|
+|2|l|
+|3|a|
+
+# Hash tables
+Las hash tables no vienen incluídas en Javascript, como en algunos otros lenguajes, aunque una buena aproximación son los objetos, a continuación, veremos cómo se denominan estas estrcturas en algunos lenguajes:
+
+|Lenguaje|Equivalencia|
+|-|-|
+|JavaScript|Objetos|
+|Python|Diccionarios|
+|Java|Maps|
+|Go|Maps|
+|Ruby|Hashes|
+
+Las has tables manejan, al igual que en los objetos de JS, el concepto de *llave-valor*, con la diferencia de que son indexadas en una estructura de una tabla llamada *bucket* con un índice denomindo *hash*. Dicho hash, es generado por una función que por ahora veremos como una caja negra:
+
+### Buckets:
+|Hash|Key|Value|
+|-|-|-|
+|234||6|
+|235|||
+|...|||
+|237|Mandarinas|20|
+|238|||
+|...|||
+|241|||
+
+Donde cada hash, es generado por una *Hash function*, que siempre asociará el mismo hash a una misma llave dada, de esta manera será fácil de encontrar, como si fuera el index de un array.
+
+Los métodos que utiliza esta estructura de datos son los siguientes:
+|Método|Acción|
+|-|-|
+|insert|Insertar un elemento en la tabla|
+|search|Buscar un elemento por key|
+|delete|Borrar un elemento|
+
+## Colisión de Hash table
+En ocasiones, nuestra Hash function, puede generar el mismo hash para llaves distintas, con lo cuál se gardan los dos valores correspondientes en el mismo bucket. Es imposible evitar que existan estas colisiones, pero hay formas de tratar esta situación, por ejemplo, pasándole un key puntual de manera que solo nos regrese el valor correspondiente, de esta situación particular surge otra estructura de datos que son las *linked lists*.
