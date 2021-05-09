@@ -133,3 +133,42 @@ Los métodos que utiliza esta estructura de datos son los siguientes:
 
 ## Colisión de Hash table
 En ocasiones, nuestra Hash function, puede generar el mismo hash para llaves distintas, con lo cuál se gardan los dos valores correspondientes en el mismo bucket. Es imposible evitar que existan estas colisiones, pero hay formas de tratar esta situación, por ejemplo, pasándole un key puntual de manera que solo nos regrese el valor correspondiente, de esta situación particular surge otra estructura de datos que son las *linked lists*.
+
+A continuación veremos la implementación de hash tables en JS:
+```javascript
+class hashTable {
+  constructor(size) {
+    this.data = new Array(size);
+  }
+  /**
+   * La usaremos de manera didáctica como hash function, pero
+   * por lo regular usaremos funciones hash de terceros
+   */
+  hashMethod(key) {
+    let hash = 0;
+    for(let i=0; i<key.length; i++) {
+      hash = (hash + key.charCodeAt(i) * i) % this.data.length;
+    }
+    return hash;
+  }
+
+  // Para agregar elementos a la hash table
+  set(key, value) {
+    const address = this.hashMethod(key);
+    // Para almacenar nuevos elementos
+    if(!this.data[address]) {
+      this.data[address] = [];
+    }
+    // Para almacenar datos de colisiones
+    this.data[address].push([key, value]);
+    return this.data;
+  }
+}
+
+// Generamos nuestra instancia con cierta cantidad de buckets
+const myHashTable = new hashTable(50);
+
+myHashTable.set("Uzi", 1997);
+```
+
+Hasta este punto, veremos que se agrega un elemento en una posición random de nuestro table, podemos seguir agregando y a veces habrá colisiones, pero en esos casos, la data se guardará en el mismo bucket.
