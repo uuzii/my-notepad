@@ -202,6 +202,23 @@ No todos los archivos que tenemos en un repositorio local tienen que subirse al 
 
 Ignorará todos los archivos con extensión jpg, esto mayormente se usa en archivos binarios o en dependencias instaladas desde un gestor de paquetes.
 
+# Recuperar archivos tal como estaba en la rama remota
+
+Nos puede suceder que hicimos un pequeño cambio (o un cambio no deseado) en un archivo delicado del proyecto y por accidente le hemos hecho push y ahora está bloqueando el proceso de revisión. Para restaurar en nuestra rama local el archivo tal cuál estaba en master, identificamos los repositorios remotos con:
+
+`git remote -v`
+
+Ahora veremos algo como lo siguiente:
+origin  <url>/<project>/<repo>.git (fetch)
+origin  <url>/<project>/<repo>.git (push)
+ 
+Con lo cuál identificaremos nuestros repos remotos. Para restaurar un archivo `file.ext` desde la rama master, ejecutaríamos el siguiente comando:
+ 
+`git checkout origin/master -- file.ext`
+ 
+ Ahora solo restaría hacer otro commit para que nuesra rama quedara limpia de los cambios en este fichero.
+
+
 # GitHub Pages
 
 *pages.github.com* es un sitio que nos permite tener hosting gratis. Para hostear un sitio aquí, tenemos que seguir los siguientes pasos:
