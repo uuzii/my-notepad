@@ -156,3 +156,24 @@ Existen otras features en scratch que nos permiten utilizar los inputs de nuestr
 Algo más a considerar, es la posibilidad de crear *bloques*, esto es, encapsular cierta secuencia de instrucciones en un bloque nombrado por nostros, lo cuál ayudará a hacer más legibles nuestros bloques, además, podemos enviarle parámetros para que dicho bloque se haga agnóstico al número de veces que se repite nuestro bloque.
 
 ![Scratch block](https://github.com/uuzii/my-notepad/blob/wip/science/science/assets/scratch-block.jpg?raw=true)
+
+# C
+Ahora nos enfocaremos en aprender un lenguaje de programación llamado `C`. Iremos entendiendo que los bloques que implementamos en scratch tienen un equivalente en este lenguaje, la única diferencia es que este lenguaje es totalmente escrito no son *building blocks* por lo que muchos conceptos nos sonarán muy familiares.
+
+¿Qué necesitamos para empezar a escribir código?
+Debemos considerar tres aspectos fundamentales:
+* **Exactitud**, pues necesitamos que al darle click a un programa, así como cuando pulsábamos nuestra bandera en scratch, se obedezcan ountualmente las instrucciones que hemos definido.
+* **Diseño**, pues es importante que nuestro código sea estructurado, que no seamos redundantes y que no hagamos más cosas que las mínimas necesarias.
+* **Estilo**, más que un aspecto estético, es un aspecto cualitativo, pensemos en la forma correcta de escribir un ensayo, debe tener secciones, obedecer signos de puntuación, tener argumentos consistentes, contar con una buena sangría, etc.
+
+Nuestra herramienta para escribir el código será [https://ide.cs50.io/](https://ide.cs50.io/), que es un IDE (integrated development environment). Esta herramienta no tiene mayor diferencia funcional con otras herramientas, salvo que está en la nube y eso nos permitirá usarlo en cualquier plataforma en la que estemos, tenemos un sistema de archivos, un editor de código y una línea de comandos. Podemos escribir el siguiente código:
+
+```c
+// A program that says hello to the world
+#include <stdio.h>
+
+int main(void)
+{
+    printf("hello, world\n");
+}
+```
