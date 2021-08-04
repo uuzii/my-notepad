@@ -109,7 +109,7 @@ Las hash tables no vienen incluídas en Javascript, como en algunos otros lengua
 |Go|Maps|
 |Ruby|Hashes|
 
-Las has tables manejan, al igual que en los objetos de JS, el concepto de *llave-valor*, con la diferencia de que son indexadas en una estructura de una tabla llamada *bucket* con un índice denomindo *hash*. Dicho hash, es generado por una función que por ahora veremos como una caja negra:
+Las has tables manejan, al igual que en los objetos de JS, el concepto de *llave-valor*, con la diferencia de que son indexadas en una estructura de una tabla llamada *bucket* con un índice denomindo *hash*. Dicho hash, es generado por una función que por ahora veremos como una caja negra llamada *hash function*:
 
 ### Buckets:
 |Hash|Key|Value|
@@ -122,7 +122,7 @@ Las has tables manejan, al igual que en los objetos de JS, el concepto de *llave
 |...|||
 |241|||
 
-Donde cada hash, es generado por una *Hash function*, que siempre asociará el mismo hash a una misma llave dada, de esta manera será fácil de encontrar, como si fuera el index de un array.
+Donde cada hash, es generado por una *Hash function*, que siempre asociará el mismo hash a una misma llave dada, de esta manera será fácil de encontrar, como si fuera el index de un array; veámoslo como un objeto con un paso intermedio, en el que la llave se convertirá en un hash, mismo que será su ubicación.
 
 Los métodos que utiliza esta estructura de datos son los siguientes:
 |Método|Acción|
@@ -155,7 +155,7 @@ class hashTable {
   // Para agregar elementos a la hash table
   set(key, value) {
     const address = this.hashMethod(key);
-    // Para almacenar nuevos elementos
+    // Para almacenar nuevos elementos si no existe la dirección
     if(!this.data[address]) {
       this.data[address] = [];
     }
@@ -172,3 +172,52 @@ myHashTable.set("Uzi", 1997);
 ```
 
 Hasta este punto, veremos que se agrega un elemento en una posición random de nuestro table, podemos seguir agregando y a veces habrá colisiones, pero en esos casos, la data se guardará en el mismo bucket.
+
+Ahora implementaremos otras funciones para obtener un valor conforme a su key, para borrar un item y también para obtener todas las llaves:
+
+```javascript
+  get(key) {
+    const address = this.hashMethod(key);
+    // Obteniendo el índice o address del elemento buscado
+    const currentBucket = this.data[address];
+    // validamos que exista el bucket en nuestra tabla
+    if (currentBucket) {
+      for (let i=0; i<currentBucket.length; i++) {
+        // buscamos nuestro elemento en el bucket
+        if (currentBucket[i][0] === key) {
+          return currentBucket[i][1];
+        }
+      }
+      return undefined;
+    }
+  }
+
+  deleteItem(key) {
+    const address = this.hashMethod(key);
+    // Obteniendo el índice o address del elemento buscado
+    const currentBucket = this.data[address];
+    // validamos que exista el bucket en nuestra tabla
+    if (currentBucket) {
+      for (let i=0; i<currentBucket.length; i++) {
+        // buscamos nuestro elemento en el bucket
+        if (currentBucket[i][0] === key) {
+          delete currentBucket[i];
+        }
+      }
+    }
+  }
+
+  getKeys() {
+    const collection = [];
+    for (let i=0; i<this.data.length; i++) {
+      if (this.data[i] && this.data[i].length) {
+        const subCollection = this.data[i].reduce((acum, current) => {
+          acum.push(current[0])
+          return acum;
+        },  []);
+        collection.push.apply(collection, subCollection);
+      }
+    }
+    return collection;
+  }
+´´´
