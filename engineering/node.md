@@ -874,3 +874,38 @@ sharp('image.png')
   .grayscale()
   .toFile('resized.png')
 ```
+
+# Datos en disco VS en memoria
+Antes de hablar de manejo de datos, tenemos que saber cuál es la diferencia de manejar datos al vuelo y almacenar datos en disco. Para esto, es clave entender que la diferencia radica en los tiempos, almacenar datos en memoria es muy rápido, pues la CPU y la memoria están muy cerca pero sabemos que los datos almacenados en memoria, aparte de volátiles, serán limitados (aprox 8-16 GB); en contraste, escribir en disco es más costoso en tiempos tanto de lectura como escritura, pero este último nos permite almacenar una gran cantidad de información (aprox 500 - 2000 GB).
+
+Dependiendo lo que tengamos que hacer, hay que considerar qué manejo de información nos conviene hacer, muchas veces lo que se hace, por ejemplo, con grandes volúmenes de información es tratarla en memoria (de función a función) para todos procesos que se requieran y una vez terminados todos, hacemos lo que tengamos que hacer con la información: guardarla, desecharla, etc.
+
+# Buffers
+Los buffers son la base del tratamiento de datos, esencialmente son datos crudos en binario que van de un lugar a otro. Un ejemplo es filesystem, donde veíamos datos binarios que eran ilegibles hasta que usábamos la función toString, ese dato era un buffer. Creemos un archivo llamado `buffer.js`:
+
+```javascript
+let buffer = Buffer.alloc(1);
+console.log(buffer);
+```
+
+Lo anterior nos arrojará `<Buffer 00>`, que significa que tenemos un *slot* listo para usarse, veamos otros ejemplos:
+
+```javascript
+let buffer4 = Buffer.alloc(4); // <Buffer 00 00 00 00>
+let bufferFrom = Buffer.from([1, 2, 3]); // <Buffer 01 02 03>
+let bufferFromStr = Buffer.from('Hola'); // <Buffer 48 6f 6c 61>
+```
+
+En el ejemplo `bufferFrom`, vemos como JS, nos permite generar buffers desde sus tipos de dato, lo mismo para `bufferFromStr`, solo que en ese caso, vemos datos un poco más abstractos (solo están en hexadecimal).
+
+Además podemos trabajar con buffers posición a posición, en este ejemplo, haremos un buffer en el que almacenaremos letras mediante un for:
+
+```javascript
+let abc = Buffer.alloc(26);
+console.log(abc); // <Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00>
+for (let i=0; i<26; i++) {
+  abc[i] = i + 97;
+}
+console.log(abc); // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+console.log(abc.toString()); // abcdefghijklmnopqrstuvwxyz
+```
