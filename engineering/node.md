@@ -909,3 +909,85 @@ for (let i=0; i<26; i++) {
 console.log(abc); // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
 console.log(abc.toString()); // abcdefghijklmnopqrstuvwxyz
 ```
+
+# Streams
+La utilidad de los buffers, la vemos en los *streams*, que son como un paso de datos entre un punto y otro: uno envía datos y otro los recibe, veamos su implementación. Para ello primero crearemos un archivo de texto `input.txt` a modo de ejemplo para empezar a leerlo:
+
+```txt
+soy
+un
+archivo
+que
+sera
+leido
+```
+
+Implementamos el read stream:
+
+```javascript
+const fs = require('fs')
+
+let data = '';
+
+// creamos un readable stream
+let readableStream = fs.createReadStream(__dirname + '/input.txt');
+// seteamos un encodign si ya sabemos que leerá texto en UTF8
+
+readableStream.setEncoding('UTF8');
+
+// indicamos el callback que recibirá a trozos los datos y los acumulará
+readableStream.on('data', function(chunk) {
+  data += chunk
+});
+
+// indicamos el callback que se ejecutará al finalizar todo el proceso 
+readableStream.on('end', function() {
+  console.log(data)
+})
+```
+
+Este proceso tiene mayor utilidad cuando estamos trabajando con archivos de tamaño muy grande ya que como vemos, maneja la información por trozos, a pequeña escala quizá no tiene caso usarlos.
+
+Implementamos el write stream:
+
+```javascript
+// Simplemente imprime en la salida estándar del sistema
+  process.stdout.write('hola')
+  process.stdout.write('que')
+  process.stdout.write('tal')
+```
+
+En el ejemplo anterior hemos usado `stdout`, que en sí ya es un buffer de escritura, pero ¿Qué pasa si queremos que haya un buffer intermedio que reciba un dato, lo modifique y luego lo escriba? Para ello haremos un *buffer de transformación*:
+
+```javascript
+// traemos stream y util (para poder trabajar con herencia automática)
+const stream = require('stream');
+const util = require('util');
+
+// creamos un stream transform que puede leer y escribir
+const Transform = stream.Transform;
+
+// instanciamos Transform en una clase propia Mayus
+function Mayus() {
+  Transform.call(this);
+}
+
+// generamos la herencia de Transform
+util.inherits(Mayus, Transform);
+
+// definimos nuestra función Mayus (_transform es propio de Transform)
+Mayus.prototype._transform = function(chunk, codif, cb) {
+  chunkMayus = chunk.toString().toUpperCase();
+  // usamos push para enviar el push a donde lo necesitamos
+  this.push(chunkMayus);
+  cb();
+}
+
+// instanciamos nuestra transformación
+let mayus = new Mayus();
+
+// hacemos pasar nuestro stream de lectura por nuestra transformación
+readableStream
+  .pipe(mayus)
+  .pipe(process.stdout);
+```
