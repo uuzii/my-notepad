@@ -222,10 +222,10 @@ Ahora implementaremos otras funciones para obtener un valor conforme a su key, p
   }
 ```
 
-# Linked lists
+# Linked lists
 Las linked lists no son muy similares a los arrays y a las estrucutras que hemos revisado, la direncia radica en que, cada elemento de la lista, está linkeado al anterior, de modo que hay una cabeza y una cola.
 
-![linked list](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/linked-list.jpeg?raw=true)
+![linked list](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/linked-list.jpg?raw=true)
 
 Existen dos tipos de listas enlazadas pero solo trataremos las *singly linked lists*. Existen ciertos métodos para manipular esta estructura:
 
@@ -239,7 +239,7 @@ Existen dos tipos de listas enlazadas pero solo trataremos las *singly linked li
 
 Consideremos que en una linked list, cada elemento posee dos valores: el valor que contiene en sí, y el siguiente valor.
 
-![singly linked list](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/singly-linked-list.jpeg?raw=true)
+![singly linked list](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/singly-linked-list.jpg?raw=true)
 
 Para encontrar un elemento en una lista de este tipo, tenemos que recorrer cada uno de los elementos de la lista, si lo hemos rebasado, será necesario reiniciar la búsqueda desde la cabeza.
 
@@ -302,7 +302,7 @@ class Node {
 const myLinkedList = new MySinglyLinkedList(1);
 ```
 
-## Agregar nodos al final de la lista
+## Agregar nodos al final de la lista
 Implementaremos dentro de nuestra clase un método `append` para agregar nodos al final de nuestra lista:
 
 ```javascript
@@ -319,7 +319,7 @@ append(value) {
 }
 ```
 
-## Agregar nodos al inicio de la lista
+## Agregar nodos al inicio de la lista
 Implementaremos dentro de nuestra clase un método `prepend` para agregar nodos al inicio de nuestra lista:
 
 ```javascript

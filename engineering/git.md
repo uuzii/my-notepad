@@ -69,7 +69,7 @@ El primero es referente al stagging de archivos, el segundo es referente a commi
 * `git stash drop`: Nos permite deshacernos de un stash guardado en memoria
 
 ## Pasar un stash de una rama a otra
-1. Generar el stash con `git stash``
+1. Generar el stash con `git stash`
 2. Poner el stash en una rama temporal `git stash temp-branch`
 3. Añadir los archivos `git add [files]`
 4. Hacer commit `git commit -m [message]`
