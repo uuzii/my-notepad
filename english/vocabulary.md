@@ -325,7 +325,29 @@ This file contains some words I've learned trough my english career :)
 ## List 11
 |**English word**|Spanish approximations|
 |-|-|
+|**avail**|aprovechar|
+|**beg**|suplicar|
+|**beneath**|debajos|
+|**envelop**|sobre, paquete|
+|**faintly**|ligeramente|
+|**feather**|pluma|
+|**forth**|en adelante|
+|**gentler**|tierno|
+|**glide**|deslizarse|
 |**grab**|agarrar|
+|**lane**|carril|
+|**leisurely**|lento|
+|**oar**|remo|
 |**petting**|caricias|
+|**ply**|ejercer|
 |**poke**|empujón|
+|**pretence**|fingimiento|
+|**pursue**|perseguir|
 |**slape**|forma|
+|**stir**|revolver|
+|**strove**|luchar|
+|**such**|tal|
+|**tale**|cuento|
+|**vain**|vano|
+|**wandering**|errante|
+|**weary**|cansado|
