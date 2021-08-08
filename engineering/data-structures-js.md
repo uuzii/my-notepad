@@ -335,3 +335,62 @@ prepend(value) {
   return this;
 }
 ```
+
+## Agregar nodos en una posición puntual
+Implementaremos un método `insert` para agregar nodos en alguna posición de nuestra lista, para ello, tenemos que tomar en cuenta lo siguiente: para insertar un nodo enseguida de otro, tendríamos que desligar el que éste tiene como  *next*, de modo que podríamos generar una pérdida de información, por ello es importante prevenir que esto suceda y en el algoritmo describiremos una idea de cómo hacerlo.
+
+> Disclaimer: esta solución no es la única que puede existir, pueden haber otras formas de llegar al mismo resultado,
+
+Algoritmo:
+* Tenemos que recorrer toda la lista hasta encontrar el elemento tras el cual queremos añadir el nuevo elemento
+* Una vez hallado, hay que hacer que nuestro nuevo nodo, apunte al que solía apuntar el nodo encontrado
+* Finalmente, apuntaremos el nodo encontrado al nuevo nodo, en el código implementaríamos esta solución:
+
+```javascript
+  insert(index, value) {
+    // consideremos que la lista pueede estar vacía y no tendría caso hacer la búsqueda del índice
+    if (index >= this.length) {
+      return this.append(value);
+    }
+    // generamos el nuevo nodo
+    const newNode = new Node(value);
+    // obtenemos el índice del elemento en la posición anterior
+    const prevItem = this.getIndex(index - 1);
+    // generamos una variable temporal para que el dato que solía estar en next no se pierda
+    const tempHolding = prevItem.next;
+    // sustituímos el next de la posición encontrada con el nuevo nodo
+    prevItem.next = newNode;
+    // colocamos el elemento on-holding como next de nuestro elemento recién insertado
+    newNode.next = tempHolding;
+    this.length++;
+    return this;
+  }
+
+  getIndex(index) {
+    let counter = 0;
+    let currentNode = this.head;
+    while (counter !== index) {
+      currentNode = currentNode.next;
+      counter++;
+    }
+    return currentNode;
+  }
+```
+
+## Remover  nodos en una posición puntual
+Para eliminar un nodo puntual, usaremos una lógica muy parecida a la anterior, reutilizando el método `getIndex` para ubicarnos en una posición anterior a la que queremos eliminar:
+
+```javascript
+  remove(index) {
+    if (index < 0) {
+      console.error('Posición inválida, intenta otra.');
+    } else if (this.length === 1 && index === 0) {
+      console.error('Solo hay un elemento en la lista y no lo puedes eliminar.');
+    } else {
+      const prevItem = this.getIndex(index - 1);
+      prevItem.next = prevItem.next.next;
+      this.length--;
+    }
+    return this;
+  }
+```
