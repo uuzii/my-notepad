@@ -243,7 +243,7 @@ Consideremos que en una linked list, cada elemento posee dos valores: el valor q
 
 Para encontrar un elemento en una lista de este tipo, tenemos que recorrer cada uno de los elementos de la lista, si lo hemos rebasado, será necesario reiniciar la búsqueda desde la cabeza.
 
-## Consideraciones
+## Consideraciones
 Puede llegar a ser complejo encontrar nodos dentro de una estructura de datos de este tipo, pues no tenemos almcenado en memoria la dirección per se de los datos, sino que dicha dirección solo se encuentra en el valor anterior, por ello no han índices que nos permitan encontrar de manera rápida los elementos. Para representarlo, imaginemos que queremos generar la siguiente lista:
 
 ```txt
@@ -336,7 +336,7 @@ prepend(value) {
 }
 ```
 
-## Agregar nodos en una posición puntual
+## Agregar nodos en una posición puntual
 Implementaremos un método `insert` para agregar nodos en alguna posición de nuestra lista, para ello, tenemos que tomar en cuenta lo siguiente: para insertar un nodo enseguida de otro, tendríamos que desligar el que éste tiene como  *next*, de modo que podríamos generar una pérdida de información, por ello es importante prevenir que esto suceda y en el algoritmo describiremos una idea de cómo hacerlo.
 
 > Disclaimer: esta solución no es la única que puede existir, pueden haber otras formas de llegar al mismo resultado,
@@ -387,7 +387,9 @@ Para eliminar un nodo puntual, usaremos una lógica muy parecida a la anterior, 
     } else if (this.length === 1 && index === 0) {
       console.error('Solo hay un elemento en la lista y no lo puedes eliminar.');
     } else {
+      // ubicamos el elemento en la posición anterior al que queremos eiminar
       const prevItem = this.getIndex(index - 1);
+      // colocamos el elemento next del elemento next en la posición ubicada para dejar de fuera le intermedio
       prevItem.next = prevItem.next.next;
       this.length--;
     }
