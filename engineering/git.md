@@ -68,6 +68,15 @@ El primero es referente al stagging de archivos, el segundo es referente a commi
 * `git stash [branch]`: Nos permite capturar nuestros cambios temporales en una rama después de que hemos ejecutado git stash
 * `git stash drop`: Nos permite deshacernos de un stash guardado en memoria
 
+## Pasar un stash de una rama a otra
+1. Generar el stash con `git stash`
+2. Poner el stash en una rama temporal `git stash temp-branch`
+3. Añadir los archivos `git add [files]`
+4. Hacer commit `git commit -m [message]`
+5. Cambiar a la rama destino `git checkout [branch]`
+6. Fusionar la rama temporal `git merge temp-branch`
+7. Borrar la rama temporal `git branch -D temp-branch`
+
 # Cherry pick
 
 * `git cherry-pick [commit]`: Nos permite traer hacia la rama en la que ejecutamos, un commit que esté en otra rama.

@@ -220,4 +220,179 @@ Ahora implementaremos otras funciones para obtener un valor conforme a su key, p
     }
     return collection;
   }
-´´´
+```
+
+# Linked lists
+Las linked lists no son muy similares a los arrays y a las estrucutras que hemos revisado, la direncia radica en que, cada elemento de la lista, está linkeado al anterior, de modo que hay una cabeza y una cola.
+
+![linked list](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/linked-list.jpg?raw=true)
+
+Existen dos tipos de listas enlazadas pero solo trataremos las *singly linked lists*. Existen ciertos métodos para manipular esta estructura:
+
+|Método|Descripción|
+|-|-|
+|prepend|agregar un nodo al inicio|
+|append|agregar un nodo al final|
+|lookup/search|buscar un nodo|
+|insert|insertar un nodo a la lista (entremedio)|
+|delete|borrar un nodo|
+
+Consideremos que en una linked list, cada elemento posee dos valores: el valor que contiene en sí, y el siguiente valor.
+
+![singly linked list](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/singly-linked-list.jpg?raw=true)
+
+Para encontrar un elemento en una lista de este tipo, tenemos que recorrer cada uno de los elementos de la lista, si lo hemos rebasado, será necesario reiniciar la búsqueda desde la cabeza.
+
+## Consideraciones
+Puede llegar a ser complejo encontrar nodos dentro de una estructura de datos de este tipo, pues no tenemos almcenado en memoria la dirección per se de los datos, sino que dicha dirección solo se encuentra en el valor anterior, por ello no han índices que nos permitan encontrar de manera rápida los elementos. Para representarlo, imaginemos que queremos generar la siguiente lista:
+
+```txt
+1 --> 2 --> 3 --> 4 --> null
+```
+
+Entonces, en JavaScript veríamos algo así:
+
+```javascript
+let singlyLinkedList = {
+  head: {
+    value: 1,
+    next: {
+      value: 2,
+      next: {
+        value: 3,
+        next: {
+          value: 4,
+          next: null
+        }
+      }
+    }
+  }
+}
+```
+
+Implementemos ahora esta estructura mediante una clase:
+```javascript
+class MySinglyLinkedList {
+  // De manera obligada contará con un elemento que es la cabeza
+  constructor(value) {
+    this.head = {
+      value: value,
+      next: null
+    }
+    // la cola será a la vez la cabeza
+    this.tail = this.head;
+    // almacenaremos la longitud, que inicialmente sería 1
+    this.length = 1;
+  }
+}
+
+/**
+ * Implementaremos también una clase *nodo*,
+ * que nos servirá para agregar elementos de
+ * manera rápida:
+ */
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null
+  }
+}
+
+// Instanciamos
+const myLinkedList = new MySinglyLinkedList(1);
+```
+
+## Agregar nodos al final de la lista
+Implementaremos dentro de nuestra clase un método `append` para agregar nodos al final de nuestra lista:
+
+```javascript
+append(value) {
+  // generamos el nuevo nodo
+  const newNode = new Node(value);
+  // sustituímos el último null por nuestro nuevo nodo
+  this.tail.next = newNode;
+  // posicionamos nuestro nuevo nodo como cola
+  this.tail = newNode;
+  // incrementamos el tamaño de la lista
+  this.length++;
+  return this;
+}
+```
+
+## Agregar nodos al inicio de la lista
+Implementaremos dentro de nuestra clase un método `prepend` para agregar nodos al inicio de nuestra lista:
+
+```javascript
+prepend(value) {
+  // generamos el nuevo nodo
+  const newNode = new Node(value);
+  // agregamos el antiguo head al next de nuestro nuevo nodo
+  newNode.next = this.head;
+  // posicionamos nuestro nuevo nodo como cabeza
+  this.head = newNode;
+  // incrementamos el tamaño de la lista
+  this.length++;
+  return this;
+}
+```
+
+## Agregar nodos en una posición puntual
+Implementaremos un método `insert` para agregar nodos en alguna posición de nuestra lista, para ello, tenemos que tomar en cuenta lo siguiente: para insertar un nodo enseguida de otro, tendríamos que desligar el que éste tiene como  *next*, de modo que podríamos generar una pérdida de información, por ello es importante prevenir que esto suceda y en el algoritmo describiremos una idea de cómo hacerlo.
+
+> Disclaimer: esta solución no es la única que puede existir, pueden haber otras formas de llegar al mismo resultado,
+
+Algoritmo:
+* Tenemos que recorrer toda la lista hasta encontrar el elemento tras el cual queremos añadir el nuevo elemento
+* Una vez hallado, hay que hacer que nuestro nuevo nodo, apunte al que solía apuntar el nodo encontrado
+* Finalmente, apuntaremos el nodo encontrado al nuevo nodo, en el código implementaríamos esta solución:
+
+```javascript
+  insert(index, value) {
+    // consideremos que la lista pueede estar vacía y no tendría caso hacer la búsqueda del índice
+    if (index >= this.length) {
+      return this.append(value);
+    }
+    // generamos el nuevo nodo
+    const newNode = new Node(value);
+    // obtenemos el índice del elemento en la posición anterior
+    const prevItem = this.getIndex(index - 1);
+    // generamos una variable temporal para que el dato que solía estar en next no se pierda
+    const tempHolding = prevItem.next;
+    // sustituímos el next de la posición encontrada con el nuevo nodo
+    prevItem.next = newNode;
+    // colocamos el elemento on-holding como next de nuestro elemento recién insertado
+    newNode.next = tempHolding;
+    this.length++;
+    return this;
+  }
+
+  getIndex(index) {
+    let counter = 0;
+    let currentNode = this.head;
+    while (counter !== index) {
+      currentNode = currentNode.next;
+      counter++;
+    }
+    return currentNode;
+  }
+```
+
+## Remover  nodos en una posición puntual
+Para eliminar un nodo puntual, usaremos una lógica muy parecida a la anterior, reutilizando el método `getIndex` para ubicarnos en una posición anterior a la que queremos eliminar:
+
+```javascript
+  remove(index) {
+    if (index < 0) {
+      console.error('Posición inválida, intenta otra.');
+    } else if (this.length === 1 && index === 0) {
+      console.error('Solo hay un elemento en la lista y no lo puedes eliminar.');
+    } else {
+      // ubicamos el elemento en la posición anterior al que queremos eiminar
+      const prevItem = this.getIndex(index - 1);
+      // colocamos el elemento next del elemento next en la posición ubicada para dejar de fuera le intermedio
+      prevItem.next = prevItem.next.next;
+      this.length--;
+    }
+    return this;
+  }
+```
