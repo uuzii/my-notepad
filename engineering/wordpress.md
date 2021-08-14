@@ -119,7 +119,7 @@ Podemos agregar los usuarios que requiramos para administrar el sitio, donde lo 
 
 > Se puede agregar permisos específicos a los usuarios mediante el uso de hooks, agregando una función en la ruta: `...\xampp\htdocs\projectname\wordpress\wp-includes\functions.php`
 
-## Herramientas
+## Herramientas
 * Salud del sitio: nos permitirá ver si hay mejoras a realizar y la información del sitio.
 * Exportar los datos personales: nos permitirá gestionar peticiones de los usuarios de retirar sus datos personales.
 
