@@ -4,7 +4,7 @@ Wordpress es un gestor de contenido escrito en PHP, es decir que nos permite ges
 
 Wordpress proviene de un fork hecho a *b2/cafelog*, que era una herramienta de software libre, gracias a ello evolucionó y ha evolucionado a lo largo de los años hasta ahora, donde podemos hacer blogs, tiendas o incluso aplicaciones web.
 
-# ¿Dónde hallamos Wordpress?
+# ¿Dónde hallamos Wordpress?
 * `wordpress.com`: Es un servicio online que nos permite crear una cuenta para generar un sitio desde el navegador.
 * `wordpress.org`: Es un sitio que nos permite descargar el código fuente de wordpress para instalarlo en un servidor con las personalizaciones que queramos añadir.
 
