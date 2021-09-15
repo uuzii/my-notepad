@@ -117,7 +117,7 @@ Podemos agregar los usuarios que requiramos para administrar el sitio, donde lo 
 * Colaborador: creará contenido pero no lo podrá publicar.
 * Suscriptor: solo puede hacer comentarios.
 
-> Se puede agregar permisos específicos a los usuarios mediante el uso de hooks, agregando una función en la ruta: `...\xampp\htdocs\projectname\wordpress\wp-includes\functions.php`
+> Se puede agregar permisos específicos a los usuarios mediante el uso de hooks, agregando una función en la ruta: `...\xampp\htdocs\projectname\wordpress\wp-includes\functions.php`. Más [info](https://wordpress.org/support/article/roles-and-capabilities/#administrator)
 
 ## Herramientas
 * Salud del sitio: nos permitirá ver si hay mejoras a realizar y la información del sitio.
@@ -131,3 +131,21 @@ Podemos agregar los usuarios que requiramos para administrar el sitio, donde lo 
 * Medios: permitirá configurar las resoluciones para los archivos multimedia.
 * Enlaces permanentes: para configurar la forma en la que se verán las urls dentro del sitio.
 * Privacidad: nos da la opción de generar una página que contendrá nuestra política de privacidad.
+
+# Creando un theme
+Para crear un tema nuevo, accederemos a `../htdocs/{project-name}/wp-comtent/themes`, ahí crearemos una carpeta nueva con el nombre de nuestro proyecto, una vez creada, la abriremos en nuestro editor de código y crearemos los siguientes archivos:
+* `index.php`:  será la vista por defecto de cualquier vista que no esté asignada.
+* `style.css`: en este archivo pasaremos todos los datos de nuestro tema, al inicio configuraremos los siguientes datos mediante un comentario:
+```css
+/*
+  Theme name: Platzigifts
+  Version: 1.0
+  Description: sitio para catalogo de platzi
+  Author: Uzi Rodriguez
+  Author URI: [repo] 
+  License: GNU General Public Licence v2 or later
+  Licence URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+*/
+```
+
+Ahora ya tenemos configurado nuestro tema pero como aún no hemos cargado nada la vista es precaria.
