@@ -39,6 +39,46 @@ Para generar archivos o trabajar con ellos, usaremos los siguientes comandos:
 Para visualizar el contenido de un archivo de texto, podemos usar los siguientes comandos:
 * `head [file]` Imprime por default las primeras líneas del archivo de texto, para modificar el número de líneas a visualizar, usamos la opción `-n [n]`.
 * `tail [file]` Imprime las últimas líneas del archivo de texto, al igual se le puede indicar el número de líneas a mostrar.
-* `less [file]` Nos muestra todo el contenido de un archivo de texto y nos permite hacer scroll o navegar con flechas. Algunas opciones que tiene en la línea de comandos, es poner `/[word]` para buscar una palabra. Para salir solo tenemos que ingresar la letra `q`.
+* `less [file]` Nos muestra todo el contenido de un archivo de texto y nos permite hacer scroll o navegar con flechas. Algunas opciones que tiene en la línea de comandos, es poner `/[word]` para buscar una palabra. Para salir solo tenemos que ingresar la letra `q`. Esta interfaz nos permite también buscar texto escribiendo el caracter `/`.
 * `open [file/dir]` Solo para mac, abre el archivo en el programa por defecto para ese tipo de archivo.
 * `nautilus [dir]` Solo para linux, abre un directorio en la interfaz gráfica.
+
+## ¿Qué es un comando?
+Un comando puede ser cualquiera de estas posibilidades:
+1. Un programa ejecutable. Programas compilados que regularmente encontraremos en la carpeta `/usr/bin`.
+2. Un comando de utilidad de la shell. Una función propia de la línea de comandos.
+3. Una función de shell. Funciones que normalmente no vienen en la línea de comandos sino que son adicionales a ella.
+4. Un alias. Es un comando custom que nostros creamos para ejecutar un comando o comandos.
+
+Podemos utilizar el comando `type` para identificar de qué tipo es un comando cualquiera, ejemplo:
+```bash
+type cd # cd is a shell builtin
+type mkdir # mkdir is /usr/bin/mkdir
+type ls # ls is aliased to "ls --color=auto"
+```
+
+### Alias
+Cómo crear un alias:
+```bash
+alias l="ls -lh"
+```
+
+Con esto generaríamos un comando `l` que nos muestre el listado de archivos de manera completa.
+
+### Obtener ayuda e infirmación de un comando
+El comando `help` nos permite visualizar las opciones que tiene un comando.
+El comando `man` nos sirve para encontrar el manual se usuario de un comando.
+El comando `whatis` nos da una descripción muy resumida de un comando.
+
+### Wildcards
+Son una serie de patrones que nos permiten hacer búsquedas de manera muy avanzada, se hará mediante el comando `ls`. Ejemplos:
+```bash
+ls *.txt # Muestra todos los archivos de tipo txt
+ls initial* # archivos que inicien con 'initial'
+ls initial? # archivos con 'initial' + un solo caracter
+ls initial??? # archivos con 'initial' + tres caracteres
+ls [[:upper:]]* # archivos que empiecen con una sola mayúscula
+ls -d [[:upper:]]* # directorios que empiecen con una sola mayúscula
+ls [[:lower:]]* # archivos que empiecen con una sola minúscula
+ls [ad]* # archivos que inicien con letra a o con d
+```
