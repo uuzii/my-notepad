@@ -98,7 +98,7 @@ Ejemplos de redirecciones.
 
 Las redirecciones son de mucha utilidad cuando ejecutamos scripts y queremos almacenar logs de alguna actividad o error.
 
-## Pipe operator
+## Pipe operator
 Es uno de los operadores más útiles, ya que nos permite, por ejemplo encadenar la salida de un comando a al entrada de otro y así generar procesos que se comuniquen entre sí.
 
 Primeramente revisemos el uso del comando `cat`, que nos sirve para concatenar la salida de dos archivos. Ahora veamos ejemplos de uso del pipe operator:
