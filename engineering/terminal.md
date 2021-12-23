@@ -70,7 +70,7 @@ El comando `help` nos permite visualizar las opciones que tiene un comando.
 El comando `man` nos sirve para encontrar el manual se usuario de un comando.
 El comando `whatis` nos da una descripción muy resumida de un comando.
 
-### Wildcards
+## Wildcards
 Son una serie de patrones que nos permiten hacer búsquedas de manera muy avanzada, se hará mediante el comando `ls`. Ejemplos:
 ```bash
 ls *.txt # Muestra todos los archivos de tipo txt
@@ -82,3 +82,26 @@ ls -d [[:upper:]]* # directorios que empiecen con una sola mayúscula
 ls [[:lower:]]* # archivos que empiecen con una sola minúscula
 ls [ad]* # archivos que inicien con letra a o con d
 ```
+
+## Redirecciones
+Normalmente ingresamos un comando que genera algún output. Ahora veremos cómo controlar esos inputs y outputs a través de ciertos comandos especiales, pero primero consideremos las siguientes partes de un comando:
+* **stdin (0)**. Standard in, es el input que se le da al comando, puede ser una entrada de texto o de un archivo.
+* **stdout (1)**. Standard output es la salida que arroja el comando, si se produce un error, se arrojará:
+* **stderr (2)**. Standard error se arroja cuando hay un error al generar el output del comando.
+
+Ejemplos de redirecciones.
+* *Imprimir* la salida de un `ls` en un archivo txt: `ls > file.txt`. No concatenará, solo sobreescribirá.
+* *Concatenar* la salida de un `ls` en un archivo existente `ls >> existing.txt`.
+* *Imprimir* la salida de un error al invocar un `ls` de manera fallida: `ls not-valid-file 2> error.txt`.
+* *Imprimir* la salida y opcionalmente el error de un comando: `ls Documents/ > output.txt 2&>1`.
+* *Introducir* información de un archivo a un comando: `script.sh < data.json`
+
+Las redirecciones son de mucha utilidad cuando ejecutamos scripts y queremos almacenar logs de alguna actividad o error.
+
+## Pipe operator
+Es uno de los operadores más útiles, ya que nos permite, por ejemplo encadenar la salida de un comando a al entrada de otro y así generar procesos que se comuniquen entre sí.
+
+Primeramente revisemos el uso del comando `cat`, que nos sirve para concatenar la salida de dos archivos. Ahora veamos ejemplos de uso del pipe operator:
+* Concatenar la salida de un `ls` con el comando `less`: `ls -lh | less`, esto nos permitirá navegar en la salida del listado.
+* Listar el contenido de una carpeta, guardar esa salida en un archivo y finalmente verlo: `ls -lh | tee output.tx | less`.
+* Ponerle un filtro que ordene los elementos: `ls -lh | sort | tee output.tx | less`.
