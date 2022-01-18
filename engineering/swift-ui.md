@@ -34,7 +34,7 @@ let y:Int = 2
 print(x+y)
 ```
 
-## Funciones y argument labels
+## Funciones y argument labels
 Una de las funciones más usadas es `print`, que ya la hemos usado en los ejemplos anteriores.
 
 Para crear una función con argumentos, esta es la estructura básica:
@@ -65,7 +65,7 @@ func saluda(a destinatario:String, de remitente:String) {
 saluda(a: "Juan", de: "Uzi")
 ``` 
 
-Si no queremos tener que especificar el nombre del argumento, podemos poner un `_`, pero esto hará que el argumento sea pediso siempre que se invoca la función:
+Si no queremos tener que especificar el nombre del argumento, podemos poner un `_`, pero esto hará que el argumento sea pedido siempre que se invoca la función:
 ```swift
 func saluda(_ destinatario:String, de remitente:String) {
     print("Mando saludo a \(destinatario) de parte de \(remitente)")
@@ -75,4 +75,111 @@ saluda("Juan", de: "Uzi")
 ``` 
 
 
+## Estructuras
+SwiftUi está basado en estructuras, por mencionar algo, todas las vistas son estructuras y por ello es importante conocer su manejo.
 
+### Definición
+
+Esta es la forma elemental de una estrcutra:
+```swift
+struct calculadora {
+}
+```
+
+Dentro de ella podemos definir atributos y métodos como en POO para las clases:
+```swift
+struct calculadora {
+    var numeroUno:Int
+    var numeroDos:Int
+    
+    func suma() -> Int {
+        var numeroInternoSuma:Int = 11
+        return numeroUno + numeroDos
+    }
+}
+```
+
+### Instanciamiento
+
+Para instanciar una estructura, simplemente la invocamos en la declaración de una variable. Para esto es importante también tomar en cuenta que los atributos o propiedades internas se tienen que inicializar o en su defecto, definirlos con un valor por defecto.
+```swift
+var suma = calculadora(numeroUno: 10, numeroDos: 8)
+
+// Accede a una prop
+suma.numeroUno // 10
+// Accede  una funcion
+suma.suma() // 18
+```
+
+> Si el editor nos arroja error, casi siempre tendremos un botón "Fix" que nos autocorregirá
+
+### Scope (alcance)
+Es importante notar algunos puntos respecto al ámbito de las funciones que vemos en el ejemplo:
+* Los métodos declarados dentro de una estructura no comparten el scope global de la estructura
+* Los métodos internos de una estrctura no comparten scope entre sí, sino ue tienen cada uno el propio
+```swift
+struct calculadora {
+    var numeroUno:Int
+    var numeroDos:Int
+    
+    func suma() -> Int {
+        var numeroInternoSuma:Int = 11
+        return numeroUno + numeroDos
+    }
+    
+    func multiplicacion(numeroUno: Int, numeroDos:Int) -> Int {
+        // Si queremos acceder a una variable global y no a la del scope local del método, usamos la palabra reservada self
+        return self.numeroUno * numeroDos
+    }
+}
+```
+
+
+## Diferencias entre estrcuturas y clases
+Tomemos en cuenta que las estructuras se pueden inicializar (constructor) a partir del método `init`, mismo en el que se pueden definir valores por defecto dentro de una estructura:
+```swift
+struct calculadora {
+    var numeroUno:Int
+    var numeroDos:Int
+    
+    init() {
+        numeroUno = 10
+        numeroDos = 20
+    }
+}
+```
+
+> Si no quitamos los argumentos que hemos puesto en el paso de instanciación, el editor nos arrojará error después de haber implementado init, ya que no tiene sentido re asignarles valor
+
+Ahora bien, si impromimos valores tendremos 10 y 20, pero también existe la posibilidad de cambiar los valores de los atributos:
+```swift
+var suma = calculadora()
+suma.numeroUno = 4
+suma.numeroDos = 8
+suma.numeroUno // 4
+suma.numeroDos // 8
+```
+
+Si creamos una instancia nueva llamada `instanciaSuma` a partir de la primera instancia, ésta se creará por valor y no almacenará la referencia, lo podemos notar cambiándo valores como la demo de arroba y comprobando que cada una tiene sus valores:
+```swift
+var suma = calculadora()
+suma.numeroUno = 4
+suma.numeroDos = 8
+suma.numeroUno // 4
+suma.numeroDos // 8
+
+var instanciaSuma = suma
+instanciaSuma.numeroUno // 4
+instanciaSuma.numeroDos // 8
+// Mdoficación de la segunda instancia:
+instanciaSuma.numeroUno = 20
+instanciaSuma.numeroDos = 30
+// Nuevos valores segunda instancia:
+instanciaSuma.numeroUno // 20
+instanciaSuma.numeroDos // 30
+// Valores que conserva la primera instancia:
+suma.numeroUno // 4
+suma.numeroDos // 8
+```
+
+Esta es la diferencia entre una estructura y una clase, que la estrcutrura se instancia generando un valor nuevo, la clase lo hará mediante una referencia.
