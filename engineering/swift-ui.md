@@ -135,7 +135,7 @@ struct calculadora {
 ```
 
 
-## Diferencias entre estrcuturas y clases
+### Diferencias entre estrcuturas y clases
 Tomemos en cuenta que las estructuras se pueden inicializar (constructor) a partir del método `init`, mismo en el que se pueden definir valores por defecto dentro de una estructura:
 ```swift
 struct calculadora {
@@ -183,3 +183,61 @@ suma.numeroDos // 8
 ```
 
 Esta es la diferencia entre una estructura y una clase, que la estrcutrura se instancia generando un valor nuevo, la clase lo hará mediante una referencia.
+
+## Computed properties
+Si queremos que una variable adopte un valor sin necesidad de tener que ejecutar una función la podemos declarar del siguiente modo:
+```swift
+var suma:Int {
+    10 + 10
+}
+
+suma // 20
+```
+> Las computed props siempre requerirán el tipo de dato
+
+Si tenemos solo una línea de código, no requiere obligatoriamente la palabra reservada `return`, pero si hay más líneas, sí se tendrá que especificar:
+```swift
+var suma:Int {
+    let x = 11;
+    return 10 + x
+}
+
+suma // 21
+```
+
+# Bases de SwiftUI
+
+## Protocolos
+Vamos al archivo ContentView.swift, del lado derecho pulsamos el botón Resume y podremos ver un Hola mundo.
+Ahora, iremos identificando cada uno de los elementos que vemos en el IDE:
+* `PlatziApp.swift`: denota un punto de entrada o pantalla principal, que se compone por una instancia de `ContentView`:
+    ```swift
+    struct PlatziApp: App {
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+            }
+        }
+    }
+    ```
+* `ContentView.swift`: es la definición de nuestra pantalla principal, donde `body` es una computed property, cuyo valor de retorno es un texto con un modificador.
+    ```swift
+    struct ContentView: View {
+        var body: some View {
+            Text("Hello, world!")
+                .padding()
+        }
+    }
+    ```
+    Nótese la parte `: View`, ésta indica que se tiene que seguir un **protocolo**, en este caso, el que sea necesario para mostrar una vista.
+    La propiedad interna `body` la estamos configurando con `: some View` porque tiene que devolver alguna vista para cumplir con el protocolo de su estructura padre.
+
+    También contiene otra estructura que utiliza internamente Xcode para mostrar nuestro Canvas del lado derecho:
+    ```swift
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+        }
+    }
+    ```
+    Nótese que en esta parte también estamos definiendo un protocolo, mismo que es obdecido por el valor de retorno que es la instancia de nuestro `ContentView`
