@@ -205,8 +205,6 @@ var suma:Int {
 suma // 21
 ```
 
-# Bases de SwiftUI
-
 ## Protocolos
 Vamos al archivo ContentView.swift, del lado derecho pulsamos el botón Resume y podremos ver un Hola mundo.
 Ahora, iremos identificando cada uno de los elementos que vemos en el IDE:
@@ -241,3 +239,69 @@ Ahora, iremos identificando cada uno de los elementos que vemos en el IDE:
     }
     ```
     Nótese que en esta parte también estamos definiendo un protocolo, mismo que es obdecido por el valor de retorno que es la instancia de nuestro `ContentView`
+
+# Vistas y controles
+Las vistas, son aquellos elementos que el usuario puede ver, ejemplos:
+* Textos
+* Imágenes
+* Divisores
+* Contenedores
+Los controles en cambio, aunque se pueden ver, el usuario también puede interactuar con ellos, ejemplos:
+* Botones
+* Menús
+* Cajas de texto
+
+## Creando una vista
+1. Creamos en nuestro proyecto un nuevo archivo de tipo SwiftUI
+2. Le asignamos un nombre, en este caso será `TextMod`
+    Si queremos que se muestre en nuestro entrypoint, habrá que implementar una instancia en nuestro archivo App:
+    ```swift
+    import SwiftUI
+
+    @main
+    struct PlatziApp: App {
+        var body: some Scene {
+            WindowGroup {
+                TextMod()
+            }
+        }
+    }
+    ```
+    Por defecto nos genera este hola mundo.
+3. Podríamos modificar el elemento para mostrar otro texto a nuestro gusto:
+    ```swift
+    import SwiftUI
+
+    struct TextoMod: View {
+        var body: some View {
+            Text("Hello, World")
+        }
+    }
+
+    struct TextoMod_Previews: PreviewProvider {
+        static var previews: some View {
+            TextoModificadores()
+        }
+    }
+    ```
+    Otro aspecto a observar es que, nuestra vista se delimita con un borde azul para que la identifiquemos.
+4. Para agregar modificadores o estilos, podemos abrir la columna del lado derecho en las properties y cambiar el tamaño, el tipo de letra, el color, la alineación y el modelo de caja, irá agregando este tipo de props en el código:
+    ```swift
+    struct TextoMod: View {
+        var body: some View {
+            Text("Hello, World!")
+                .font(.title)
+                .foregroundColor(Color.blue)
+                .padding(.vertical, 10.0)
+        }
+    }
+    ```
+5. Un modificador importante es `frame`, que nos permite definir un contenedor de un tamaño determinado y una alineación:
+    ```swift
+    Text("Hello, World!")
+        .font(.title)
+        .foregroundColor(Color.blue)
+        .padding(.vertical, 10.0)
+        .frame(width: 300, height: 100, alignment: .leading)
+    ```
+    Nótese que importa el orden en el que se van añadiendo las props, de preferencia añadir primero las del item y luego las del frame si es que lo hemos definido.
