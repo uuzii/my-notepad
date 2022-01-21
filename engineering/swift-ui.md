@@ -305,3 +305,57 @@ Los controles en cambio, aunque se pueden ver, el usuario también puede interac
         .frame(width: 300, height: 100, alignment: .leading)
     ```
     Nótese que importa el orden en el que se van añadiendo las props, de preferencia añadir primero las del item y luego las del frame si es que lo hemos definido.
+
+## Botones
+Empecemos analizando la prop VStack, que nos permite generar una pila de elementos para que éstos sean devueltos en una sola vista:
+```swift
+struct Buttons: View {
+    var body: some View {
+        VStack{
+            Text("Hello, World!")
+            Text("Hello, World!")
+        }
+    }
+}
+
+struct Buttons_Previews: PreviewProvider {
+    static var previews: some View {
+        Buttons()
+    }
+}
+```
+Consideremos que hay un límite de argumentos que se puede usar dentro de un stack. Lo que podemos hacer es anidar stacks.
+Bien, para generar un botón dentro de nuestro stack, usaremos la clase `Button` con los argumentos `title:` y `action:`:
+```swift
+VStack{
+    Button("Mi primer boton", action: {
+        // código que se quiere ejecutar
+        print("Pulse mi boton")
+    })
+}
+```
+Los argumentos que hemos introducido, son respectivamente el label del botón y la función que ejecutará, misma que no requiere de especificar nombre y la forma en la que se declara hace que se le denomine *closure*.
+Cuando usamos un closure como último argumento, se escribir de esta forma:
+```swift
+Button("Mi segundo boton") {
+    print("Mi segundo boton")
+}
+```
+Una última forma de hacerlo y la que nos permite hacer botones con otro tipo de vistas que no sean un texto y con una función definida exteriormente es la siguiente:
+```swift
+var body: some View {
+    VStack {
+        Button(action: {
+            saludo()
+        }, label: {
+            Text("Boton con label como argumento")
+        })    
+    }
+
+    func saludo() {
+        print("Hola desde un metodo definido de manera externa")
+    }
+}
+```
+> Si solo tenemos una línea en el argumento action, se pueden eliminar las llaves y dejar solo el nombre del método.
+
