@@ -359,3 +359,43 @@ var body: some View {
 ```
 > Si solo tenemos una línea en el argumento action, se pueden eliminar las llaves y dejar solo el nombre del método.
 
+## Imágenes
+1. Primeramente, para importar una imagen al proyecto, sleccionamos nuestra carpeta Assets.xcassets.
+2. Damos click al botón + que se encuenta en la primera columna en la barra de abajo.
+3. Seleccionamos la opción import y buscamos nuestra imagen.
+4. Si queremos agregar imágenes de mayor resolución para dispositivos de mayor tamaño, es necesario nombrarlos con sufijo @2x o @3x.
+5. Agregamos la imagen a nuestra pila de la siguiente manera:
+    ```swift
+    var body: some View {
+        VStack {
+            Image("image_name")
+        }
+    }
+    ```
+
+Algunos modificadores para las imágenes que podríamos agregar son:
+```swift
+Image("uzi")
+    .resizable() // hace que se ajuste el tamaño
+    .aspectRatio(contentMode: .fit) // mantiene el aspect ratio
+    .frame(width: 100, height: 100, alignment: .center) // cambia el tamaño y la posicion
+```
+
+Otros modificadores:
+* Blur: `.blur(radius: 3.0)`
+* Opacidad: `.opacity(0.8)`
+
+Para hacer una imagen botón:
+```swift
+Button(action: {}, label: {
+    Image("uzi")
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 100, height: 100, alignment: .center)
+})
+```
+
+Para implementar íconos del sistema iOS, podemos basarnos en la app [SF Symbols](https://developer.apple.com/sf-symbols/) y encontrar el nombre del ícono que necesitemos, la forma de implementarlos es la siguiente:
+```swift
+Image(systemName: "moon.fill")
+```
