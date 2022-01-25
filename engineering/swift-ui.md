@@ -399,3 +399,71 @@ Para implementar íconos del sistema iOS, podemos basarnos en la app [SF Symbols
 ```swift
 Image(systemName: "moon.fill")
 ```
+
+## Input fields
+Crearemos un stack nuevo y una variable fuera del mismo, la cuál nos permitirá almacenar el texto
+que el usuario genere dentro del campo de texto:
+```swift
+struct TextFields: View {
+    var textoVista:String = "Hola"
+
+    var body: some View {
+        VStack {
+            Text(textoVista)
+        }
+    }
+}
+```
+
+Ahora generaremos un botón que nos permita modificar dinámicamente el valor de la variable que
+previamente habíamos dado un valor por default:
+```swift
+struct TextFields: View {
+    // Property wrapper
+    @State var textoVista:String = "Hola"
+
+    var body: some View {
+        VStack {
+            Text(textoVista)
+
+            Button(action: {
+                textoVista = "Uzi"
+            }, label: {
+                Text("Cambia el texto de la vista")
+            })
+        }
+    }
+}
+```
+
+Nótese que hemos agregado un *property wrapper* a nuestra variable denotado por `@State` este
+wrapper tiene la función de generar un **state** de la aplicación, esto quiere decir, que va
+envolver la property para que el valor de la misma se almacene fuera de la estructura aunque las
+vistas se destruyan (ya que siempre que hay algún cambio se destruyen y se reconstruyen las vistas);
+de esta forma, aunque nuestro stack se re-calcule, los valores almacenados en el **state**, prevalecerán.
+
+Ahora generaremos nuestro field:
+```swift
+struct TextFields: View {
+    @State var textoVista:String = "Hola"
+    
+    var body: some View {
+        
+        VStack {
+            Text(textoVista)
+            
+            TextField("Escribe algo", text: $textoVista)
+            
+            Button(action: {
+                textoVista = "Uzi"
+            }, label: {
+                Text("Cambia el texto de la vista")
+            })
+        }
+    }
+}
+```
+
+Notamos que el `TextField` recibe dos parámetros en este caso: un título (placeholder) y un *text binding*,
+que traducido al español podría entenderse como *texto amarrado* ya que cada que se modifique el
+valor del input, los cambios se propagarán a la variable, para ello se coloca el signo de `$`.
