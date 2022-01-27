@@ -467,3 +467,56 @@ struct TextFields: View {
 Notamos que el `TextField` recibe dos parámetros en este caso: un título (placeholder) y un *text binding*,
 que traducido al español podría entenderse como *texto amarrado* ya que cada que se modifique el
 valor del input, los cambios se propagarán a la variable, para ello se coloca el signo de `$`.
+
+## Dividers
+Para generar formas dentro de la pantalla podemos utilizar la siguiente estructura:
+```swift
+var body: some View {
+    VStack {
+        Circle()
+    }
+}
+```
+
+Hasta este punto no le hemos determinado dimensiones o un frame, para hacerlo, le agregamos el modificador
+`frame`, con el cuál, limitaremos la figura al frame que determinemos:
+```swift
+    Circle().frame(width: 100, height: 100, alignment: .center)
+```
+
+Para generar un divisor, utilizaremos la estructura `Divider`, siempre procurando configurarle un frame para
+que los elementos tengan distancia de separación:
+```swift
+    Divider().frame(height: 16)
+```
+
+# Contenedores
+
+## HStack, VStack y spacer
+Ya hemos revisado el `Vstack` como pila de elementos, ahora identificaremos el `HStack`, si bien el primero
+nos permitía introducir varios elementos en una vista de manera vertical, el segundo nos permitirá hacerlo
+de manera horizontal:
+```swift
+    VStack(alignment: .trailing) {
+        Text("Hello, World!")
+        Text("Placeholder")
+        Text("Placeholder")
+            
+        HStack {
+            Text("Mexico")
+            Text("Mexico")
+            Text("Mexico")
+        }
+    }.border(Color.black)
+```
+
+
+> 💡 Para agregar elementos, podemos pulsar el botón + en la parte superior derecha
+
+> 💡 Para embeber un item dentro de un stack, usamos opt + cmd + click en el elemento a embeber,
+posteriomente embed in VStack o HStack
+
+> 💡 Podemos agregar modificadores al final de una estructura cuando sea de tipo vista
+
+Nótese que estamos introduciendo el argumento `alignment` al `VStack` con la finalidad de alinear de cierto
+modo su contenido.
