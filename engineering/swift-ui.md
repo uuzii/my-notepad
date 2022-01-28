@@ -520,3 +520,56 @@ posteriomente embed in VStack o HStack
 
 Nótese que estamos introduciendo el argumento `alignment` al `VStack` con la finalidad de alinear de cierto
 modo su contenido.
+
+La clase `spacer` nos ayuda a generar un espacio entre nuestras diferentes vistas de manera que se llenen
+los espacios que estén vacíos, esto dependiendo del tipo de stack en el que estemos, en el siguiente ejemplo,
+para un `Vstack` nos generaría espacios entre los tres textos para llenar toda la pantalla:
+```swift
+VStack(alignment: .trailing) {
+    Text("1").border(Color.black)
+    Spacer()
+    Text("2").border(Color.black)
+    Spacer()
+    Text("3").border(Color.black)
+}
+```
+
+## ZStack
+Este stack nos permite acomodar vistas en el eje de la Z, es decir, de atrás hacia adelante.
+```swift
+var body: some View {
+    ZStack {
+        Color.yellow
+        Text("Uzi")
+    }.ignoresSafeArea()
+}
+```
+
+> 💡 El modificador `ignoreSafeArea()` nos ayuda para que cuando queramos rellenar una vista de color por ejemplo,
+se pinten aún la zona del botón home y el notch
+
+Para emplear el `Stack` hagamos el siguiente ejercicio: pongamos un input field, y modifiquemos
+el color del placeholder (ya que actualmente no hay un modificador para esta parte del input):
+```swift
+var body: some View {
+    ZStack {
+        Color.yellow
+        VStack {
+            Image("uzi")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 100, height: 100, alignment: .center)
+            Text("Bienvenidos")
+                
+            ZStack {
+                if curso == "" {
+                    Text("Curso").foregroundColor(.blue)
+                }
+                TextField("", text: $curso).padding(.leading, 16.0)
+            }
+        }
+    }.ignoresSafeArea()
+}
+```
+Observemos cómo se ha puesto el placeholder artificial detrás del input controlado por un if que
+nos permita esconderlo cuando el usuario ya haya escrito algún valor.
