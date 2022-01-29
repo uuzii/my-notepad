@@ -573,3 +573,47 @@ var body: some View {
 ```
 Observemos cómo se ha puesto el placeholder artificial detrás del input controlado por un if que
 nos permita esconderlo cuando el usuario ya haya escrito algún valor.
+
+## Dividir nuestra aplicación en módulos de contenedores
+Cuando nuestro código empieza a crecer, surge la necesidad de ir modularizando las partes de la UI
+para hacerlo más legible y sostenible. Para ello, podemos crear otra estructura que retorne un tipo
+`View`, ejemplo:
+```swift
+import SwiftUI
+
+struct ZStackPadding: View {
+    // Código de la vista principal
+    Imagenes()
+    // Código de la vista principal
+}
+
+struct Imagenes: View {
+    var body: some View {
+        Image("uzi")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 100, height: 100, alignment: .center)
+    }
+}
+
+struct ZStackPadding_Previews: PreviewProvider {
+    static var previews: some View {
+        ZStackPadding()
+    }
+}
+```
+
+Otra manera sería agregar la instancia de nuestra estructura `Imagenes` dentro del `Previews`:
+```swift
+struct ZStackPadding_Previews: PreviewProvider {
+    static var previews: some View {
+        ZStackPadding()
+        Imagenes()
+    }
+}
+````
+
+El Previews nos puede servir para ir observando una vista en particular y finalmente agregarla cuando
+esté lista a la vista principal. De esta forma podemos generar todos los views que necesitemos con el
+fin de modularizar el código y generar piezas reutilizables. Esta separación e instanciación de código,
+también se puede hacer de la misma forma entre archivos.
