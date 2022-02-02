@@ -611,9 +611,137 @@ struct ZStackPadding_Previews: PreviewProvider {
         Imagenes()
     }
 }
-````
+```
 
 El Previews nos puede servir para ir observando una vista en particular y finalmente agregarla cuando
 esté lista a la vista principal. De esta forma podemos generar todos los views que necesitemos con el
 fin de modularizar el código y generar piezas reutilizables. Esta separación e instanciación de código,
 también se puede hacer de la misma forma entre archivos.
+
+# TabView
+Es otro tipo de vista que nos permitirá generar varias vistas dentro de una ruta de nuestra app.
+Una vista de tipo `TabView` también puede agrupar a otras vistas al igual que los stacks, pero en
+este caso, nos servirán para generar un switch de vistas dentro de una ruta de la app:
+```swift
+struct Tabviews: View {
+    var body: some View {
+        TabView {
+            TextoModificadores().tabItem {
+                Text("Pantalla 1")
+                Image(systemName: "moon")
+            }
+            
+            TextFields().tabItem {
+                Text("Pantalla 2")
+                Image(systemName: "play")
+            }
+            
+            ZStackPadding().tabItem {
+                Text("Pantalla 3")
+                Image(systemName: "terminal")
+            }
+        }
+    }
+}
+```
+Nótese que cada vista que se inserta dentro de `tabView`, luego es modificado mediante `tabItem`,
+y éste último a su vez, nos requiere dos argumentos: `Text` e `Image`, que no son sino el título
+y el ícono de la tab que se formarán en el bottom de la aplicación para hacer esta navegación.
+
+# Navigations
+## NavigationView
+Para generar más rutas en nuestra aplicación, utlizaremos el `NavigationView`, éste se configura de
+la siguiente manera:
+```swift
+var body: some View {
+    NavigationView {
+        Text("Hello, World!")
+            .navigationTitle("Home")
+    }
+}
+```
+De esta forma ya le hemos dado a la vista `Text` el carácter de una ruta de la aplicación, cuyo
+*header* es *Home*.
+
+Veamos algunos modificadores, como:
+* `navigationBarTitleDisplayMode` que nos permite cambiar el tipo de ruta en la que estamos y
+modifica el header para casos de pantallas quizá con menor jerarquía.
+* `toolbar` que nos da la opción de agregar elementos en el header de la aplicación.
+```swift
+    Text("Hello, World!")
+        .navigationTitle("Home")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                Button(action: {}, label: {
+                    Text("+")
+                })
+            })
+        })
+```
+
+## NavigationLink
+Ahora veamos cómo agregar un link que nos permita generar la navegación hacia otra ruta, ésta
+se hace mediante el `NavigationLink`, para ello podemos poner nuestra vista anterior en un stack
+junto con este elemento, el cuál requerirá como argumentos un label y un destination, es decir
+la vista destino.
+```swift
+var body: some View {
+    NavigationView {
+        VStack {
+            Text("Hello, World!")
+                .navigationTitle("Home")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(content: {
+                    ToolbarItem(placement: .navigationBarTrailing, content: {
+                        Button(action: {}, label: {
+                            Text("+")
+                        })
+                    })
+                })
+            NavigationLink("Navegar a vista de texto", destination: Text("Hola desde otra vista"))
+        }
+    }
+}
+```
+Nótese que la ruta hacia la que estamos navegando es muy simple, pero en la práctica, se colocará
+normalmente otra vista más compleja que hayamos generado previamente, ejemplo, la vista `Tabviews`
+que generamos en otras lecciones.
+
+### Variantes del NavigationLink
+Si requerimos generar nuestra navegación mediante otro elemento que no sea un texto, o trasladar
+esta acción a otro elemento, podemos implementar lo siguiente:
+```swift
+struct Navigations: View {
+    // State de la vista
+    @State var isDividersActive: Bool = false;
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Hello, World!")
+                    .navigationTitle("Home")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar(content: {
+                        ToolbarItem(placement: .navigationBarTrailing, content: {
+                            Button(action: {
+                                isDividersActive = true // Habilitar la ruta divider
+                            }, label: {
+                                Text("+")
+                            })
+                        })
+                    })
+                NavigationLink(
+                    destination: Dividers(),
+                    isActive: $isDividersActive,
+                    label: {
+                        EmptyView() // Vista vacía
+                    })
+            }
+        }
+    }
+}
+```
+Nótese que ahora estamos usando otros argumentos, como `isActive`, que no es otra cosa sino un flag
+para indicar que está activa otra vista (la indicada en `destination`). Asimismo `label`, que es
+donde se colocará la vista que controlará nuestro routing.
