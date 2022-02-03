@@ -745,3 +745,47 @@ struct Navigations: View {
 Nótese que ahora estamos usando otros argumentos, como `isActive`, que no es otra cosa sino un flag
 para indicar que está activa otra vista (la indicada en `destination`). Asimismo `label`, que es
 donde se colocará la vista que controlará nuestro routing.
+
+# Práctica
+Practiquemos un poco todo el contenido generando la siguiente vista en la que usaremos una imagen como
+botón de inicio para un botón de player que nos direccione hacia otra vista con un video player:
+```swift
+import SwiftUI
+// Libreria para video player
+import AVKit
+
+struct Player: View {
+    @State var isPlayerActive = false
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Button(action: {
+                    isPlayerActive = true
+                }, label: {
+                    ZStack {
+                        Image("uzi")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                        // Icono de player sobrepuesto
+                        Image(systemName: "play.fill")
+                            .foregroundColor(.white)
+                    }
+                })
+                
+                NavigationLink(
+                    destination: VideoPlayer(
+                        player: AVPlayer(
+                            url: URL(string: "https://cdn.cloudflare.steamstatic.com/steam/apps/256705156/movie480.mp4")!
+                        )
+                    ).frame(width: 420, height: 360, alignment: .center)
+                    ,
+                    isActive: $isPlayerActive,
+                    label: {
+                        EmptyView()
+                    })
+            }
+        }
+    }
+}
+```
