@@ -146,3 +146,131 @@ int main() {
 }
 ```
 
+# Algoritmos de ordenamiento
+Existen muchos algoritmos de ordenamiento, pero los principales conocidos son:
+* Insertion sort
+* Binary sort
+* Bubble sort
+* Quick sort
+* Merge sort
+
+Los cuáles entre más complejos son, generalmente son más eficientes.
+
+> Un algoritmo de ordenamiento es un algoritmo que colocará objetos (números o letras) en orden (ascendente o desdcendente)
+
+Ejemplo: ´[a,b,c,d,e,f]´ es un array ordenado alfabéticamente.
+
+* **Merge sort**. Utiliza un principio conocido como *divide y vencerás*, en el cuál se separan conjuntos de datos, se resuelve el micro problema y posteriormente vamos mergeando en una lista principal. No conviene usarlo con arreglos pequeños, pero con arreglos grandes toma relevancia.
+* **Insertion sort**. Comparamos pares de valores, y reubicamos el valor más pequeño al principio. Conviene cuando el set de datos es corto.
+* **Bubble sort**. 
+* **Quick sort**. Utiliza también el paradigma *divide y vencerás* pero de manera más eficiente. Es uno de los más rápidos.
+
+Tomemos en cuenta la siguiente tipología:
+* `S`: secuencia de objetos rdenables
+* `N`: núm de elementos en S
+
+## Bubble sort
+Es el algoritmo más simple de todos los que hay: va tomando pares de datos y los cambia de lugar según el orden deseado, este proceso se repite hasta que está completamente ordenado, no conviene con sets de datos muy grandes.
+
+![bubble-sort](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/bubble-sort-diagram.jpg?raw=true)
+
+Trasladando esto a código, escribimos primeramente nuestros pasos:
+1. Comparo y swapeo los elementos adyacentes
+2. Repito hasta tener un recorrido completo sin ningún swap
+
+Implementando el código en C:
+```c
+#include <stdio.h>
+
+// Función que haga el swap
+void change_position(int *n1, int *n2)
+{
+  // almacenará el dato de la posición mientras cambiamos el dato
+  int temp = *n1;
+  *n1 = *n2 ;
+  *n2 = temp;
+}
+
+// función que haga el recorrido del array e implemente las comparaciones
+void bubble_sort(int input_set[], int n)
+{
+  int i, j;
+  // ciclos totales
+  for(i = 0; i < n-1; i++)
+  {
+    // comparaciones en cada ciclo
+    for(j = 0; j < n-i-1; j++)
+    {
+      if(input_set[j] > input_set[j+1])
+        change_position(&input_set[j], &input_set[j+1]);
+    }
+  }
+}
+
+// Función que imprima el arreglo ordenado
+void print_array(int input_set[], int n)
+{
+  int i;
+  printf("[ ");
+  for(i = 0; i < n-1; i++)
+    printf("%d ,", input_set[i]);
+  printf(" ]\n");
+}
+
+int main() {
+  int input_set[] = {100, 1992, 0, 5, -1, 60, 70, 15, 14};
+  int n = sizeof(input_set) / sizeof(input_set[0]);
+  bubble_sort(input_set, n);
+  print_array(input_set, n);
+  printf("\n");
+  return 0;
+}
+```
+
+## Insertion sort
+Este algoritmo va comparando cada elemento del array con el siguiente para determinar si es mayor o menor, en caso de que sea menor, lo mueve n posiciones atrás, hasta que encuentra el sitio donde ya no hay un número mayor.
+
+![insertion-sort](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/insertion-sort-diagram.jpg?raw=true)
+
+Trasladando esto a código, escribimos primeramente nuestros pasos:
+1. Comparo y swapeo los elementos adyacentes
+2. Repito hasta tener un recorrido completo sin ningún swap
+
+Implementando el código en C:
+```c
+#include <stdio.h>
+
+void insertion_sort(int input_arr[], int n)
+{
+  int current_index, current_val, prev_index;
+  for(current_index = 1; current_index < n; current_index++)
+  {
+    current_val = input_arr[current_index];
+    prev_index = current_index - 1;
+    while (prev_index >= 0 && input_arr[prev_index] > current_val)
+    {
+      input_arr[prev_index + 1] = input_arr[prev_index];
+      prev_index = prev_index - 1;
+    }
+    input_arr[prev_index + 1] = current_val;
+  }
+}
+
+void print_array(int input_arr[], int n)
+{
+  int i;
+  printf("[ ");
+  for(i = 0; i < n ; i++)
+    printf("%d ,", input_arr[i]);
+  printf(" ]\n");
+}
+
+int main() {
+  int input_arr[] = {100, 1992, 0, 5, -1, 60, 70, 15, 14};
+  int n = sizeof(input_arr) / sizeof(input_arr[0]);
+  insertion_sort(input_arr, n);
+  print_array(input_arr, n);
+  printf("\n");
+  return 0;
+}
+```

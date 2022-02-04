@@ -68,6 +68,15 @@ El primero es referente al stagging de archivos, el segundo es referente a commi
 * `git stash [branch]`: Nos permite capturar nuestros cambios temporales en una rama después de que hemos ejecutado git stash
 * `git stash drop`: Nos permite deshacernos de un stash guardado en memoria
 
+## Pasar un stash de una rama a otra
+1. Generar el stash con `git stash`
+2. Poner el stash en una rama temporal `git stash temp-branch`
+3. Añadir los archivos `git add [files]`
+4. Hacer commit `git commit -m [message]`
+5. Cambiar a la rama destino `git checkout [branch]`
+6. Fusionar la rama temporal `git merge temp-branch`
+7. Borrar la rama temporal `git branch -D temp-branch`
+
 # Cherry pick
 
 * `git cherry-pick [commit]`: Nos permite traer hacia la rama en la que ejecutamos, un commit que esté en otra rama.
@@ -201,6 +210,23 @@ No todos los archivos que tenemos en un repositorio local tienen que subirse al 
 ```
 
 Ignorará todos los archivos con extensión jpg, esto mayormente se usa en archivos binarios o en dependencias instaladas desde un gestor de paquetes.
+
+# Recuperar archivos tal como estaba en la rama remota
+
+Nos puede suceder que hicimos un pequeño cambio (o un cambio no deseado) en un archivo delicado del proyecto y por accidente le hemos hecho push y ahora está bloqueando el proceso de revisión. Para restaurar en nuestra rama local el archivo tal cuál estaba en master, identificamos los repositorios remotos con:
+
+`git remote -v`
+
+Ahora veremos algo como lo siguiente:
+origin  <url>/<project>/<repo>.git (fetch)
+origin  <url>/<project>/<repo>.git (push)
+ 
+Con lo cuál identificaremos nuestros repos remotos. Para restaurar un archivo `file.ext` desde la rama master, ejecutaríamos el siguiente comando:
+ 
+`git checkout origin/master -- file.ext`
+ 
+ Ahora solo restaría hacer otro commit para que nuesra rama quedara limpia de los cambios en este fichero.
+
 
 # GitHub Pages
 
