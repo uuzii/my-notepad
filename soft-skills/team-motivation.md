@@ -63,9 +63,9 @@ Liderar a un equipo realmente es controlarse a uno mismo.
 
 Cuando buscamos controlar, solo generaremos tensión porque solo es posible a través de sembrar miedo y ansiedad. Es importante esforzarnos por ser nuestra mejor versión, de esta forma las personas querrán *caminar a nuestro lado* y no habrá necesidad de controlar a nadie.
 
-# Cómo fidelizar talento
+# Cómo fidelizar talento
 
-## ¿Cómo reclutar intra-emprendedores?
+## ¿Cómo reclutar intra-emprendedores?
 Los intra-emprendedores son personas que:
 * Tratan a su carrera como su negocio
 * Tienen interés por innovar
@@ -89,14 +89,14 @@ Una vez reclutados, podemos propiciar lo siguiente para generar la motivación:
 * Exigir soluciones creativas
 * Creación de un plan de carrera
 
-## On-boardings efectivos
+## On-boardings efectivos
 Un buen on-barding es muy importante en la decisión de las personas para permanecer en una empresa y empezar a colaborar de manera eficiente en el proyecto. Para ello podemos valernos de los siguientes recursos:
 1. Comenzar con una *entry-interview* donde empezaremos a entender sus habilidades para adaptarse y para trabajar en equipo. Se tiene que mostrar la forma en la que solemos comunicarnos para hacerlo entrar en una zona de confianza y así se pueda introducir al flujo de trabajo.
 2. Contribuir a que interactúe con las personas del equipo. Para esto es importante que el equipo sea parte del on-boarding, invitar a la persona a reuniones y presentarla, poner tareas conjuntas de la persona nueva y las personas que ya formaban parte del equipo.
 3. Preparar un plan de trabajo. Por lo general, cuando ha llegado una persona al equipo, ya tenemos identificado cuál será su tarea, pero al cabo de unos días que se haya introducido a la dinámica del equipo lo ideal es que la persona diseñe su propio plan de trabajo.
 4. Evaluar que las personas entiendan su rol en el equipo.  Esto se puede llevar a cabo con una dinámica a través del *jenga*, donde le colocaremos etiquetas de cada uno de los roles a los bloques del juego. Cada que se saque un bloque, cada persona debe decir lo que entiende del rol descrito y luego el líder debe explicar qué valora de ese rol.
 
-## El progreso motiva
+## El progreso motiva
 Las personas nos motivamos no solo por nuestras necesidades individuales sino también por la tarea común. La mayor tarea a cumplir, no se puede ejecutar por una persona, sino que tiene que ser por todo el equipo, por lo tanto cada individuo debe entenderla, debe estar convencido del impacto y debe tener sentido de pertenencia al equipo.
 
 Para evaluar qué tanto se comunica cada persona y el nivel de entendimiento de las instrucciones podemos llevar a cabo la siguiente actividad:
@@ -148,7 +148,7 @@ Para crear un ambiente de motivación, es importante el bienestar físico y psic
 * Que todos entiendan el impacto que tiene su colaboración en el equipo.
 * Incentivar la autonomía empuja al equipo a la innovación.
 
-### Lighting Decision Jam
+### Lighting Decision Jam
 Es una dinámica para la resolución de problemas creado por AJ&Smart, se necesitan:
 * Post-its de tres colores
 * Stickers circulares
