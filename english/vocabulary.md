@@ -87,6 +87,7 @@ This file contains some words I've learned trough my english career :)
 |**stitch**|puntada, sutura, punzada|
 |**swank**|fanfarronear|
 |**underneath**|debajo de|
+
 ## List 4
 |**English word**|Spanish approximations|
 |-|-|
@@ -264,6 +265,7 @@ This file contains some words I've learned trough my english career :)
 |**unfathomably**|de modo insondable|
 |**woobly**|tambaleante|
 |**yikes**|caramba|
+
 
 ## List 9
 |**English word**|Spanish approximations|

@@ -618,6 +618,217 @@ function someReturn() {
 
 En este caso, obtendremos un error, debido a que después del return, se considera que hay un ;
 
+# Asincronismo
+Hay que comprender que Js es un lenguaje no bloqueante, con un manejador de eventos conocido como *envent loop*, mismo que está implementado como un único hilo para sus interfaces de entrada y salida. La palabra *asinconismo* hace referencia a eventos que no suceden al mismo tiempo.
+
+> Un ejemplo de asincrnismo, sería una pista de aterrizaje de un aeropuerto, ya que no permite el aterrizaje de varios aviones a la vez. 🛬
+
+## Conceptos importantes:
+Memory heap
+: Espacio en memoria compartido para toda una aplicación
+
+Pila de ejecución o *callstack*
+: Pila en la que las funciones se ejecutan con un orden consecutivo
+
+Cola de tareas
+: Pila secundaria en la que se encolan las tareas asíncronas
+
+Eventloop
+: *Observer* de la pila de ejecución que valida que tiene la finalidad de darle lugar a las funciones de la cola de tareas o *callbacks*
+
+## Callbacks
+Un callback es una función que es pasada como parámetro a otra función, misma que se ejecutará cuando los proceso de la función principal termine.
+
+En el siguiente ejemplo, vemos un callback pasado a una función:
+
+```javascript
+function sum(num1, num2) {
+  return num1 + num2
+}
+function calc(num1, num2, callback) {
+  return callback(num1, num2)
+}
+console.log(calc(1, 5, sum)) // 6
+```
+
+Veamos otro ejemplo, que nos permitirá manejar tiempos de ejecución
+
+```javascript
+function printDate(nowDate) {
+  console.log(nowDate)
+}
+function createDate(callback) {
+  console.log(new Date) // 2021-01-05T02:04:01.154Z
+  setTimeout(function() {
+    let date = new Date
+    callback(date)
+  }, 3000)
+}
+createDate(printDate) // 2021-01-05T02:04:04.157Z
+```
+
+En el siguiente ejemplo, haremos la implementación de un callback dentro de una función llamada `fetchData` que hace un llamado a la api de Rick and Morty mediante `XMLHttpRequest`, nótese que este programa cae en un vicio que se conoce como *callback hell*, dado que encadena múliples procesos asíncronos y genera un código que crece horizontalmente.
+
+```javascript
+let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
+const API = 'https://rickandmortyapi.com/api/character/'
+
+console.log(API)
+
+function fetchData(api_url, callback) {
+  let xthttp = new XMLHttpRequest()
+  // Definiendo el método, la url y activando el asincronismo de nuestra petición
+  xthttp.open('GET', api_url, true);
+  xthttp.onreadystatechange = function(event) {
+    // Leyendo el estado en el que senencuentra xhttp (1-5)
+    if(xthttp.readyState === 4) {
+      // Leyendo el código del status http
+      if(xthttp.status === 200) {
+        // Nuestro callback recibiría un error y luego la respuesta
+        callback(null, JSON.parse(xthttp.responseText))
+      } else {
+        const error = new Error(`Error en la consulta a ${api_url}`)
+        return callback(error, null)
+      }
+    }
+  }
+  xthttp.send()
+}
+fetchData(API, function(firstError, firstResponse) {
+  if(firstError) return console.error(firstError)
+  fetchData(API + firstResponse.results[0].id, function(secondError, secondResponse) {
+    if(secondError) return console.error(secondError)
+    fetchData(secondResponse.origin.url, function(thirdError, thirdResponse) {
+      if(thirdError) return console.error(thirdError)
+      console.log(firstResponse.info.count)
+      console.log(secondResponse.name)
+      console.log(thirdResponse.dimension)
+    })
+  })
+})
+```
+
+## Promesas
+Son objetos definidos en el estándar de JS, que nos permitirán administrar procesos asíncronos de una manera más amigable.
+
+en el siguiente ejemplo, implementamos la estructura básica de una promesa con la finalidad de entender su funcionamiento, en ella veremos el uso del prototipo `Promise` y de las funciones `then` y `catch`
+
+```javascript
+const sometimesWillHappen = () => {
+  /**
+   * Generamos una nueva promesa que recibe como parámetro dos
+   * funciones: una que se ejecutará si el resultado es exitoso y otra
+   * que se ejecutará si el resultado es negativo
+   */
+  return new Promise((resolve, reject) => {
+    if(true) {
+      resolve('Success message')
+    } else {
+      reject('Error message')
+    }
+  })
+}
+// Implementando la función asíncrona
+sometimesWillHappen()
+  // lo que sucede después de que se resuelve la promesa
+  .then(response => console.log(response))
+  // lo que sucede cuando no se puede resolver exitósamente
+  .catch(error => console.error(error))
+```
+
+Podemos generar un módulo en el que encapsulemos nuestra función del ejercicio anterior `fetchData`pero traducido a sintaxis de promesas:
+
+```javascript
+let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
+const fetchData = api_url => {
+  return new Promise((resolve, reject) => {
+    const xthttp = new XMLHttpRequest()
+    xthttp.open('GET', api_url, true);
+    xthttp.onreadystatechange = (() => {
+      if(xthttp.readyState === 4) {
+        xthttp.status === 200 ?
+          resolve(JSON.parse(xthttp.responseText)) :
+          reject(new Error(`Error en la consulta a ${api_url}`))
+      }
+    })
+    xthttp.send()
+  })
+}
+module.exports = fetchData
+```
+
+Posteriormenre, para utilizar este módulo y hacer el mismo encadenamiento pero con la sintaxis de promesas:
+```javascript
+const fetchData = require('../utils/fetchData')
+const API = 'https://rickandmortyapi.com/api/character/'
+
+fetchData(API)
+  .then(data => {
+    console.log(data.info.count)
+    return fetchData(`${API + data.results[0].id}`)
+  })
+  .then(data => {
+    console.log(data.name)
+    return fetchData(data.origin.url)
+  })
+  .then(data => {
+    console.log(data.dimension)
+  })
+  .catch(error => {
+    console.error(error)
+  })
+```
+
+Nótese que el código se hace vertical, modularizable y más legible con el uso de promesas.
+
+# Async-await
+Es una forma que nos proporciona JavaScript para gestionar la ejecución de promesas de manera que no ejecutemos las siguientes líneas de código después de una línea que marcamos con la palabra reservada `await`. Veamos un ejemplo de la implementación de manera básica:
+```javascript
+const doSomethingAsync = () => {
+  return new Promise((resolve, reject) => {
+    (true) ?
+    setTimeout(() => {
+      resolve('Do something async')
+    }, 3000) :
+    reject(new Error('Test error'))
+  })
+}
+const anotherFunction = async () => {
+  try {
+    const something = await doSomethingAsync()
+    console.log(something)
+  } catch(error) {
+    console.error(error)
+  }
+}
+console.log('Before function execution')
+anotherFunction()
+console.log('After function excecution')
+```
+
+Nótese que para usar la palabra reservada `await` tenemos que ejecutar el proceso asíncrono dentro de una función que lleva el prefijo `async`. Adicional, que el await se usa dentro de un bloque `try-catch`. No se ejecutará ninguna línea de código posterior a la que hayamos usado await, en caso de fallo, nos iremos al catch.
+
+Para generar una implementación de peticiones al servidor como en los ejemplos de callbacks y promesas, hacemos lo siguiente (encapsulando la lógica del XMLHttpRequest en fetchData):
+```javascript
+const fetchData = require('../utils/fetchData')
+const API = 'https://rickandmortyapi.com/api/character/'
+const anotherFunction = async url => {
+  try {
+    const data = await fetchData(url)
+    const character = await fetchData(`${url + data.results[0].id}`)
+    const origin = await fetchData(`${character.origin.url}`)
+    console.log(data.info.count)
+    console.log(character.name)
+    console.log(origin.dimension)
+  } catch(error) {
+    console.error(error)
+  }
+}
+console.log('Before')
+anotherFunction(API)
+console.log('After')
+```
+
 # ES6
 
 ECMAScript es una especificación propuesta por ECMA, que es una organización de estándares. ES6, fue un estándar lanzado en 2015 que permite agregar características nuevas a JavaScript, a partir de ahí, cada año ha salido una nueva versión de ECMAScript.
@@ -798,3 +1009,146 @@ let base = 4
 let exponent = 3
 let result = base ** exponent
 ```
+
+# ES8
+
+## Object.entries
+Nos permite convertir un Objeto a una matriz de arreglos
+
+```javascript
+const data = {
+  frontend: 'uzi',
+  backend: 'fili',
+  design: 'uzi'
+}
+const entries = Object.entries(data);
+console.log(entries) // matrix with three [key, value] items
+console.log(entries.length) // 3
+```
+
+## Object.values
+Nos permite generar un arreglo con todos los valores del objeto
+
+```javascript
+const data = {
+  frontend: 'uzi',
+  backend: 'fili',
+  design: 'uzi'
+}
+const values = Object.values(data);
+console.log(values) // matrix with three items with [values...]
+console.log(values.length) // 3
+```
+
+## Padding
+Nos permite anteponer o sobreponer elementos a un string
+
+```javascript
+const string = 'hello'
+console.log(string.padStart(7, 'hi')) // hihello
+console.log(string.padEnd(12, ' ------')) // hello -----
+```
+
+## Trailing comma
+Nos permite dejar una coma al final de un objeto
+
+```javascript
+const obj = {
+  name: 'uzi',
+}
+```
+
+## [Async-await](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#async-await-async-await)
+
+# ES9
+
+## [Spread operator](https://github.com/uuzii/my-notepad/blob/main/engineering/js.md#spread-operator-spread-operator)
+
+## Promise.finally
+Nos permitirá ejecutar un cloque de código cuándo se completó una promesa
+
+```javascript
+const helloWorld = () => {
+  return new Promise((resolve, reject) => {
+    (true)
+      ? resolve('Hello world')
+      : reject(new Error('Test error'))
+  })
+}
+helloWorld()
+  .then(response => console.log(response))
+  .catch(error => console.log(error))
+  .finally(() => console.log('fin'))
+```
+
+## Mejoras Regex
+Nos permite agrupar elementos de una expresión regular para posteriormente tenerlos dentro de un array
+
+```javascript
+const regexDAta = /([0-9]{4})-([0-9]{2})-([0-9]{2})/
+const match = regexData.exec('2018-04-20')
+const year = match[1]
+const mont = match[2]
+const day = match[3]
+console.log(year, month, day)
+```
+
+# ES10
+
+##  Array.prototype.flat
+Nos permitirá aplanar un arreglo que tenga determinados elementos de profundidad
+
+```javascript
+let array = [1,2,3, [1,2,3, [1,2,3]]]
+console.log(array.flat()) // [1,2,3,1,2,3, [1,2,3]]
+console.log(array.flat(2)) // [1,2,3,1,2,3,1,2,3]
+```
+
+##  Array.prototype.flatMap
+Nos permite aplanar un array utilizando cierto mapeo en la estrucutra resultante
+
+```javascript
+let array = [1,2,3,4,5]
+console.log(array.flatMap(value => [value, value * 2])) // [1,2,2,4,3,6,4,8,5,10]
+```
+
+## String.protoype.trimStart y trimEnd
+Nos permite eliminar espacios en blanco al inicio o al final de un string
+
+```javascript
+let hello = '      hello'
+console.log(hello.trimStart()) // hello
+```
+
+## Optional try binding
+Nos permite pasar de manera opcional el parámetro de error al `catch`
+
+```javascript
+try {
+
+} catch {
+  // se puede usar el `error`
+}
+```
+
+## Object.fromEntries
+Transforma una matriz clave-valor a un objeto, es decir, lo inverso de Object.entries
+
+```javascript
+let entries = [['name', 'uzi'], ['age', '23']]
+console.log(Object.fromEntries(entries))
+```
+
+## Symbol.prototype.description
+Nos permite agregar una descripción a un elemento de tipo ´Symbol´
+
+```javascript
+let mySymbl = `My Symbol`
+let symbol = Symbol(mySymbol)
+console.log(symbol.descriptiom)
+```
+
+# ES.next
+ES.next se refiere a la siguiente versión de JS que saldrá, el equipo técnico que se encarga de validar estos avances se llama [TC39](https://tc39.es), cuyos integrantes revisan las propuestas y eventualmente las autorizan. Nosotros también podemos colaborar en ellas y pasan las siguientes etapas:
+
+> Stage 0: Idea > Stage 1: Proposal > Stage 2: Draft > Stage 3: Candidate > Stage 4: Ready

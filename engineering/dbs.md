@@ -314,13 +314,13 @@ CREATE TABLE people (
 En la consola, desplegamos nuestra schema, y damos click derecho en Tablas luego en la opción Create Table. Colocamos un nombre a nuestra tabla y veremos que por default nos crea un campo id, lo modificamos a nuestro gusto, generalmente para un id, seleccionaremos el campo AI (automatic increment) que lo incrementará automáticamente cuando se agregue más registros, agregamos los campos mencionados arriba con sus tipos y al darle apply, veremos algo así:
 
 ```sql
-CREATE TABLE `platziblog`.`people` (
-  `person_id` INT NOT NULL AUTO_INCREMENT,
-  `last_name` VARCHAR(255) NULL,
-  `first_name` VARCHAR(255) NULL,
-  `address` VARCHAR(255) NULL,
-  `city` VARCHAR(255) NULL,
-  PRIMARY KEY (`person_id`));
+CREATE TABLE schemaname.people (
+  person_id INT NOT NULL AUTO_INCREMENT,
+  last_name VARCHAR(255) NULL,
+  first_name VARCHAR(255) NULL,
+  address VARCHAR(255) NULL,
+  city VARCHAR(255) NULL,
+  PRIMARY KEY (person_id));
 ```
 
 Posteriormente, dentro de Tables, veremos que ya existe la tabla people. Para hacer una consulta, podemos dar click derecho y hacer click en Select Rows - Limit 1000 para ver los primeros 1000 registros.
@@ -396,3 +396,535 @@ Para borrar una base de datos/schema en Workbench:
 
 Los comandos DDL, se usan mayormente al inicio del proyecto, posteriormente, usaremos los comandos **DML**.
 
+## DML
+Es otro sub-lenguaje de SQL, que tiene que ver con el manejo del contenido de la base de datos, no tanto de la base de datos per se. Quiere decir *Data Manipulation Language*, algunas de las acciones principales son:
+* Insert
+* Update
+* Delete
+* Select
+
+### INSERT
+Agrega nuevos registro o tuplas en una tabla de una base de datos, sería un equivalente a agregar *filas* a una tabla:
+
+```sql
+INSERT INTO people (last_name, first_name, address, city)
+VALUES ('Rodriguez', 'Uzi', 'Calle X', 'HMO')
+```
+
+* `INSERT` indica en qué tabla se van a introducir los datos y cuáles serán los argumentos
+* `VALUES` representa una de las *filas* a insertar, en este punto es muy importante mantener el orden en el que se introducen los campos
+
+PAra hacerlo en workbench, introducimos directamente el comando anterior en la tabla.
+
+### UPDATE
+Nos permitirá modificar datos ya existentes en nuestra tabla
+
+```sql
+UPDATE people
+SET last_name = 'Alcantara', city = 'MEX'
+WHERE person_id = 1;
+
+UPDATE people
+SET last_name = 'Alcantara'
+WHERE city = 'MEX';
+
+UPDATE people
+SET first_name = 'Uzi';
+```
+
+Donde:
+* `UPDATE` contiene la tabla
+* `SET` especifica qué campo se tiene que cambiar y por qué valor
+* `WHERE` detalla qué condiciones debe cumplir el ítem que se va modificar
+
+En el primer caso, cambiamos apllido y ciudad de un row puntual, en el segundo caso afectamos a todos los rows que sean de la ciudad MEX; en el tercer caso no especificamos qué ítem se debe modificar.
+
+### DELETE
+Puede borrar el contenido de una tabla, en el primer caso, borra un ítem puntual, si no especificamos dónde como en el segundo caso de abajo, se puede borrar toda la tabla.
+
+```sql
+DELETE FROM people
+WHERE person_id = 1;
+
+DELETE FROM poeple;
+```
+## SELECT
+Nos consulta información de una base de datos:
+
+```sql
+SELECT first_name, last_name
+FROM people;
+```
+
+Donde:
+* `SELECT` nos permitirá ver los campos indicados
+* `FROM` especifica la tabla
+* `WHERE` especifica argumentos de los ítems que queremos consultar
+
+## ¿Qué tan estándar es SQL?
+El lenguaje SQL, unificó la forma en la que se hacían consultas a una base de datos. Aún actualmente, muchas tecnologías modernas siguen usando su estructura sintáctica.
+
+> 💡 Para todos los manejadores de bases de datos relacionales que usan SQL, el lenguaje DDL y DML se utilizan igual
+
+# Creando una base de datos para un Blogpost
+Para crear la DD del diagrama físico que tenemos arriba, necesitamos seguir los siguientes pasos:
+1. Identificar qué entidades NO poseen llaves fóraneas, pues éstas entidades, dependen de otras.
+2. Proceder a crear las tablas de las entidades que no poseen llaves primarias, cuidando que tengan bien asignados sus tipos de dato, valores por defecto, así como sus constrains, que pueden ser:
+  * **PK** PRIMARY KEY
+  * **NN** NOT NULL
+  * **UQ** UNIQUE
+  * **AI** AUTO INCREMENT
+3. Proceder a crear las *tablas dependientes*, es decir, las que tienen llaves foráneas cuidando que éstas últimas correspondan a entidades de las que ya tenemos tabla creada.
+4. Configurar las llaves foráneas especificando las tablas referenciadas y sus acciones, que pueden ser:
+  * **RESTRICT** Para impedir que se borre información debajo de este ítem.
+  * **CASCADE** Para re-etiquetar todos los elementos de una columna.
+  * **SET NULL** Para poner un null en lugar del ítem (cuidado con los campos NN).
+  * **NOT ACTION** Para no hacer nada.
+  Éste es un ejemplo de la forma SQL de crear una FK:
+  ```sql
+  ALTER TABLE schemaname.posts -- Modificando la tabla
+  ADD INDEX posts_users_idx (user_id ASC); -- Añadiendo un index al campo user_id
+  ;
+  ALTER TABLE schemaname.posts -- Altera la tabla añadiendo un constrain
+  ADD CONSTRAINT posts_users
+    FOREIGN KEY (user_id)
+    REFERENCES schemaname.users (id)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
+  ```
+5. Crear las tablas que tienen llaves foráneas de tablas dependientes
+6. Crear las *tablas transitivas*, es decir, aquellas que en nuestro diagrama físico, descomponen las relaciones N:N. Dichas tablas, no poseen información per se, sino solo contendrán llaves foráneas a modo de pivote para generar las relaciones N:N entre dos entidades.
+
+> 💡  Pro tip: En Workbench, una vez generada nuestra BD, podemos usar Database/Reverse engineer... para generar el diagrama físico de nuestra base de datos si es que estamos en un lugar en el que no conocemos a detalle cómo se ha diseñado una instancia.
+
+# Consultas o querys
+Es importante saber hacer consultas correctas a las bases de datos, muchas veces, puede exisitr una gran cantidad de información distribuida en múltiples tablas, lo cuál de manera estática muchas veces carece de sentido, pero cuando sabemos consultar esa información para presentarla de modos útiles, podemos aportar mucho valor a una organización. Hacer query's es el quehacer diario del administrador de bases de datos.
+
+> Cualquier duda de negocio se puede resolver haciendo un buen query
+
+## Estructura básica de un query
+Las partes esenciales de una consulta son: `WHERE`y `FROM`. El siguiente es un ejemplo de un query:
+```sql
+SELECT city, count(*) AS total -- proyectamos ciertos datos como total
+FROM people -- de la tabla people
+WHERE active = true -- agregamos una condición
+GROUP BY city -- agrupamos por ciudad
+ORDER BY total DESC -- ordenamos de manera descendente
+HAVING total >= 2; -- filtra el total de los que tienen más de dos
+```
+
+Veamos a detalle algunas consultas básicas para nuestro blog:
+* Consulta básica de todos los elementos de una tabla
+  ```sql
+  SELECT *
+  FROM posts;
+  ```
+* Consulta de todos los elementos que sean de fechas menores a 2020:
+  ```sql
+  SELECT *
+  FROM posts
+  WHERE post_date < '2020';
+  ```
+
+## SELECT
+`SELECT` nos ayuda a hacer las diferentes proyecciones de nuestra base de datos. La forma mas básica de usar `SELECT` es:
+```sql
+SELECT * FROM [table];
+```
+
+Si qusiéramos seleccionar solo ciertos campos de una tabla:
+```sql
+SELECT [column1], ..., [columnN] FROM [table];
+```
+
+Si queremos cambiar el nombre que se le da al campo en la consulta:
+```sql
+SELECT [column1] AS [alias1], ..., [columnN] AS [aliasN] FROM [table];
+```
+
+Si queremos hacer una agrupación sencilla, que nos arrojaría un conteo de los elementos de una tabla:
+```sql
+SELECT COUNT(*) AS [alias] FROM [table]
+```
+
+De este modo vemos que, si bien podemos consultar y filtrar datos de nuestra base de datos, también podemos construir *datos on the flight*.
+
+## FROM
+`FROM`, como hemos visto, nos ayuda a indicar de dónde se van a traer los datos. Hacer consultas a una sola tabla es sencillo, pero cuando queremos unir tablas para hacer proyecciones más específicas, requeriremos ser más minuciosos. Para esto, usaremos otra sentencia que es inseparable de `FROM` y esta es `JOIN`. Para entender esto, usaremos diagramas de Venn:
+
+### Diferencia
+Para la diferencia, hay dos tipos de `JOIN` que nos permiten proyectarla: *LEFT JOIN* y *RIGHT JOIN*. Consideremos que estamos haciendo una base de datos para un blog, sea **A** la tabla que trae los posts y **B** la tabla que trae los usuarios:
+
+![diferencia](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-1.jpg?raw=true)
+
+* El el primer caso de `LEFT JOIN`, traeríamos todos los usuarios, tengan o no tengan posts. En SQL ejecutaríamos
+  ```sql
+  SELECT *
+  FROM schema.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* En el segundo caso de `LEFT JOIN`, solo traeríamos los usuarios que no tengan posts. En SQL ejecutaríamos:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id
+    WHERE posts.user_id IS NULL;
+  ```
+* El el primer caso de `RIGHT JOIN`, traeríamos todos los posts, aunque ningún usuario los haya creado. En SQL:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* El el segundo caso de `RIGH JOIN` traeríamos todos los posts que ningún usuario haya creado.
+```sql
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id
+    WHERE posts.user_id IS NULL;
+  ```
+
+### Intersección
+Para la intersección, existe el *INNER JOIN*, que trerá los datos que compartan ambas tablas y el *OUTER JOIN*, que se presenta en dos casos: unión (traería todos los datos de las tablas) y la diferencia simétrica, que traería todos los datos de las tablas, excepto aquellos que tengan en común. Volviendo al ejemplo de la tabla **A** y **B**, veríamos lo siguiente:
+
+![imagen](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/join-2.jpg?raw=true)
+
+* El `INNER JOIN` traería los usuarios que tengan algún post asociado o viceversa. En SQL:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+	  INNER JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* El `OUTER JOIN` en el caso unión, traería todos los usuarios y todos los posts.
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id
+  UNION
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id;
+  ```
+* El `OUTER JOIN` en el caso diferencia simétrica, traería todos los usuarios que no tengan posts asociados y todos los posts que no tengan usuario asociado. En SQL:
+  ```sql
+  SELECT *
+  FROM schemaname.users
+    LEFT JOIN schemaname.posts ON users.id = posts.user_id
+  WHERE posts.user_id IS NULL
+  UNION
+  SELECT *
+  FROM schemaname.users
+    RIGHT JOIN schemaname.posts ON users.id = posts.user_id
+  WHERE posts.user_id IS NULL;
+  ```
+
+## WHERE
+`WHERE` nos ayuda a filtrar tuplas de acuerdo a criterios específicos como fechas, cantidades, etc. Ejemplo, la siguiente consulta nos permitirá consultar todos los posts que tengan un id menor a 50:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE id < 50;
+```
+En estos casos, nos será muy útil tener bien definidos los tipos de dato de nuestros campos.
+
+Si queremos ingresar criterios de los que no tenemos el valor preciso, podemos usar la sentencia `LIKE`:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE titulo LIKE '%[someWordBetweenFieldValue]%';
+```
+
+Para especificar que el valor buscado esté al inicio o al final, removemos el signo de `%` del inicio o del final para cada opción respectivamente:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE titulo LIKE '[someWordBetweenFieldValue]%'; -- para buscar la palabra al inicio
+```
+
+Podemos validar también con fechas:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE post_date > '2025-01-01';
+```
+
+O elementos en intervalos con las sentencias `BETWEEN` y `AND` (estas sentencias se pueden usar para establecer intervalos a otros tipos de dato):
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE post_date BETWEEN '2023-01-01' AND '2025-01-01';
+```
+
+Podemos usar la función `YEAR`, por mencionar un ejemplo, para no escribir toda la fecha sino solo el año y filtrar los elementos de acuerdo a alguno de sus campos que maneje un timestamp:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE YEAR(post_date) BETWEEN '2023' AND '2025';
+```
+
+## Valores nulos y no nulos
+Los *valores nulos* son los valores que se guardan cuando un campo no se ha definido. El constrain `NOT NULL` impide que los campos se rellenen de este modo. a través de `WHERE` podemos hacer consultas de los valores nulos, no se hacen de la misma manera que los demás datos, pues no hay nada qué comparar. Usaremos una sentencia especial, que es:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE user_id IS NULL;
+```
+
+Muchas veces consultamos más bien el complemento, es decir, lo que no es nulo:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE user_id IS NOT NULL;
+```
+
+## Sentencia AND
+En `WHERE`podemos usar la sentencia `AND` para agrecar condicionales sobre los campos que queremos consultar:
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE category_id IS NOT NULL
+	AND status = 'activo'
+  AND id < 50
+  AND category_id = 2
+  AND YEAR(post_date) = '2025';
+```
+
+## GROUP BY
+Le indicará a la base de datos ciertos criterios para agrupar información de nuestras consultas de manera funcional. La siguiente consulta, nos muestra el número de posts activos, seleccionando una columna, filtrando los datos y contándolos en una columna llamada `post_quantity`:
+```sql
+SELECT status, COUNT(*)post_quantity
+FROM shcemaname.posts
+GROUP BY status;
+```
+
+Esta sentencia se utiliza mucho para presentar informes de acuerdo a determinados criterios requeridos por el negocio. Veamos otro ejemplo, generando un alias a la columna en cuestión, en este caso la lógica es: selecciona todas las fechas de publicación, agrúpalas y cuenta la cantidad de elementos que hay de cada año:
+```sql
+SELECT YEAR(post_date) AS post_year, COUNT(*) AS post_quantity
+FROM shcemaname.posts
+GROUP BY post_year;
+```
+
+Éste sería el mismo ejemplo pero agrupando los datos mediante su mes de publicación:
+```sql
+SELECT MONTHNAME(post_date) AS post_month, COUNT(*) AS post_quantity
+FROM schemaname.posts
+GROUP BY post_month;
+```
+
+De la siguiente manera, conjugaríamos los datos de dos columnas para agruparlos por dos criterios:
+```sql
+SELECT status, MONTHNAME(post_date) AS post_month, COUNT(*) AS post_quantity
+FROM schemaname.posts
+GROUP BY status, post_month;
+```
+
+## ORDER BY
+La sentencia `ORDER BY` nos permite establecer criterios para ordenar los datos consultados. Implementemos esto en el ejemplo del blog ordenando los elementos por fecha de publicación de manera ascendente:
+```sql
+SELECT *
+FROM schemaname.posts
+ORDER BY post_date ASC;
+```
+> Para ordenar de manera descendente, usaríamos la palabra `DESC`
+
+Si queremos ordenar mediante criterios aplicados a cadenas de texto, podemos emplear la siguiente forma, que por default ordenará alfabéticamente (o numéricamente si es el caso):
+```sql
+SELECT *
+FROM schemaname.posts
+ORDER BY title ASC;
+```
+
+Podemos agregar un límite a nuestro ordenamiento mediante la sentencia `LIMIT`:
+```sql
+SELECT *
+FROM schemaname.posts
+ORDER BY post_date ASC
+LIMIT 5;
+```
+
+## HAVING
+La sentencia `HAVING` tiene una similitud con `WHERE`, pero su diferencia radica en que los elementos que se agrupan, no se pueden filtrar mediante la sentencia `WHERE`, para eso se utiliza `HAVING`, ejemplo:
+```sql
+SELECT MONTHNAME(post_date) AS post_month, status, COUNT(*) AS post_quantity
+FROM schemaname.posts
+GROUP BY status, post_month
+HAVING post_quantity > 1
+ORDER BY post_month;
+```
+
+# Nested queries
+Los nested queries o interminable agujero de conejo, son consultas anidadas que nos permiten por ejemplo, si queremos generar queries con una tabla *virtual* hecha por un `JOIN`, o una que resulte de un `WHERE`. De esta forma se pueden anidar n queries. Éstos se usan solo cuando no hay forma de responder una pregunta haciendo una consulta, luego entonces hacemos un query y después eso lo metemos en la entrada (`FROM`) de un segundo query.
+
+Hay que tener cuidado con esta práctica, ya que en bases de datos muy grandes se pueden generar *productos cartesianos*, es decir, la multiplicación de todos los datos de una tabla con todos los de otra y otra, de manera que los procesos se vuelvan muy difíciles de procesar. Es decir, no es escalable.
+
+En el siguiente ejemplo, creamos una tabla virtual denominada `new_table_projection` y sobre ella ejecutamos un query que agrupa los datos y los ordena:
+```sql
+SELECT new_table_projection.date, COUNT(*) AS post_count
+FROM (
+	SELECT DATE(MIN(post_date)) AS date, YEAR(post_date) AS post_year
+    FROM schemaname.posts
+    GROUP BY post_year
+) as new_table_projection
+GROUP BY new_table_projection.date
+ORDER BY new_table_projection.date;
+```
+
+Este tipo de prácticas se usa comúnmente para consultas de máximos, mínimos o agrupaciones más customizadas. Otro ejemplo, es utilizarlo en el contexto del `WHERE`.
+```sql
+SELECT *
+FROM schemaname.posts
+WHERE post_date = (
+	SELECT MAX(post_date)
+    FROM schemaname.posts
+);
+```
+
+# Convertir una pregunta de negocio en un query
+La conversión de preguntas a queries es una habilidad que se va desarrollando con el ejercicio continuo. Pero estas soon algunas equivalencias aproximadas de nuestro lenguaje con las sentencias de SQL:
+|Sentencia|Aproximación|
+|-|-|
+|`SELECT`|Lo que queremos mostrar ¿qué datos? columnas, campos dinámicos|
+|`FROM`|De dónde voy a tomar los datos, ¿de una tabla?, ¿de más tablas unidas?|
+|`WHERE`|Los filtros de los datos que quiero mostrar|
+|`GROUP BY`|Los rubros por los que me interesa agrupar la información.|
+|`ORDER BY`|Orden en el que quiero presentar la información que ya filtré, hacer tops|
+|`HAVING`|Los filtros que quiero que mis datos **agrupados** tengan|
+
+Ejemplos:
+
+1. Consultar el número de tags que tiene cada post y ordenarlos de manera descendente:
+  ```sql
+  SELECT posts.title, COUNT(*) num_etiquetas
+  FROM schemaname.posts
+    INNER JOIN schemaname.posts_tags ON posts.id = schemaname.posts_tags.post_id
+    INNER JOIN schemaname.tags ON tags.id = schemaname.posts_tags.tag_id
+  GROUP BY posts.id
+  ORDER BY num_etiquetas DESC;
+  ```
+
+2. Consultar cuáles son las tags que tiene cada post:
+  ```sql
+  SELECT posts.title, group_concat(tag_name)
+  FROM schemaname.posts
+	  INNER JOIN schemaname.posts_tags ON posts.id = schemaname.posts_tags.post_id
+    INNER JOIN schemaname.tags ON tags.id = schemaname.posts_tags.tag_id
+  GROUP BY posts.id
+  ```
+
+3. Consultar las tags que no tienen ningún post asociado
+  ```sql
+  SELECT *
+  FROM schemaname.tags
+	  LEFT JOIN schemaname.posts_tags ON tags.id = schemaname.posts_tags.tag_id
+  WHERE posts_tags.tag_id IS NULL;
+  ```
+
+4. Consultar un ranking de las categorías que tienen más posts a las que tienen menos:
+  ```sql
+  SELECT c.category_name, COUNT(*) AS cant_posts
+  FROM uziblog.categories AS c
+	  INNER JOIN uziblog.posts AS p ON c.id = p.category_id
+  GROUP BY c.id
+  ORDER BY cant_posts DESC;
+  ```
+
+5. Consultar el usuario que ha creado mas posts:
+  ```sql
+  SELECT u.nickname, COUNT(*) AS cant_posts
+    FROM uziblog.users AS u
+	  INNER JOIN uziblog.posts AS p ON u.id = p.user_id
+  GROUP BY u.id
+  ORDER BY cant_posts DESC
+  LIMIT 1;
+  ```
+
+# Bases de datos no relacionales
+En general, se distinguen de las bases de datos SQL y se les denomina No SQL. Éstos son los tipos de bases de datos no relacionales:
+* **Clave-valor**. Están hechas para almacenar y extraer datos con una clave única, debido a ello no podremos hacer consultas muy complejas. Manejan los diccionarios de manera excepcional. Ejemplos: *DynamoDB*, *Cassandra*.
+* **Basadas en documentos**. Son una implementación de clave-valor de una forma semi-estructurada, manejarán generalmente JSON y XML. Probablemente fuera de SQL son las más usadas. Nos servirá muy bien para mantener estados en tiempo real, no mucho para queries. Ejemplos: *MongoDB*, *Firestore*.
+* **Basadas en grafos**. Basadas en teoría de grafos, se utilizan con entidades que se encuentran fuertemente interconectadas, ideales para almacenar relaciones complejas, las veremos en inteligencia artificial y redes neuronales. Ejemplos: *neo4j*, *TITAN*.
+* **En memoria**. Son aquellas que viven en memoria, se caracterizan por ser muy rápidas pero se ven limitadas por los reinicios o indexaciones de las máquinas. Ejemplos: *Memcached*, *Redis*.
+* **ptimizadas para búsquedas**. Pueden tener diversas estructuras, su ventaja es que se pueden hacer queries y búsquedas complejas de manera óptima. Sirven como grandes repositorios de datos históricos que nos ayudan generalmente en business intelligence o machine learning. Ejemplos: *Elasticsearch*, *BigQuery*.
+> Las bases de datos relacionales se pueden utilizar para responder a todo tipo de problemas pero conforme escalan puede que se enfrenten a problemas, por ello es que las no-relacionales se enfocan a resolver ciertos problemas.
+
+## Servicios administrados y jerarquía de datos
+Los servicios administrados son aquellos que nos permiten delegar las funciones de mantenimiento de los equipos a proveedores de Cloud como Google o Amazon. En este caso usaremos *Firestore* de Google, que nos permite interactuar con una base de datos con lenguajes de programación, pero también nos ofrece una interfaz gráfica para administrarla.
+
+En SQL, dada una base de datos, teníamos dentro de ella schemas, dentro de los schemas tablas, dentro de las tablas rows o tuplas, por cada row un solo dato consistente. Muchas de estas reglas no se siguen en las bases de datos no relacionales (aunque sigue existiendo una estructura jerárquica). Así pues, la estructura fundamental es:
+
+> Base de datos > Colecciones > Documentos
+
+Esta estructura, obedece a los archivos estándar que son muy conocidos en el mundo del desarrollo como los son los archivos json.
+
+## Top level collection con Firebase
+Las bases de datos no relacionales son un poco más acordes al lenguaje natural y muchas veces no serán tan intrincadas como las relacionales. Las *top level collections* son las colecciones que tenemos de manera más inmediata en nuestro proyecto. En el caso de Firestore, administraremos nuestra base de datos mediante *Firebase*, que nos brinda una consola con varias herramientas como son autenticación, hosting, pero nos enfocaremos en base de datos. Para empezar a configurarla, creamos una base de datos (en modo producción) ésta se denomina *top level collection*:
+
+![Add DB](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-db-firebase.jpg?raw=true)
+
+Luego damos click a iniciar una colección. Las colecciones en este caso son un simil de las entidades en SQL. 
+
+![Add Collection](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-collection-firebase.jpg?raw=true)
+
+Una colección no puede existir si no creamos un documento, por lo cuál tenemos que generar al menos uno:
+
+![Add Document](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/add-document-firebase.jpg?raw=true)
+
+## Tipos de datos en Firestore
+Al crear documentos, nos encontraremos con que tenemos los siguientes tipos de dato:
+* string
+* number
+* boolean
+* map (nos permite anidar otro documento)
+* array
+* null
+* timestamp
+* geopoint
+* reference (hace referencia a otro documento)
+
+## Subcolecciones
+Consideremos que las bases de datos no relacionales son más flexibles, pues pueden haber documentos al mismo nivel que no tengan la misma estructura.
+
+Cuando creamos un documento con sus respectivos campos, vemos que como campo podemos agregar otro documento (que es un simil de la tabla etiquetas en el blog) y así podemos ir añadiendo colecciones.
+
+Esta práctica queda a consideración del desarrollador, ¿cuándo es bueno utilizar subcolecciones? si vamos a necesitar listar los elementos de la colección de manera independiente, hacer queries separados, hacer listados o varios documentos tendrán referencia a los de nuestra colección, conviene que sea una top level collection, pero si la información solo nos interesa visualizarla en el contexto de un documento, bien puede ser una subcolección.
+
+## Recreando el blog
+Para recrear el modelo de datos de un blog, no hay una forma exacta de hacerlo, sino que depende del caso de uso que nos ocupe, por ejemplo: podríamos poner como top level la colección de posts y dentro de cada post el usuario que lo creó, pero si nuestra aplicación constantemente consultará la lista de todos los usuarios, este modelo no será muy funcional, pues tendríamos que hacer varias consultas.
+
+> Lo ideal es tener en las top level collections los datos que se verán en una primera vista. Si requerimos relacionar otra información por fuera, podemos crear otras colecciones a la par.
+
+La siguiente imagen muestra una captura de cómo podríamos estructurar nuestro blog de manera general:
+
+![Firebase blog](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/firebase-blog.jpg?raw=true)
+
+Nótese que las etiquetas vienen como una subcolección y cuando necesitamos algún dato de una colección top level hacemos referencia a ella.
+
+# Bases de datos en la vida real
+Ahora qeu hemos analizado el funcionamiento de las diferentes bases de datos, consideremos que, en el mundo real no existe una base de datos que funcione para todo, si bien en algún momento solo se utilizó SQL, hoy en día han surgido nuevas necesidades a las que buscan atacar algunas de las bases de datos no relacionales. De este modo, puede que para una sola aplicación se utilicen distintas bases de datos según las necesidades de la misma. Existen múltiples disciplinas en las cuáles podemos incursionar dentro del mundo de la data:
+
+## Big data
+Es uno de los temas que está de moda actualmente. Esta disciplina tiene dos grandes acepciones, pues se ha deformado el significado:
+1. Originalmente el concepto nace de lo que dice su nombre: *grandes datos*, YouTube, por ejemplo, fue una de las aplicaciones que iniciaron este campo. Las bases de datos relacionales ya no respondían exactamente a las necesidades, por ello surge Big Data, para **optimizar el resguardo de una cantidad masiva de datos por segundo**.
+2. Es una acepción del término no muy exacta, pues se utiliza mucho para referirse a analíticas, estadísticas de datos, lo cuál hace mayor referencia a *Business Intelligence*.
+
+Big data en sí, es un movimiento de diferentes bases de datos para guardar y rescatar datos de manera muy rápida, una de sus implementaciones es mediante *Cassandra* por Facebook. Para ciertos casos, como hacer queries complejos, estas bases de datos no nos responderán de la mejor manera.
+
+## Data warehouse
+Hace referencia a grandes repositorios de información (análogo a la bodega de una empresa). Su objetivo no es guardar muchos datos por segundo, sino **guardar la máxima cantidad de datos no recurrentes**: aquellas cosas que se van archivando y deben hacerlo de manera ordenada, se deben resguardar en estos grandes almacenes. Una implmentación de estas bases, es *Big table*, se caracteriza por ser **una sola tabla** de millones de datos como las búsquedas. Este tipo de bases de datos, aparte de especializarse en cantidades de datos, nos deben servir para responder a necesidades del negocio, ejemplo de su implementación es *Big query*.
+
+## Data mining
+Es una disciplina que se dedica a extraer datos de los diferentes lugares donde se tengan almacenados, podrían ser in-house, warehouses, tablas, DBs en producción, datos no normalizados, sin coerción, etc, nos tocaría exprimirlos de la mejor manera para poder consultarlos, concentrarlos, normalizarlos de la mejor manera, en eso consiste Data Mining. La intención es que los datos se hagan más útiles para el negocio.
+* **Extract Transform Load (ETL)**. Es una técnica utilizada para data mining, en la cuál vamos a extraer datos de varios sitios, vamos a tratarlos y posteriormete cargarlos en una nueva base de datos donde la data ya se encuentre normalizada. En los últimos años esta práctica tiende a hacerse en *tiempo real*, tomando periódicamente (cada día o ciertos días) datos vivos de las aplicaciones para archivarlos en una data warehouse, data que aporte mayor valor al negocio a lo largo del tiempo. Existen algunos software que nos permiten hacer esto, que se conocen como *data pipelines*.
+
+## Business Intelligence
+Es una parte muy importante en las carreras de bases de datos, pues generalmente es el fin de todas ellas. Business Intelligence consiste en tener la data de manera clara y oportuna para que las empresas lleguen a los lugares que se proponen usando dicha data en la toma de decisiones. Generalmente veremos el resultado del business intelligence plasmado en gráficas, tablas de balance, dashboards, etc. Para esto más que la técnica es importante la sensibilidad respecto al negocio para entender los resúmenes que le aportan valor.
+
+## Machine Learning
+El machine learning es una de las aplicaciones de los datos. Poodríamos decir que machine learning va más allá del business intelligence, pues no solo consiste en la búsqueda y resumen de los datos de acuerdo a patrones, sino que tomará todo un pull de datos y encontrará patrones que no buscábamos (patrones fortuitos) o que no son lógicos de primera vista para nosotros. Hay varios modelos de machine learning, generalmente se basan en estadística. Machine learning tiene dos casos de uso por lo general:
+* **Problema de clasificación**. Ejemplo: tenemos un pull de datos masivo de un blog, generado por varias décadas, podríamos buscar palabras clave pero esto no será tan eficiente, habría que utilizar una técnica de machine learning que es el procesamiento de lenguaje natural, mismo que es posible gracias a algoritmos *entrenados*. Supongamos que queremos hallar todos los items que hablen de política: introducimos inicialmente un volumen de datos que nosotros ya sabemos que tratan de ese tema para entrenar el algoritmo, posteriormente introducimos ahora sí la masa de datos, el agoritmo encontraría todos los items relacionados con el tema (aunque de primera vista a nosotros pudiera ser que no tienen mucha relación pero en algún punto el algoritmo lo matcheó).
+* **Predicción de datos**. Ejemplo, queremos entender las ventas que hemos hecho, le pasamos todas las ventas de un par de años, genera un modelo, posteriormente introducimos nuevos datos y el algoritmo encontrará todas las relaciones que encuentre entre esos datos, con lo cuál entenderemos posiblemente nuestros puntos de dolor y también podremos predecir el futuro.
+
+Hay que tener en consideración que para generar e implementar este tipo de disciplinas es importante tener fundamentos muy buenos en cuanto a matemáticas y estadística, pero también es importante contar con el conocimiento de manejo de data.
+
+## Data Science
+Consiste en aplicar todas las técnicas de manejo de Data. Generalmente se asocia mucho a las personas que son expertas en la parte formal (matemáticas). Por ello, los Data scientists serán los managers dentro de los equipos de profesionales de datos.
