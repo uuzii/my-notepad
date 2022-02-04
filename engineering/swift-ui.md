@@ -1,3 +1,5 @@
+v0.1.0 🐦 
+
 # Qué es SwiftUI
 Es un framework para crear interfaces de usuario para todas las plataformas de apple, reutilizando elementos ya desarrollados. Para emplearlo es necesario concer Switft y tener instalado Xcode.
 
