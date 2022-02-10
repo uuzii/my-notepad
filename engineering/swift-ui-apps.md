@@ -82,7 +82,7 @@ struct InicioYRegistroView: View {
 }
 ```
 
-### Lógica de pantalla de inicio
+### Lógica de pantalla de inicio
 La pantalla de Inicio, consiste básicamente en el logo y dos botones: "Inicia sesión" y "Regístrate", estos
 han de alternar su propia vista, para lo cuál, primeramente generaremos los botones en el `HStack` de la sección
 anterior:
