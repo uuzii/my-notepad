@@ -37,7 +37,9 @@ que se cree el repo local.
 
 ## Pantalla de inicio
 Para la pantalla de login, observamos que es necesario importar primeramente algunos aassets, principalmente
-el logotipo.
+el logotipo:
+
+![swift ui apps login design](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-ui-apps-login.png?raw=true)
 
 Posteriormente, vemos que la aplicación tiene un fondo de color, para ello implementaremos primeramente
 un `ZStack`:
@@ -242,3 +244,83 @@ ZStack(alignment: .leading) {
 ```
 Recordando que en SwiftUI los text fields no tienen nativamente el hint, se tiene que generar mediante estos `ZStack`
 para poder ocultarlos cuando el usuario escriba.
+
+### Estilos para botones
+Para continuar con la elaboración de la pantalla de inicio, específicamente los botones de *Iniciar sesión*,
+*Iniciar sesión con redes sociales*, *Facebook* y *Twitter*, revisaremos algunas cuestiones de estilos. Los elementos
+siguientes los introduciremos en las estructuras `ScrollView` > `VStack` donde metimos los elementos anteriores.
+
+#### Botón Iniciar sesión:
+```swift
+VStack {
+    ...
+
+    Button(action: {}, label: {
+        Text("INICIAR SESIÓN")
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(
+                EdgeInsets(top: 11, leading: 18, bottom: 11, trailing: 18)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6.0)
+                    .stroke(Color("Dark-Cyan"), lineWidth: 1.0)
+                    .shadow(color: .white, radius: 1)
+            )
+    })
+    
+    ...
+}
+```
+
+Donde resaltaremos el uso de los siguientes modificadores:
+* `frame` con `maxWidth: .infinity`: para que el ancho de el frame se ajuste al total del ancho del padre.
+* `EdgeInsets()`: para especificar el tamaño de cada uno de los paddings
+* `overlay` > `RoundedRectangle`: que será un recatángulo redondeado que estará sobrepuesto a nuestro botón, en este caso
+solo le estamos configurando un `stroke` para el color del borde y `shadow` para generar una sombra a este.
+
+#### Botones Inicar sesión con redes sociales:
+```swift
+VStack {
+    ...
+
+    Text("Inicia sesión con redes sociales")
+        .foregroundColor(.white)
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.top, 48.0)
+        
+    HStack {
+        Button(action: {}, label: {
+            Text("Facebook")
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .frame(width: 128, height: 48, alignment: .center)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6.0)
+                        .foregroundColor(.white)
+                        .opacity(0.2)
+                )
+        })
+
+        Button(action: {}, label: {
+            Text("Twitter")
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .frame(width: 128, height: 48, alignment: .center)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6.0)
+                        .foregroundColor(.white)
+                        .opacity(0.2)
+                )
+        })
+    }
+    .padding(.vertical)
+    .frame(maxWidth: .infinity, alignment: .center)
+
+...
+}
+```
+
+Donde también hemos implementado el modificador `overlay` > `RoundedRectangle` para cada botón y, en
+este caso el `frame(maxWidth: .infinity)` lo hemos implementado para un `HStack`.
