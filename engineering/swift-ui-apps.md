@@ -1,3 +1,5 @@
+v0.1.0 
+
 # Desarrollo de aplicaciones iOS con SwiftUI
 
 ## Contenidos
