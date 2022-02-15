@@ -86,7 +86,7 @@ struct InicioYRegistroView: View {
 }
 ```
 
-### Lógica de pantalla de inicio
+### Estructura de pantalla de inicio
 La pantalla de Inicio, consiste básicamente en el logo y dos botones: "Inicia sesión" y "Regístrate", estos
 han de alternar su propia vista, para lo cuál, primeramente generaremos los botones en el `HStack` de la sección
 anterior:
@@ -171,7 +171,8 @@ struct ContentView: View {
 }
 ```
 
-### SecureField y Scroll
+### Vista Inicio de sesión
+#### SecureField y Scroll
 Para la vista de inicio de sesión, implementaremos la siguiente estructura:
 ```swift
 struct InicioSesionView: View {
@@ -245,12 +246,12 @@ ZStack(alignment: .leading) {
 Recordando que en SwiftUI los text fields no tienen nativamente el hint, se tiene que generar mediante estos `ZStack`
 para poder ocultarlos cuando el usuario escriba.
 
-### Estilos para botones
+#### Estilos para botones
 Para continuar con la elaboración de la pantalla de inicio, específicamente los botones de *Iniciar sesión*,
 *Iniciar sesión con redes sociales*, *Facebook* y *Twitter*, revisaremos algunas cuestiones de estilos. Los elementos
 siguientes los introduciremos en las estructuras `ScrollView` > `VStack` donde metimos los elementos anteriores.
 
-#### Botón Iniciar sesión:
+##### Botón Iniciar sesión:
 ```swift
 VStack {
     ...
@@ -280,7 +281,7 @@ Donde resaltaremos el uso de los siguientes modificadores:
 * `overlay` > `RoundedRectangle`: que será un recatángulo redondeado que estará sobrepuesto a nuestro botón, en este caso
 solo le estamos configurando un `stroke` para el color del borde y `shadow` para generar una sombra a este.
 
-#### Botones Inicar sesión con redes sociales:
+##### Botones Inicar sesión con redes sociales:
 ```swift
 VStack {
     ...
@@ -324,3 +325,180 @@ VStack {
 
 Donde también hemos implementado el modificador `overlay` > `RoundedRectangle` para cada botón y, en
 este caso el `frame(maxWidth: .infinity)` lo hemos implementado para un `HStack`.
+
+### Vista de Registro
+Para la vista de registro, importaremos solo un asset, que es la imagen ejemplo de perfil, notamos
+que son pocas las diferencias con la pantalla de inicio se sesión, principalmente la imagen de perfil y el
+campo de confirmación de contraseña, empezaremos por la primera:
+
+#### Sección de imagen de perfil
+Para empezar a trabajar, podemos colocar la variable `esInicioDeSesion = true`, de modo que nos muestre la
+vista `RegistroView` por defecto, pues estaremos trabajando en ella.
+
+![swift ui apps register design](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-ui-apps-register.png?raw=true)
+
+Nuestro `RegistroView` devolverá el siguiente `View`:
+
+```swift
+// RegistroView
+var body: some View {
+    ScrollView {
+        VStack(alignment: .center) {
+            Text("Elige una foto de perfil")
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+
+            Text("Puedes cambiar o elegirlo más adelante")
+                .font(.footnote)
+                .fontWeight(.light)
+                .foregroundColor(.gray)
+                .padding(.bottom)
+
+            Button(action: tomarFoto, label: {
+                ZStack {
+                    Image("profile-example")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 80, height: 80)
+
+                    Image(systemName: "camera")
+                        .foregroundColor(.white)
+                }
+            }).padding(.bottom)
+        }
+    }
+}
+```
+
+Nótese que el botón para agregar foto de perfil se compone de dos imágenes sobrepuestas que indican
+que con el botón se abriría la cámara.
+
+#### Forms del registro
+Los campos de texto para esta vista son muy parecidos a los de la vista de registro, por lo cuál,
+podemos copiarlos y generar un nuevo campo, así como una nueva variable bindeada a este:
+
+```swift
+// RegistroView
+var body: some View {
+    ScrollView {
+        // VSTACK IMAGEN PERFIL
+
+        VStack(alignment: .leading) {
+            // Correo
+            Text("Correo electrónico*")
+                .foregroundColor(Color("Dark-Cyan"))
+            
+            ZStack(alignment: .leading) {
+                if correo.isEmpty {
+                    Text("ejemplo@gmail.com")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                TextField("", text: $correo)
+            }
+
+            Divider().frame(height: 1)
+                .background(Color("Dark-Cyan"))
+                .padding(.bottom)
+
+            // Contraseña
+            Text("Contraseña")
+                .foregroundColor(.white)
+
+            ZStack(alignment: .leading) {
+                if contrasena.isEmpty {
+                    Text("Escribe tu contraseña")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                SecureField("", text: $contrasena)
+            }
+
+            // Confirmar contraseña
+            Text("Confirmar contraseña")
+                .foregroundColor(.white)
+
+            ZStack(alignment: .leading) {
+                if confirmarContrasena.isEmpty {
+                    Text("Vuelve a escribir tu contraseña")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                SecureField("", text: $confirmarContrasena)
+            }
+
+            Divider().frame(height: 1)
+                .background(Color("Dark-Cyan"))
+                .padding(.bottom)
+        }
+        .padding(.horizontal, 77.0)
+    }
+}
+```
+Nótese que en este caso no hemos agregado los botones en este `VStack`, ya que de hacerlo XCode no
+nos permitiría agregar ese número de elementos dentro de un stack. Por ello, generaremos otro para los
+botones:
+
+#### Botones del registro
+Ahora, dentro de un nuevo `VStack` pondremos exactamente los mismos botones de la sección de Inicio de sesión:
+```swift
+// RegistroView
+var body: some View {
+    ScrollView {
+        // VStack IMAGEN PERFIL
+
+        // VStack FORMS
+
+        VStack {
+            Button(action: {}, label: {
+                Text("REGÍSTRATE")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(
+                        EdgeInsets(top: 11, leading: 18, bottom: 11, trailing: 18)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6.0)
+                            .stroke(Color("Dark-Cyan"), lineWidth: 1.0)
+                            .shadow(color: .white, radius: 1)
+                    )
+            })
+
+            Text("Inicia sesión con redes sociales")
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 48.0)
+
+            HStack {
+                Button(action: {}, label: {
+                    Text("Facebook")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(width: 128, height: 48, alignment: .center)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6.0)
+                                .foregroundColor(.white)
+                                .opacity(0.2)
+                        )
+                })
+
+                Button(action: {}, label: {
+                    Text("Twitter")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(width: 128, height: 48, alignment: .center)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6.0)
+                                .foregroundColor(.white)
+                                .opacity(0.2)
+                        )
+                })
+            }
+            .padding(.vertical)
+            .frame(maxWidth: .infinity, alignment: .center)
+        }
+        .padding(.horizontal, 77.0)
+    }
+}
+```
