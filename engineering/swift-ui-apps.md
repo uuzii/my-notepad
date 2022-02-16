@@ -29,7 +29,7 @@ También solemos requerir assets o imágenes, que es importante contar con ellas
 identificar aquellas librerías de terceros que podemos requerir para emplear funciones que no están
 inmersas de manera nativa en el lenguaje.
 
-# Primeras pantallas
+# Creando el proyecto
 Para empezar a crear nuestro proyecto, seleccionaremos en Xcode, Crear nuevo proyecto > iOS > App >
 Pondremos nombre, ejemplo: `GameStream`. No será necesario seleccionar o mdificar ninguna otra opción.
 Posteriormente localizaremos el proyecto en la ubicación que requiramos, preferentemente aceptando
@@ -499,6 +499,113 @@ var body: some View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.horizontal, 77.0)
+    }
+}
+```
+
+# Ruteo de la aplicación
+Para generar la navegación desde la pantalla de login hacia las pantallas subsecuentes de la app,
+vamos a embeber el `ZStack` que habíamos puesto como única vista de `ContentView` dentro de un
+`NavigationView`:
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            ZStack { ... }
+            .navigationBarHidden(true)
+        }
+    }
+}
+```
+
+Nótese que estamos implementando el modificador `navigationBarHidden` para ocultar el header que este
+tipo de contenedor nos genera de manera automática.
+
+## Navegación del login al home
+Para generar la navegación del login hacia la pantalla de inicio, tenemos que generar una nueva
+variable de estado `isHomePageActive` para controlar si la página `Home` está activa:
+```swift
+struct InicioSesionView: View {
+    @State var correo = ""
+    @State var contrasena = ""
+    @State var isHomePageActive = false
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                ...
+
+                Button(action: {
+                    iniciarSesion()
+                }, label: {
+                    Text("INICIAR SESIÓN")
+                    ...
+                })
+                
+                ...
+            }
+            .padding(.horizontal, 77.0)
+            
+            NavigationLink(
+                destination: Home(),
+                isActive: $isHomePageActive,
+                label: {
+                    EmptyView()
+                })
+        }
+    }
+    
+    // Cambia variable de estado para generar la navegación
+    func iniciarSesion() {
+        isHomePageActive = true
+    }
+}
+```
+Nótese la implemantación de la estructura `NavigationLink`, donde indicamos la página
+destino en `destination`, la variable que controla el navigation `isActive` y un `label`, que
+en este caso le pasaremos un `EmptyView` ya que no requerimos el link pues el `Button` es la
+cara visible de esta acción.
+
+## Pantalla Home
+Para la pantalla `Home`, como se indicó en el `NavigationLink`, generaremos otra estructura en este caso,
+dentro de otro archivo que llamaremos `Home.swift`. Dentro de esta vista, vamos a hacer uso de un `TabView`,
+para switchear entre diferentes pantallas que hemos dedefinir más adelante. Dentro del `TabView`, incluiremos
+cuatro vistas de manera provisional (`Text`), agregaremos un poco de estilos y el modificador `tabItem` para
+que se conviertan en las tabs y para que en el footer podamos visualizar los botones que nos permitan switchear
+entre las cuatro diferentes vistas:
+```swift
+struct Home: View {
+    var body: some View {
+        TabView {
+            Text("Perfil")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Perfil")
+                }
+            
+            Text("Juegos")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .tabItem {
+                    Image(systemName: "gamecontroller")
+                    Text("Juegos")
+                }
+            
+            Text("Pantalla home")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
+                }
+            
+            Text("Favoritos")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .tabItem {
+                    Image(systemName: "heart")
+                    Text("Favoritos")
+                }
+        }
+        
     }
 }
 ```
