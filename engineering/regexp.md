@@ -64,7 +64,7 @@ csv1,csv2,csv3,csv4,csv5,
 
 Si usáramos, la expresión `.+,`, encontraríamos toda la línea, pero si quisiéramos reducir nuestra búsqueda a cada match de los elementos separados por comas, usaremos: `.+?,`
 
-## Not (^)
+## Not (^)
 Para las clases más generales, ejemplo `\d`si la colocamos en mayúcula `\D` encontraremos lo que no sea un dígito. Pero hay una forma de hacer esto para las clases custom que hagamos, ejemplo, `[^0-5]` nos encontraría lo que no haga match con este patrón.
 
 Otro ejemplo, sería para validar los siguientes teléfonos:
