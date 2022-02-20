@@ -609,3 +609,147 @@ struct Home: View {
     }
 }
 ```
+
+### Poner un tab por defecto
+Para establecer un tab como seleccionado por default en el `TabView`, tenemos que generarle a cada
+vista un `tag`, ejemplo:
+```swift
+TabView {
+    Text("Perfil")
+        .font(.system(size: 30, weight: .bold, design: .rounded))
+        .tabItem {
+            Image(systemName: "person")
+            Text("Perfil")
+        }
+        .tag(0)
+    
+    ...
+}
+```
+
+De esta forma le configuraremos un `tag` a cada vista, porque posteriormente configuraremos una variable
+en el `@State` que almacene el tab seleccionado:
+```swift
+struct Home: View {
+    @State var selectedTab: Int = 2
+    
+    var body: some View {
+        TabView(selection: $selectedTab) { ... }
+    }
+}
+```
+Nótese que estamos colocando el tab seleccionado como `2`, de esta forma nuestra *Pantalla home* será la
+tab por defecto.
+
+### Cambiar estilos de la barra de tabs
+Para modificar los estilos de los tabs que ve el usuario en la parte posterior, implementaremos el método
+`init`, que forma parte del ciclo de vida de nuestra vista, para que en el momento en el que esta se instancia,
+se modifiquen los estilos.
+
+Para esto, también haremos uso de la librería que se usaba anterior a SwiftUI, que era `UIKit`, ésta poseía
+la clase `UITabBar`:
+```swift
+    init() {
+        UITabBar.appearance()
+            .barTintColor = UIColor((Color("Tabbar-Color")))
+        UITabBar.appearance()
+            .isTranslucent = true
+    }
+```
+Estos estilos se compilarán en nuestros tab bars, en este caso, el color de la barra `appearance().barTintColor`
+y una pequeña opacidad `appearance().isTranslucent`. (El color se ha definido en nuestros assets, R: 57, G: 63, B: 83).
+
+Finalmente, para establecer el color de los items de cada tab, configuraremos un modificador a la vista `TabView`:
+```swift
+TabView(selection: $selectedTab) { ... }
+    .accentColor(.white)
+```
+
+### Tab home
+Hemos de generar la vista de la tab home, en un módulo separado:
+```swift
+struct PantallaHome: View {
+    var body: some View {
+        Text("Hola")
+    }
+}
+```
+
+Posteriormente, sustituiremos en lugar del texto que teníamos colocado en la tab:
+```swift
+    PantallaHome()
+        .font(.system(size: 30, weight: .bold, design: .rounded))
+        .tabItem {
+            Image(systemName: "house")
+            Text("Home")
+        }
+        .tag(2)
+```
+
+#### Estructura inicial
+
+Empezaremos a construir nuestra pantalla, configurando los stacks correspondientes, el color de
+fondo y un contenido inicial:
+```swift
+struct PantallaHome: View {
+    var body: some View {
+        ZStack {
+            Color("Navy").ignoresSafeArea()
+            
+            VStack {
+                Text("Hola")
+            }
+            .padding(.horizontal, 18)
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+    }
+}
+```
+En este caso, hemos implementado dos modificadores al `ZStack`, que son `navigationBarHidden` y 
+`navigationBarBackButtonHidden` para que no se visualice ni la barra de navegación, ni el botón para hacerla navegación.
+
+#### Logo
+Para configurar el logo, tomaremos el logo que habíamos implementado en `ContentView`:
+```swift
+    VStack {
+        Image("app_logo")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 250)
+            .padding(.horizontal, 11.0)
+    }
+```
+
+#### Barra de búsqueda
+Para la barra de búsqueda, implementaremos un `HStack` después del logo, donde estará principalmente nuestro ícono
+de búsqueda a modo de botón y el `TextField` con un text hint que se muestre/oculte dependiendo si está vacío el
+campo de texto o no, dependiento de la variable de estado `textoBusqueda`:
+```swift
+    VStack {
+        ...
+
+        HStack {
+            Button(action: {
+                // accion del boton (buscar)
+            }, label: {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(textoBusqueda.isEmpty ? Color(.yellow) : Color("Dark-Cyan"))
+            })
+                    
+            ZStack(alignment: .leading) {
+                if textoBusqueda.isEmpty {
+                    Text("Buscar un video")
+                        .foregroundColor(Color(red: 173/255, green: 177/255, blue: 185/255, opacity: 1.0))
+                }
+                        
+                TextField("", text: $textoBusqueda)
+                    .foregroundColor(.white)
+            }
+        }
+        .padding([.top, .leading, .bottom], 11.0)
+        .background(Color("Tabbar-Color"))
+        .clipShape(Capsule())
+    }
+```
+El modificador `clipShape(Capsule())`, nos permite hacer que nuestro contenedor tome la forma de una cápsula.
