@@ -574,7 +574,8 @@ cuatro vistas de manera provisional (`Text`), agregaremos un poco de estilos y e
 que se conviertan en las tabs y para que en el footer podamos visualizar los botones que nos permitan switchear
 entre las cuatro diferentes vistas:
 
-Diseño:
+Diseño tabs:
+
 ![swift ui apps tabs](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-ui-apps-tabs.png?raw=true)
 
 ```swift
@@ -671,7 +672,8 @@ TabView(selection: $selectedTab) { ... }
 
 ### Tab home
 Diseño de la tab Home:
-![swift ui apps Home](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-apps-tabs.png?raw=true)
+
+![swift ui apps Home](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-ui-apps-home.png?raw=true)
 
 Hemos de generar la vista de la tab home, en un módulo separado:
 ```swift
