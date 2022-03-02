@@ -573,6 +573,11 @@ para switchear entre diferentes pantallas que hemos dedefinir más adelante. Den
 cuatro vistas de manera provisional (`Text`), agregaremos un poco de estilos y el modificador `tabItem` para
 que se conviertan en las tabs y para que en el footer podamos visualizar los botones que nos permitan switchear
 entre las cuatro diferentes vistas:
+
+Diseño tabs:
+
+![swift ui apps tabs](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-ui-apps-tabs.png?raw=true)
+
 ```swift
 struct Home: View {
     var body: some View {
@@ -666,6 +671,10 @@ TabView(selection: $selectedTab) { ... }
 ```
 
 ### Tab home
+Diseño de la tab Home:
+
+![swift ui apps Home](https://github.com/uuzii/my-notepad/blob/wip/engineering/engineering/assets/swift-ui-apps-home.png?raw=true)
+
 Hemos de generar la vista de la tab home, en un módulo separado:
 ```swift
 struct PantallaHome: View {
@@ -687,7 +696,6 @@ Posteriormente, sustituiremos en lugar del texto que teníamos colocado en la ta
 ```
 
 #### Estructura inicial
-
 Empezaremos a construir nuestra pantalla, configurando los stacks correspondientes, el color de
 fondo y un contenido inicial:
 ```swift
@@ -696,18 +704,23 @@ struct PantallaHome: View {
         ZStack {
             Color("Navy").ignoresSafeArea()
             
-            VStack {
-                Text("Hola")
+            ScrollView {
+                VStack {
+                    // Logo
+                    // Barra de búsqueda
+                    // Vista los más populares
+                }
+                .padding(.horizontal, 18)
             }
-            .padding(.horizontal, 18)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
 }
 ```
-En este caso, hemos implementado dos modificadores al `ZStack`, que son `navigationBarHidden` y 
-`navigationBarBackButtonHidden` para que no se visualice ni la barra de navegación, ni el botón para hacerla navegación.
+En este caso, hemos implementado un `ZStack` dentro de un `ScrollView` que nos permita posteriormente generar contenido
+scrolleable de manera vertical; dos modificadores al `ZStack`, que son `navigationBarHidden` y 
+`navigationBarBackButtonHidden` para que no se visualice ni la barra de navegación, ni el botón para hacerla navegación nativos.
 
 #### Logo
 Para configurar el logo, tomaremos el logo que habíamos implementado en `ContentView`:
@@ -730,19 +743,18 @@ campo de texto o no, dependiento de la variable de estado `textoBusqueda`:
         ...
 
         HStack {
-            Button(action: {
-                // accion del boton (buscar)
-            }, label: {
+            // Si no hay texto buscado, el ícono se verá amarillo
+            Button(action: busqueda, label: {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(textoBusqueda.isEmpty ? Color(.yellow) : Color("Dark-Cyan"))
             })
-                    
+            // Si no hay texto buscado, se verá el hint "Buscar un video" de un color grisáceo
             ZStack(alignment: .leading) {
                 if textoBusqueda.isEmpty {
                     Text("Buscar un video")
-                        .foregroundColor(Color(red: 173/255, green: 177/255, blue: 185/255, opacity: 1.0))
+                        .foregroundColor(Color(red: 174/255, green: 177/255, blue: 185/255, opacity: 1.0))
                 }
-                        
+                // Campo de texto
                 TextField("", text: $textoBusqueda)
                     .foregroundColor(.white)
             }
@@ -752,4 +764,156 @@ campo de texto o no, dependiento de la variable de estado `textoBusqueda`:
         .clipShape(Capsule())
     }
 ```
-El modificador `clipShape(Capsule())`, nos permite hacer que nuestro contenedor tome la forma de una cápsula.
+El modificador `clipShape(Capsule())`, nos permite hacer que nuestro contenedor tome la forma de una cápsula
+(bordes redondeados).
+
+También definiremos a nivel de nuestra estructura `PantallaHome` la variable de estado `textoBusqueda` y
+la función `busqueda`:
+```swift
+struct PantallaHome: View {
+    @State var textoBusqueda = ""
+
+    var body: some View {...}
+
+    func busqueda() {
+        print("El usuario está buscando \(textoBusqueda)")
+    }
+}
+```
+
+#### Vista "Los más populares"
+Para la vista de la parte superior, generaremos un submódulo llamado `SobModuloHome`, que se indexará al mismo
+nivel que nuestro logo y nuestra barra de búsqueda:
+```swift
+struct PantallaHome: View {
+    var body: some View {
+        ZStack {
+            Color("Navy").ignoresSafeArea()
+            
+            ScrollView {
+                VStack {
+                    Image("app_logo")...
+                    HStack {
+                        // Barra de búsqueda
+                    }
+                    SobModuloHome()
+                }
+                .padding(.horizontal, 18)
+            }
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+    }
+}
+
+struct SobModuloHome: View {
+    var body: some View {
+        // Contenido de la vista
+    }
+}
+```
+
+##### Variables
+Primeramente, configuraremos un par de variables de estado que servirán para las urls de los videos que se pueden
+reproducir desde esta vista:
+* `url` como url actual
+* `isPlayerActive` que nos permite identificar si se ha abierto el reproductor
+* `urlVideos` colección de las urls de todos los videos
+```swift
+struct SobModuloHome: View {
+    @State var url = "https://cdn.cloudflare.steamstatic.com/steam/apps/256658589/movie480.mp4"
+    @State var isPlayerActive = false
+    let urlVideos:[String] = [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256658589/movie480.mp4",
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256671638/movie480.mp4",
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256720061/movie480.mp4",
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256814567/movie480.mp4",
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256705156/movie480.mp4",
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256801252/movie480.mp4",
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/256757119/movie480.mp4"
+    ]
+    
+    var body: some View {}
+}
+```
+
+##### Título
+Para el título, iniciaremos indexando un texto dentro de un `VStack` que contendrá todos nuestros elementos:
+```swift
+var body: some View {
+    VStack {
+        Text("LOS MÁS POPULARES")
+            .font(.title3)
+            .foregroundColor(.white)
+            .bold()
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+    }.padding(.top)
+}
+```
+
+##### Miniatura
+Para la miniatura, vamos a generar un `ZStack` con la imagen, el ícono de reproducir y el pequeño label:
+```swift
+var body: some View {
+    VStack {
+        Text("LOS MÁS POPULARES")...
+        
+         ZStack {
+             // La acción será seleccionar la url en la posición 0 y activar el player
+            Button(action: {
+                url = urlVideos[0]
+                print("URL: \(url)")
+                isPlayerActive = true
+            }, label: {
+                VStack(spacing: 0) {
+                    Image("The Witcher 3")
+                        .resizable()
+                        .scaledToFill()
+                    
+                    Text("The Witcher 3")
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .background(Color("Navy"))
+                }
+            })
+            Image(systemName: "play.circle.fill")
+                .resizable()
+                .foregroundColor(.white)
+                .frame(width: 42, height: 42)
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+        .padding(.vertical)
+    }.padding(.top)
+}
+```
+Notemos que básicamente tenemos un botón con el ícono de reproducir superpuesto, el `label` de este botón,
+se compone a su vez de una Imagen (la miniatura) y un pequeño texto.
+
+##### Reproductor de video
+Finalmente, con la finalidad de que la acción del botón que hemos configurado nos direccione al reproductor,
+generaremos un `NavigationLink` para que este se abra en una nueva ruta, para ello, primeramente importaremos
+`AVKit` al inicio de nuestro archivo:
+```swift
+import SwiftUI
+import AVKit
+```
+
+Posteriormente, pondremos nuestro `NavigationLink` a la altura del `VStack` principal de la vista `SobModuloHome`:
+```swift
+var body: some View {
+    VStack {...}.padding(.top)
+
+    NavigationLink(
+        destination: VideoPlayer(player: AVPlayer(url: URL(string: url)!))
+            .frame(width: 400, height: 300),
+        isActive: $isPlayerActive,
+        label: {
+            EmptyView()
+        }
+    )
+}
+```
+Donde notaremos tres detalles:
+* El `AVPlayer` recibe como argumento la url de nuestra variable de estado pero es necesario colocarle el signo `!'
+para responsabilizarnos de que ésta valor será válida.
+* La vista se activa mediante la variable de estado `isPlayerActive` habilitada por el botón de la miniatura.
+* No lleva label, por ello se implementa el `EmptyView`.
