@@ -704,14 +704,16 @@ struct PantallaHome: View {
         ZStack {
             Color("Navy").ignoresSafeArea()
             
-            ScrollView {
-                VStack {
-                    // Logo
-                    // Barra de búsqueda
-                    // Vista los más populares
+            VStack {
+                // Logo
+                // Barra de búsqueda
+
+                ScrollView {
+                // Sub secciones del home
                 }
-                .padding(.horizontal, 18)
+
             }
+            .padding(.horizontal, 18)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -732,6 +734,7 @@ Para configurar el logo, tomaremos el logo que habíamos implementado en `Conten
             .frame(width: 250)
             .padding(.horizontal, 11.0)
     }
+    .padding(.horizontal, 18)
 ```
 
 #### Barra de búsqueda
@@ -763,6 +766,7 @@ campo de texto o no, dependiento de la variable de estado `textoBusqueda`:
         .background(Color("Tabbar-Color"))
         .clipShape(Capsule())
     }
+    .padding(.horizontal, 18)
 ```
 El modificador `clipShape(Capsule())`, nos permite hacer que nuestro contenedor tome la forma de una cápsula
 (bordes redondeados).
@@ -781,25 +785,31 @@ struct PantallaHome: View {
 }
 ```
 
-#### Vista "Los más populares"
+#### Sección "Los más populares"
 Para la vista de la parte superior, generaremos un submódulo llamado `SobModuloHome`, que se indexará al mismo
-nivel que nuestro logo y nuestra barra de búsqueda:
+nivel que nuestro logo y nuestra barra de búsqueda para luego insertarle las subsecciones de nuestro home:
 ```swift
 struct PantallaHome: View {
     var body: some View {
         ZStack {
             Color("Navy").ignoresSafeArea()
             
-            ScrollView {
-                VStack {
-                    Image("app_logo")...
-                    HStack {
-                        // Barra de búsqueda
-                    }
+            
+            VStack {
+                Image("app_logo")...
+
+                HStack {
+                    // Barra de búsqueda
+                }
+                .padding([.top, .leading, .bottom], 11.0)
+                .background(Color("Tabbar-Color"))
+                .clipShape(Capsule())
+
+                ScrollView {
                     SobModuloHome()
                 }
-                .padding(.horizontal, 18)
             }
+            .padding(.horizontal, 18)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -917,3 +927,166 @@ Donde notaremos tres detalles:
 para responsabilizarnos de que ésta valor será válida.
 * La vista se activa mediante la variable de estado `isPlayerActive` habilitada por el botón de la miniatura.
 * No lleva label, por ello se implementa el `EmptyView`.
+
+#### Sección "Categorías sugeridas para ti"
+Para esta sección, continuaremos agregand contenido a la misma altura del `VStack` principal del `SobModuloHome`:
+
+##### Título
+Será prácticamente idéntico al de la sección anterior:
+```swift
+var body: some View {
+    VStack {
+        Text("LOS MÁS POPULARES")...
+
+        ZStack {...}
+
+        Text("CATEGORIAS SUGERIDAS PARA TI")
+            .font(.title3)
+            .foregroundColor(.white)
+            .bold()
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+    }
+}
+```
+
+##### Carousel
+Para el carrusel que muestra los íconos, haremos un `ScrollView` horizontal que despliegue botones en forma
+de rectángulos con una imagen adentro, para ello implementaremos el siguiente `HStack`:
+```swift
+var body: some View {
+    VStack {
+        ...
+
+        Text("CATEGORIAS SUGERIDAS PARA TI")
+            .font(.title3)
+            .foregroundColor(.white)
+            .bold()
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                Button(action: {}, label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8.0)
+                            .fill(Color("Tabbar-Color"))
+                            .frame(width: 160, height: 90)
+                        
+                        Image("fps")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 42, height: 42)
+                    }
+                })
+                    
+                Button(action: {}, label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8.0)
+                            .fill(Color("Tabbar-Color"))
+                            .frame(width: 160, height: 90)
+                        
+                        Image("rpg")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 42, height: 42)
+                    }
+                })
+                    
+                Button(action: {}, label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8.0)
+                            .fill(Color("Tabbar-Color"))
+                            .frame(width: 160, height: 90)
+                        
+                        Image("open-world")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 42, height: 42)
+                    }
+                })
+            }
+        }
+    }
+}
+```
+
+Notemos que dentro del `ScrollView` con la opción horizontal, solo hemos generado un `HStack` en el cual
+hemos añadido nuestros elementos que han de hacer scroll de manera horizontal.
+
+#### Sección "Recomendados para ti"
+Para esta sección, continuaremos agregand contenido a la misma altura del `VStack` principal del `SobModuloHome`:
+
+##### Título
+Será prácticamente idéntico al de la sección anterior:
+```swift
+var body: some View {
+    VStack {
+        Text("LOS MÁS POPULARES")...
+
+        ZStack {...}
+
+        Text("CATEGORIAS SUGERIDAS PARA TI")...
+
+        ScrollView(.horizontal, showsIndicators: false) {...}
+
+        Text("RECOMENDADOS PARA TI")
+            .font(.title3)
+            .foregroundColor(.white)
+            .bold()
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+    }
+}
+```
+
+##### Carousel
+El carrusel de esta sección se hará bajo la misma lógica del anterior, solo usando otras imágenes y prgramando
+los `action` de manera que desplieguen el reproductor de video a partir de las urls 1, 2 y 3:
+```swift
+var body: some View {
+    VStack {
+        ...
+
+        Text("RECOMENDADOS PARA TI")
+            .font(.title3)
+            .foregroundColor(.white)
+            .bold()
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                Button(action: {
+                    url = urlVideos[1]
+                    print("URL: \(url)")
+                    isPlayerActive = true
+                }, label: {
+                    Image("Abzu")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 240, height: 135)
+                })
+                    
+                Button(action: {
+                    url = urlVideos[2]
+                    print("URL: \(url)")
+                    isPlayerActive = true
+                }, label: {
+                    Image("Crash Bandicoot")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 240, height: 135)
+                })
+                    
+                Button(action: {
+                    url = urlVideos[3]
+                    print("URL: \(url)")
+                    isPlayerActive = true
+                }, label: {
+                    Image("DEATH STRANDING")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 240, height: 135)
+                })
+            }
+        }
+    }
+}
+```
