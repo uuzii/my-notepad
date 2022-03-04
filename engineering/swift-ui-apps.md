@@ -1090,3 +1090,79 @@ var body: some View {
     }
 }
 ```
+
+# Arquitectura MVVM
+Conforme vamos generando más secciones, nuestra aplicación va creciendo tanto en código
+como en necesidades, por lo cuál es bueno empezar a darle una arquitectura tanto en el aspecto de
+modularizar vistas, como de lógica. Para ello, generaremos ciertos grupos de archivos que nos
+permitan identificarlos de mejor manera en el editor.
+
+## Estructura de la aplicación
+Nuestra estructura será la siguiente:
+```
+| GameStream/
+| -- Modelos/
+| ---- Model.swift *
+| -- Vistas/
+| ---- ContentView.swift
+| ---- Home.swift
+| ---- GamesView.swift *
+| -- VistasModelos
+| ---- ViewModel.swift *
+```
+
+Nótese que estamos generando tres nuevos archivos (denotados por *): `GamesView.swift`, que contendrá
+la vista a desplegar en la tab Juegos, `Model.swift` y `ViewModel.swift`, que veremos con más
+detenmiento más adelante.
+
+### GamesView
+Para la vista `GamesView`, iniciaremos con la siguiente configuración rápida:
+1. Sustituir el texto genérico actual a nivel deñ `TabView` del `Home` por la nueva vista:
+   ```swift
+    struct Home: View {
+        @State var tabSeleccionado: Int = 2
+        
+        var body: some View {
+            TabView(selection: $tabSeleccionado) {
+                Text("Perfil")
+                    ...
+                
+                GamesView()
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .tabItem {
+                        Image(systemName: "gamecontroller")
+                        Text("Juegos")
+                    }
+                    .tag(1)
+                ...
+            }
+            .accentColor(.white)
+        }
+        ...
+    }
+   ```
+2. Agregar las siguientes configuraciones en un texto temporal que representa nuestra nueva vista:
+    ```swift
+    struct GamesView: View {
+        var body: some View {
+            Text("Pantalla games view")
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
+                .onAppear(
+                    perform: {
+                        print("Primer elemento del json:")
+                        print("Titulo del primer videojuego del json")
+                    }
+                )
+        }
+    }
+
+    struct GamesView_Previews: PreviewProvider {
+        static var previews: some View {
+            GamesView()
+        }
+    }
+    ```
+    En este caso, la función `onAppear`, es una función del ciclo de vida de esta vista, que nos
+    permitirá ejecutar ciertas acciones en el momento en el que nuestra vista es desplegada, temporalmente,
+    imprimir en consola un par de mensajes temporales.
